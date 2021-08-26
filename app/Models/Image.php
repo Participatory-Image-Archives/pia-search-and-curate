@@ -33,14 +33,6 @@ class Image extends Model
     
     protected $appends = ['resource_url'];
 
-    /**
-     * Get the location associated with the image.
-     */
-    public function location()
-    {
-        return Location::find($this->location_id);
-    }
-
     /* ************************ ACCESSOR ************************* */
 
     public function getResourceUrlAttribute()
