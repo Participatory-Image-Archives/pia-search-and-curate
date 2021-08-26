@@ -41,4 +41,18 @@ $factory->define(Brackets\AdminAuth\Models\AdminUser::class, function (Faker\Gen
         'last_login_at' => $faker->dateTime,
         
     ];
+});/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Location::class, static function (Faker\Generator $faker) {
+    return [
+        'label' => $faker->sentence,
+        'geonames_id' => $faker->randomNumber(5),
+        'geonames_url' => $faker->sentence,
+        'latitude' => $faker->randomFloat,
+        'longitude' => $faker->randomFloat,
+        'place_id' => $faker->randomNumber(5),
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
 });

@@ -60,5 +60,26 @@ return [
         ],
     ],
 
+    'location' => [
+        'title' => 'Locations',
+
+        'actions' => [
+            'index' => 'Locations',
+            'create' => 'New Location',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => 'ID',
+            'label' => 'Label',
+            'geonames_id' => 'Geonames',
+            'geonames_url' => 'Geonames url',
+            'latitude' => 'Latitude',
+            'longitude' => 'Longitude',
+            'place_id' => 'Place',
+            
+        ],
+    ],
+
     // Do not delete me :) I'm used for auto-generation
 ];

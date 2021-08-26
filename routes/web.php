@@ -12,6 +12,10 @@ Route::get('/light-table', function () {
     return view('frontend/light-table');
 });
 
+Route::get('/map', function () {
+    return view('frontend/map');
+});
+
 Route::get('/api/images', function(Request $request) {
     $terms = explode(' ', $request->input('q'));
     $query = Image::query();
@@ -29,8 +33,17 @@ Route::get('/api/images', function(Request $request) {
 Route::get('/api/ids', function(Request $request) {
     $ids = explode(',', $request->input('ids'));
 
-    $results = Image::whereIn('id', $ids)
-                ->select('id', 'salsah_id', 'title')->get();
+    $query = Image::whereIn('id', $ids)
+                ->select('id', 'salsah_id', 'title', 'location_id');
+
+    $results = $query->get();
+
+    if($request->exists('geo')){
+        foreach($results as $k => $r) {
+            $r->longitude = $r->location()->longitude;
+            $r->latitude = $r->location()->latitude;
+        }
+    }
 
     return response()->json($results);
 });
@@ -72,6 +85,21 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
             Route::post('/bulk-destroy',                                'ImagesController@bulkDestroy')->name('bulk-destroy');
             Route::post('/{image}',                                     'ImagesController@update')->name('update');
             Route::delete('/{image}',                                   'ImagesController@destroy')->name('destroy');
+        });
+    });
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(static function () {
+    Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin/')->group(static function() {
+        Route::prefix('locations')->name('locations/')->group(static function() {
+            Route::get('/',                                             'LocationsController@index')->name('index');
+            Route::get('/create',                                       'LocationsController@create')->name('create');
+            Route::post('/',                                            'LocationsController@store')->name('store');
+            Route::get('/{location}/edit',                              'LocationsController@edit')->name('edit');
+            Route::post('/bulk-destroy',                                'LocationsController@bulkDestroy')->name('bulk-destroy');
+            Route::post('/{location}',                                  'LocationsController@update')->name('update');
+            Route::delete('/{location}',                                'LocationsController@destroy')->name('destroy');
         });
     });
 });

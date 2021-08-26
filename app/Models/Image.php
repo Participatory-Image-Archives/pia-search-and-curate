@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Location;
 
 class Image extends Model
 {
@@ -16,7 +17,7 @@ class Image extends Model
         'original_file_name',
         'salsah_date',
         'sequence_number',
-        'location',
+        'location_id',
         'collection',
         'verso',
         'objecttype',
@@ -31,6 +32,14 @@ class Image extends Model
     ];
     
     protected $appends = ['resource_url'];
+
+    /**
+     * Get the location associated with the image.
+     */
+    public function location()
+    {
+        return Location::find($this->location_id);
+    }
 
     /* ************************ ACCESSOR ************************* */
 
