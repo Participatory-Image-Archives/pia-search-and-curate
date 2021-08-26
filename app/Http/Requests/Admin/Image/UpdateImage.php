@@ -35,7 +35,7 @@ class UpdateImage extends FormRequest
             'original_file_name' => ['nullable', 'string'],
             'salsah_date' => ['nullable', 'string'],
             'sequence_number' => ['nullable', 'string'],
-            'location' => ['nullable', 'integer'],
+            'location_id' => ['nullable', 'integer'],
             'collection' => ['nullable', 'integer'],
             'verso' => ['nullable', 'integer'],
             'objecttype' => ['nullable', 'integer'],

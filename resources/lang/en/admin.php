@@ -50,7 +50,7 @@ return [
             'original_file_name' => 'Original file name',
             'salsah_date' => 'Salsah date',
             'sequence_number' => 'Sequence number',
-            'location' => 'Location',
+            'location_id' => 'location_id',
             'collection' => 'Collection',
             'verso' => 'Verso',
             'objecttype' => 'Objecttype',
@@ -60,7 +60,7 @@ return [
         ],
     ],
 
-    'location' => [
+    'location_id' => [
         'title' => 'Locations',
 
         'actions' => [
@@ -77,6 +77,36 @@ return [
             'latitude' => 'Latitude',
             'longitude' => 'Longitude',
             'place_id' => 'Place',
+            
+        ],
+    ],
+
+    'image' => [
+        'title' => 'Images',
+
+        'actions' => [
+            'index' => 'Images',
+            'create' => 'New Image',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => 'ID',
+            'salsah_id' => 'Salsah',
+            'oldnr' => 'Oldnr',
+            'signature' => 'Signature',
+            'title' => 'Title',
+            'original_title' => 'Original title',
+            'file_name' => 'File name',
+            'original_file_name' => 'Original file name',
+            'salsah_date' => 'Salsah date',
+            'sequence_number' => 'Sequence number',
+            'location_id' => 'location_id',
+            'collection' => 'Collection',
+            'verso' => 'Verso',
+            'objecttype' => 'Objecttype',
+            'model' => 'Model',
+            'format' => 'Format',
             
         ],
     ],

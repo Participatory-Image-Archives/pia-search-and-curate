@@ -37,7 +37,7 @@ class ImagesController extends Controller
             $request,
 
             // set columns to query
-            ['id', 'salsah_id', 'oldnr', 'signature', 'title', 'original_title', 'file_name', 'original_file_name', 'salsah_date', 'sequence_number', 'location', 'collection', 'verso', 'objecttype', 'model', 'format'],
+            ['id', 'salsah_id', 'oldnr', 'signature', 'title', 'original_title', 'file_name', 'original_file_name', 'salsah_date', 'sequence_number', 'location_id', 'collection', 'verso', 'objecttype', 'model', 'format'],
 
             // set columns to searchIn
             ['id', 'oldnr', 'signature', 'title', 'original_title', 'file_name', 'original_file_name', 'salsah_date', 'sequence_number']

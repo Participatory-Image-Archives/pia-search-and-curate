@@ -116,7 +116,7 @@ class LocationsController extends Controller
 
 
         return view('admin.location.edit', [
-            'location' => $location,
+            'location_id' => $location,
         ]);
     }
 

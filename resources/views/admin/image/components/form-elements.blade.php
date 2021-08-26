@@ -70,11 +70,11 @@
     </div>
 </div>
 
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('location'), 'has-success': fields.location && fields.location.valid }">
+<div class="form-group row align-items-center" :class="{'has-danger': errors.has('location_id'), 'has-success': fields.location && fields.location.valid }">
     <label for="location" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.image.columns.location') }}</label>
         <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <input type="text" v-model="form.location" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('location'), 'form-control-success': fields.location && fields.location.valid}" id="location" name="location" placeholder="{{ trans('admin.image.columns.location') }}">
-        <div v-if="errors.has('location')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('location') }}</div>
+        <input type="text" v-model="form.location" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('location_id'), 'form-control-success': fields.location && fields.location.valid}" id="location" name="location" placeholder="{{ trans('admin.image.columns.location') }}">
+        <div v-if="errors.has('location_id')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('location_id') }}</div>
     </div>
 </div>
 

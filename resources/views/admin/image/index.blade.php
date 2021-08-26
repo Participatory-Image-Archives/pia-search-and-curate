@@ -59,7 +59,7 @@
                                         <th is='sortable' :column="'original_file_name'">{{ trans('admin.image.columns.original_file_name') }}</th>
                                         <th is='sortable' :column="'salsah_date'">{{ trans('admin.image.columns.salsah_date') }}</th>
                                         <th is='sortable' :column="'sequence_number'">{{ trans('admin.image.columns.sequence_number') }}</th>
-                                        <th is='sortable' :column="'location'">{{ trans('admin.image.columns.location') }}</th>
+                                        <th is='sortable' :column="'location_id'">{{ trans('admin.image.columns.location') }}</th>
                                         <th is='sortable' :column="'collection'">{{ trans('admin.image.columns.collection') }}</th>
                                         <th is='sortable' :column="'verso'">{{ trans('admin.image.columns.verso') }}</th>
                                         <th is='sortable' :column="'objecttype'">{{ trans('admin.image.columns.objecttype') }}</th>
