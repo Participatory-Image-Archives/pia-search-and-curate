@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>playground</title>
 
+
     <link rel="stylesheet" href="node_modules/bulma/css/bulma.min.css">
     
     @yield('styles')
@@ -17,6 +18,8 @@
 
     <!--<script src="node_modules/jszip/dist/jszip.min.js"></script>
     <script src="node_modules/file-saver/dist/FileSaver.min.js"></script>-->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     @yield('scripts')
 
 </body>

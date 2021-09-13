@@ -45,16 +45,9 @@ Route::get('/api/images', function(Request $request) {
 Route::get('/api/ids', function(Request $request) {
     $ids = explode(',', $request->input('ids'));
 
-    $query = DB::table('images')
-                ->select('images.id', 'images.salsah_id', 'images.title', 'images.location_id')
-                ->whereIn('images.id', $ids);
-
-    if($request->exists('geo')){
-        $query
-            ->join('locations', 'images.location_id', '=', 'locations.id')
-            ->addSelect('locations.latitude', 'locations.longitude');
-    }
-
+    $query = Image::query();
+    $query->whereIn('salsah_id', $ids);
+    $query->select('id', 'salsah_id', 'title');
     $results = $query->get();
 
     return response()->json($results);
