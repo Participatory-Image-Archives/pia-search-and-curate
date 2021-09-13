@@ -32,17 +32,18 @@
 
 @section('content')
     <div 
-        x-data="{ images: [], selection: [],
+        x-data="{ images: [], selection: [], threshold: 20,
                 api_url: 'api/images', q: '', ids: [] }"
         x-init="() => {
             params = new URLSearchParams(window.location.search)
             
-
             if(params.has('q')) {
                 q = params.get('q')
-                fetch('api/images?q='+q)
-                    .then(response => response.json())
-                    .then(data => images = data)
+                if(q.length >= 3) {
+                    fetch('api/images?q='+q)
+                        .then(response => response.json())
+                        .then(data => images = data)
+                }
             }
 
             if(params.has('ids')) {
@@ -76,7 +77,15 @@
                                         x-model="q">
                                 </p>
                                 <p class="control">
-                                    <button class="button" @click.prevent="images = await (await fetch(api_url+'?q='+q)).json()">Suchen</button>
+                                    <button class="button" @click.prevent="() => {
+                                        if(q.length >= 3) {
+                                            fetch('api/images?q='+q)
+                                                .then(response => response.json())
+                                                .then(data => images = data)
+                                        } else {
+                                            alert('Suchanfrage muss länger sein.')   
+                                        }
+                                    }">Suchen</button>
                                 </p>
                             </div>
                             <div class="field level">
@@ -110,6 +119,7 @@
                                         src = 'https://data.dasch.swiss/core/sendlocdata.php?res='+img.salsah_id+'&qtype=full&reduce=4'
                                     }
                                 }
+                                images.length < threshold ? src = 'https://data.dasch.swiss/core/sendlocdata.php?res='+img.salsah_id+'&qtype=full&reduce=4' : ''
                             }"
                             @click="() => {
                                 let contains = false;
@@ -143,7 +153,7 @@
 
                 <div class="columns is-multiline is-3" id="results_wrapper">
                     <template x-for="image in selection" :key="image.id">
-                        <div class="item column is-one-quarter is-size-7"
+                        <div class="item column is-one-fifth is-size-7"
                             x-data="{ img: image }"
                             @click="() => {
                                 for(let i = 0; i <= ids.length; i++) {
