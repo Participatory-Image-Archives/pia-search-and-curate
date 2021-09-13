@@ -15,6 +15,9 @@
         .item .card.selected {
             border: 2px solid blue;
         }
+        .item .card img {
+            width: 100%;
+        }
         #actions {
             position: fixed;
             bottom: 0;
@@ -62,7 +65,7 @@
             });
         }">
 
-        <div class="columns">
+        <div class="columns pb-5">
             <div class="column is-two-third">
                 <div class="card">
                     <div class="card-content">
@@ -70,8 +73,7 @@
                             <div class="field has-addons level" style="margin-bottom: 0;">
                                 <p class="control">
                                     <input type="text" name="q" class="input q"
-                                        x-model="q"
-                                        @input.debounce="images = await (await fetch(api_url+'?q='+q)).json()">
+                                        x-model="q">
                                 </p>
                                 <p class="control">
                                     <button class="button" @click.prevent="images = await (await fetch(api_url+'?q='+q)).json()">Suchen</button>
@@ -79,10 +81,16 @@
                             </div>
                             <div class="field level">
                                 <p class="control mr-1 ml-1">
-                                    <span class="results_count is-bold">0</span> Bild(er) 
+                                    <span class="results_count is-bold" x-text="images.length"></span> Bild(er) 
                                 </p>
                                 <p>
-                                    <button class="show_results button" type="button">anzeigen.</button>
+                                    <button class="show_results button" type="button"
+                                        @click="() => {
+                                            document.querySelectorAll('.card.result').forEach((el, i) => {
+                                                let img = el.querySelector('img');
+                                                img.src = 'https://data.dasch.swiss/core/sendlocdata.php?res='+img.name+'&qtype=full&reduce=4';
+                                            })
+                                        }">anzeigen.</button>
                                 </p>
                             </div>
                         </form>
@@ -94,7 +102,15 @@
                 <div class="columns is-multiline is-3" id="results_wrapper">
                     <template x-for="image in images" :key="image.id">
                         <div class="item column is-one-quarter is-size-7"
-                            x-data="{ img: image }"
+                            x-data="{ img: image, src: '', selected: false }"
+                            x-init="() => {
+                                for(let i = 0; i <= ids.length; i++) {
+                                    if(img.salsah_id == ids[i]) {
+                                        selected = true
+                                        src = 'https://data.dasch.swiss/core/sendlocdata.php?res='+img.salsah_id+'&qtype=full&reduce=4'
+                                    }
+                                }
+                            }"
                             @click="() => {
                                 let contains = false;
                                 for(let i = 0; i <= ids.length; i++) {
@@ -105,15 +121,18 @@
                                 if(! contains) {
                                     ids.push(img.salsah_id)
                                     selection.push(img)
+                                    selected = ! selected
                                 }
                             }">
-                            <div class="card">
+                            <div class="card result" :class="selected && 'selected'">
                                 <img class="item_image"
-                                    :alt="img.title" :name="img.id" :data-id="img.id">
+                                    :alt="img.title" :name="img.salsah_id" :data-id="img.salsah_id" :src="src">
                                 <div>
-                                    <a class="button is-small is-ghost is-rounded item_load_image" target="_blank">🖼️</a>
+                                    <a class="button is-small is-ghost is-rounded item_load_image"
+                                        @click.stop="src = 'https://data.dasch.swiss/core/sendlocdata.php?res='+image.salsah_id+'&qtype=full&reduce=4'">🖼️</a>
                                     <a class="button is-small is-ghost is-rounded item_link" target="_blank"
-                                        :href="'https://data.dasch.swiss/resources/'+img.salsah_id">🔗</a>
+                                        :href="'https://data.dasch.swiss/resources/'+img.salsah_id"
+                                        @click.stop>🔗</a>
                                 </div>
                             </div>
                         </div>
@@ -135,12 +154,12 @@
                                 selection = selection.filter(item => item !== img)
                             }">
                             <div class="card selected">
-                                <img class="item_image"
+                                <img class="item_image" :src="'https://data.dasch.swiss/core/sendlocdata.php?res='+img.salsah_id+'&qtype=full&reduce=4'"
                                     :alt="img.title" :name="img.id" :data-id="img.id">
                                 <div>
-                                    <a class="button is-small is-ghost is-rounded item_load_image" target="_blank">🖼️</a>
                                     <a class="button is-small is-ghost is-rounded item_link" target="_blank"
-                                        :href="'https://data.dasch.swiss/resources/'+img.salsah_id">🔗</a>
+                                        :href="'https://data.dasch.swiss/resources/'+img.salsah_id"
+                                        @click.stop>🔗</a>
                                 </div>
                             </div>
                         </div>
