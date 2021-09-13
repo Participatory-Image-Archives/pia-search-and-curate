@@ -7,6 +7,8 @@ use App\Models\Location;
 
 class Image extends Model
 {
+    protected $connection = 'pia';
+    
     protected $fillable = [
         'salsah_id',
         'oldnr',

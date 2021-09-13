@@ -7,6 +7,8 @@ use App\Models\Image;
 
 class Location extends Model
 {
+    protected $connection = 'pia';
+    
     protected $fillable = [
         'label',
         'geonames_id',
