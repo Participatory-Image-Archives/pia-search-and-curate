@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Location;
+use App\Models\Keyword;
 
 class Image extends Model
 {
@@ -26,19 +27,9 @@ class Image extends Model
         'model',
         'format',
     ];
-    
-    
-    protected $dates = [
-        'created_at',
-        'updated_at',
-    ];
-    
-    protected $appends = ['resource_url'];
 
-    /* ************************ ACCESSOR ************************* */
-
-    public function getResourceUrlAttribute()
+    public function keywords()
     {
-        return url('/admin/images/'.$this->getKey());
+        return $this->belongsToMany(Keyword::Class);
     }
 }

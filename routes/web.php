@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 */
 
 use App\Models\Image;
+use App\Models\Keyword;
 
 Route::get('/', function () {
     return view('frontend/home');
@@ -30,16 +31,16 @@ Route::get('/map', function () {
 
 Route::get('/api/images', function(Request $request) {
     $terms = explode(' ', $request->input('q'));
-    $query = Image::query();
+    $query = DB::connection('pia')->table('images');
 
     foreach($terms as $k => $term) {
-        $query->where(DB::raw('lower(title)'), 'like', '%' . strtolower($term) . '%');
+        $query->where(DB::raw('lower(images.title)'), 'like', '%' . strtolower($term) . '%');
     }
 
-    $query->select('id', 'salsah_id', 'title');
-    $results = $query->get();
+    $query->join('collections as c', 'c.id', '=', 'images.collection_id');
+    $query->select('images.*', 'c.label as collection');
 
-    return response()->json($results);
+    return response()->json($query->get());
 });
 
 Route::get('/api/ids', function(Request $request) {
