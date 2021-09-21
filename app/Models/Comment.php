@@ -5,22 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Image;
 
-class Location extends Model
+class Comment extends Model
 {
     protected $connection = 'pia';
     
     protected $fillable = [
-        'label',
-        'geonames_id',
-        'geonames_url',
-        'latitude',
-        'longitude',
-        'place_id',
-    
+        'comment',
     ];
 
     public function images()
     {
-        return $this->hasMany(Image::Class);
+        return $this->belongsToMany(Image::Class, 'image_comment', 'image_id', 'comment_id');
     }
 }

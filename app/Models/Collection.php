@@ -5,18 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Image;
 
-class Location extends Model
+class Collection extends Model
 {
     protected $connection = 'pia';
     
     protected $fillable = [
-        'label',
-        'geonames_id',
-        'geonames_url',
-        'latitude',
-        'longitude',
-        'place_id',
-    
+        'label'
     ];
 
     public function images()

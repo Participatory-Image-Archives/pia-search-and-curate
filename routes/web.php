@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,24 +32,32 @@ Route::get('/map', function () {
 
 Route::get('/api/images', function(Request $request) {
     $terms = explode(' ', $request->input('q'));
-    $query = DB::connection('pia')->table('images');
+    $query = Image::with(['keywords:id,label', 'collection']);
 
     foreach($terms as $k => $term) {
         $query->where(DB::raw('lower(images.title)'), 'like', '%' . strtolower($term) . '%');
     }
 
-    $query->join('collections as c', 'c.id', '=', 'images.collection_id');
-    $query->select('images.*', 'c.label as collection');
+    $query->orWhereHas('comments', function($query) use ($terms)  {
+        foreach($terms as $k => $term) {
+            $query->where(DB::raw('lower(comments.comment)'), 'like', '%' . strtolower($term) . '%');
+        }
+    });
 
-    return response()->json($query->get());
+    $query->select('images.id', 'images.salsah_id', 'images.title');
+    $images = $query->get();
+
+    return response()->json($images);
 });
 
 Route::get('/api/ids', function(Request $request) {
     $ids = explode(',', $request->input('ids'));
 
-    $query = Image::query();
+    $query = Image::with(['location']);
+
     $query->whereIn('salsah_id', $ids);
-    $query->select('id', 'salsah_id', 'title');
+    //$query->select('images.id', 'images.salsah_id', 'images.title', 'location');
+
     $results = $query->get();
 
     return response()->json($results);

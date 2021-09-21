@@ -22,6 +22,7 @@
     "interactjs": "^1.10.11",
     "jszip": "^3.6.0",
     "leaflet": "^1.7.1",
+    "leaflet.markercluster": "^1.5.1",
     "papaparse": "^5.3.1",
     "timeline": "git+https://github.com/squarechip/timeline.git"
   }

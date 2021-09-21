@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Location;
 use App\Models\Keyword;
+use App\Models\Comment;
+use App\Models\Collection;
 
 class Image extends Model
 {
@@ -28,8 +30,23 @@ class Image extends Model
         'format',
     ];
 
+    public function location()
+    {
+        return $this->belongsTo(Location::Class);
+    }
+
     public function keywords()
     {
         return $this->belongsToMany(Keyword::Class);
+    }
+
+    public function collection()
+    {
+        return $this->belongsTo(Collection::Class);
+    }
+
+    public function comments()
+    {
+        return $this->belongsToMany(Comment::Class, 'image_comment', 'image_id', 'comment_id');
     }
 }

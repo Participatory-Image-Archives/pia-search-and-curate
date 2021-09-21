@@ -15,11 +15,6 @@ class Keyword extends Model
         'description'
     ];
 
-    public function count($label)
-    {
-        return Keyword::where('label', $label)->get()->count();
-    }
-
     public function images()
     {
         return $this->belongsToMany(Image::Class);
