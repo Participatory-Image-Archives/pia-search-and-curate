@@ -56,7 +56,7 @@ Route::get('/api/ids', function(Request $request) {
     $query = Image::with(['location']);
 
     $query->whereIn('salsah_id', $ids);
-    //$query->select('images.id', 'images.salsah_id', 'images.title', 'location');
+    //$query->select('images.id', 'images.salsah_id', 'images.title');
 
     $results = $query->get();
 

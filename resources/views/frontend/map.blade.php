@@ -75,18 +75,20 @@
                         selected_data = JSON.parse(this.responseText);
 
                         selected_data.forEach((el, i) => {
-                            let marker = L.marker([el.location.latitude, el.location.longitude], {
-                                icon: L.divIcon({
-                                    html: '<span>🖼️</span>',
-                                    className: 'image-icon'
-                                })
-                            }).addTo(cluster);
+                            if(el.location){
+                                let marker = L.marker([el.location.latitude, el.location.longitude], {
+                                    icon: L.divIcon({
+                                        html: '<span>🖼️</span>',
+                                        className: 'image-icon'
+                                    })
+                                }).addTo(cluster);
 
-                            var popup = L.popup()
-                                .setLatLng([el.location.latitude, el.location.longitude])
-                                .setContent('<img src="https://data.dasch.swiss/core/sendlocdata.php?qtype=full&reduce=3&res='+el.salsah_id+'"/>');
+                                var popup = L.popup()
+                                    .setLatLng([el.location.latitude, el.location.longitude])
+                                    .setContent('<img src="https://data.dasch.swiss/core/sendlocdata.php?qtype=full&reduce=3&res='+el.salsah_id+'"/>');
 
-                            marker.bindPopup(popup);
+                                marker.bindPopup(popup);
+                            }
                         });
 
                         /*let asv_locations = window.location.protocol+'//'+window.location.host
