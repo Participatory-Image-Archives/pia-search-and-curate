@@ -256,11 +256,12 @@
                     });
 
                     this.$watch('selection', (value) => {
-                        if(value.length) {
+                        if(this.ids.length) {
                             url.searchParams.set('ids', this.ids.join(','))
                         } else {
                             url.searchParams.delete('ids')
                         }
+                        
                         history.pushState(null, document.title, url.toString())
                     });
                 }
