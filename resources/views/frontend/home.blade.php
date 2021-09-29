@@ -145,7 +145,7 @@
                                 let _keywords = [], _l = data.length;
 
                                 data.map(el => {
-                                    el.visible = _l > 100 ? false : true;
+                                    el.visible = false;
                                     el.selected = false;
                                     el.src = image_call(el.collection, el.signature, el.salsah_id);
 
@@ -176,6 +176,12 @@
 
                                 this.keywords = _keywords;
                                 this.images = data;
+
+                                if(this.images.length < 200) {
+                                    this.filtered_images().forEach(el => {
+                                        el.visible = true;
+                                    })
+                                }
 
                                 this.loading = false;
                             })
