@@ -35,9 +35,16 @@
             @click="keywords.forEach(el => el.active = false)">none</span>
     </div>
 
-    <div class="grid grid-flow-row grid-cols-4 gap-4">
+    <div class="shadow-xl py-4 px-8 mb-4 flex">
+        <input type="range" id="grid-col-size" name="grid-col-size" min="1" max="12" value="4" class="w-3/4" x-model="grid_col_size">
+        <label for="show-details" class="w-1/4 ml-4">
+            <input type="checkbox" id="show-details" name="show-details" min="1" max="12" value="4" x-model="show_details"> Show Details
+        </label>
+    </div>
+
+    <div class="grid grid-flow-row gap-4" :class="'grid-cols-'+grid_col_size">
         <template x-for="image in filtered_images" :key="image.id">
-            <div class=" overflow-hidden border" :class="img.selected && 'border-blue-600'"
+            <div class=" overflow-hidden border border-gray-100" :class="img.selected && 'border-blue-600'"
                 x-data="{ img: image }"
                 x-init="() => {
                     for(let i = 0; i <= ids.length; i++) {
@@ -61,18 +68,20 @@
                 }">
                     <img class="w-full result" :class="img.visible ? '' : 'p-2 px-4 text-xs'"
                         :alt="img.title" :name="img.title" :src="img.visible && img.src" :data-src="img.src">
-                    <div class="flex p-2 px-4">
-                        <button class="cursor-pointer mr-2" :class="img.visible && 'hidden'"
-                            @click.stop="img.visible = true">🖼️</button>
-                        <a class="" target="_blank"
-                            :href="'https://data.dasch.swiss/resources/'+img.salsah_id"
-                            @click.stop>🔗</a>
-                    </div>
-                    <div class="p-2 px-4">
-                        <template x-for="keyword in img.keywords" :key="keyword.id + '' + Math.random()">
-                            <span class="text-xs p-1 py-0 mr-1 mb-1 inline-block bg-gray-500 text-white"
-                                x-text="keyword.label"></span>
-                        </template>
+                    <div x-show="show_details">
+                        <div class="flex p-2 px-4">
+                            <button class="cursor-pointer mr-2" :class="img.visible && 'hidden'"
+                                @click.stop="img.visible = true">🖼️</button>
+                            <a class="" target="_blank"
+                                :href="'https://data.dasch.swiss/resources/'+img.salsah_id"
+                                @click.stop>🔗</a>
+                        </div>
+                        <div class="p-2 px-4">
+                            <template x-for="keyword in img.keywords" :key="keyword.id + '' + Math.random()">
+                                <span class="text-xs p-1 py-0 mr-1 mb-1 inline-block bg-gray-500 text-white"
+                                    x-text="keyword.label"></span>
+                            </template>
+                        </div>
                     </div>
             </div>
         </template>
@@ -80,7 +89,9 @@
 
     <hr class="my-6">
 
-    <div class="grid grid-flow-row grid-cols-6 gap-4 mb-8" >
+    <h2 class="text-2xl text-bold">Selection</h2>
+
+    <div class="grid grid-flow-row gap-4 mb-8" :class="'grid-cols-'+grid_col_size">
         <template x-for="image in selection" :key="image.id">
             <div class=" border border-blue-600 overflow-hidden"
                 x-data="{ img: image }"
@@ -121,6 +132,9 @@
                 q: '',
                 loading: false,
 
+                grid_col_size: 4,
+                show_details: true,
+
                 fetch_images() {
                     if(this.q.length >= 3) {
                         this.loading = true;
@@ -128,10 +142,10 @@
                             .then(response => response.json())
                             .then(data => {
 
-                                let _keywords = [];
+                                let _keywords = [], _l = data.length;
 
                                 data.map(el => {
-                                    el.visible = false;
+                                    el.visible = _l > 100 ? false : true;
                                     el.selected = false;
                                     el.src = image_call(el.collection, el.signature, el.salsah_id);
 
@@ -246,9 +260,9 @@
                 return `https://data.dasch.swiss/core/sendlocdata.php?res=${salsah_id}&qtype=full&reduce=4`
             }*/
 
-            //return `http://pia-iiif.dhlab.unibas.ch/${collection}/${signature}.jp2/full/640,/0/default.jpg`
+            return `https://pia-iiif.dhlab.unibas.ch/${collection.label}/${signature}.jp2/full/640,/0/default.jpg`
 
-            return `https://data.dasch.swiss/core/sendlocdata.php?res=${salsah_id}&qtype=full&reduce=4`
+            //return `https://data.dasch.swiss/core/sendlocdata.php?res=${salsah_id}&qtype=full&reduce=4`
         }
 
     </script>

@@ -44,7 +44,6 @@ Route::get('/api/images', function(Request $request) {
         }
     });
 
-    $query->select('images.id', 'images.salsah_id', 'images.title');
     $images = $query->get();
 
     return response()->json($images);
