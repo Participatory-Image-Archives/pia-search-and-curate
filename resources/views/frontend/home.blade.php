@@ -179,8 +179,8 @@
 
                                 if(this.images.length < 200) {
                                     this.filtered_images().forEach(el => {
-                                        el.visible = true;
-                                    })
+                                    el.visible = true;
+                                })
                                 }
 
                                 this.loading = false;
@@ -247,12 +247,20 @@
                     const url = new URL(window.location.href)
 
                     this.$watch('q', (value) => {
-                        url.searchParams.set('q', value)
+                        if(value.length) {
+                            url.searchParams.set('q', value)
+                        } else {
+                            url.searchParams.delete('q')
+                        }
                         history.pushState(null, document.title, url.toString())
                     });
 
                     this.$watch('selection', (value) => {
-                        url.searchParams.set('ids', this.ids.join(','))
+                        if(value.length) {
+                            url.searchParams.set('ids', this.ids.join(','))
+                        } else {
+                            url.searchParams.delete('ids')
+                        }
                         history.pushState(null, document.title, url.toString())
                     });
                 }
