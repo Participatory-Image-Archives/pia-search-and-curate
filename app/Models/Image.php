@@ -40,9 +40,9 @@ class Image extends Model
         return $this->belongsToMany(Keyword::Class);
     }
 
-    public function collection()
+    public function collections()
     {
-        return $this->belongsTo(Collection::Class);
+        return $this->belongsToMany(Collection::Class, 'image_collection', 'image_id', 'collection_id');
     }
 
     public function comments()

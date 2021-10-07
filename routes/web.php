@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 use App\Models\Image;
 use App\Models\Keyword;
+use App\Models\Collection;
+use App\Models\Comment;
 
 Route::get('/', function () {
     return view('frontend/home');
@@ -32,32 +34,46 @@ Route::get('/map', function () {
 
 Route::get('/api/images', function(Request $request) {
     $terms = explode(' ', $request->input('q'));
-    $query = Image::with(['keywords:id,label', 'collection']);
+    $image_query = Image::with([]);
+    $comment_query = Comment::with(['images']);
+    $image_ids = [];
 
     foreach($terms as $k => $term) {
-        $query->where(DB::raw('lower(images.title)'), 'like', '%' . strtolower($term) . '%');
+        $image_query->where(DB::raw('lower(images.title)'), 'like', '%' . strtolower($term) . '%');
+        $comment_query->where(DB::raw('lower(comments.comment)'), 'like', '%' . strtolower($term) . '%');
     }
 
-    $query->orWhereHas('comments', function($query) use ($terms)  {
-        foreach($terms as $k => $term) {
-            $query->where(DB::raw('lower(comments.comment)'), 'like', '%' . strtolower($term) . '%');
-        }
-    });
+    $images = $image_query->get();
+    $comments = $comment_query->get();
 
-    $images = $query->get();
+    foreach($images as $k => $image) {
+        if(!in_array($image->id, $image_ids)) {
+            $image_ids[] = $image->id;
+        }
+    }
+    foreach($comments as $k => $comment) {
+        foreach($comment->images as $k => $image) {
+            if(!in_array($image->id, $image_ids)) {
+                $image_ids[] = $image->id;
+            }
+        }
+    }
+
+    $images = Image::with(['keywords:id,label', 'collections:signature,origin'])
+                ->whereIn('id', $image_ids)
+                ->select('images.id', 'images.salsah_id', 'images.signature', 'images.title')
+                ->get();
 
     return response()->json($images);
 });
 
 Route::get('/api/ids', function(Request $request) {
-    $ids = explode(',', $request->input('ids'));
+    $image_ids = explode(',', $request->input('ids'));
 
-    $query = Image::with(['location']);
+    $images = Image::with(['collections:signature,origin', 'location'])
+                ->whereIn('salsah_id', $image_ids)
+                ->select('images.id', 'images.salsah_id', 'images.signature', 'images.title')
+                ->get();
 
-    $query->whereIn('salsah_id', $ids);
-    //$query->select('images.id', 'images.salsah_id', 'images.title');
-
-    $results = $query->get();
-
-    return response()->json($results);
+    return response()->json($images);
 });

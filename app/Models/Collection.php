@@ -15,6 +15,6 @@ class Collection extends Model
 
     public function images()
     {
-        return $this->hasMany(Image::Class);
+        return $this->belongsToMany(Image::Class, 'image_collection', 'image_id', 'collection_id');
     }
 }

@@ -1,50 +1,59 @@
 @extends('frontend/base')
 
 @section('content')
-<div x-data="app" class="p-4">
-    <div class="fixed top-0 left-0 h-full w-full bg-green-500 bg-opacity-50 flex justify-around items-center" x-show="loading">
+<div x-data="app" class="p-4" style="margin-right: 2rem;">
+    <div class="fixed top-0 left-0 h-full w-full bg-green-500 bg-opacity-50 flex justify-around items-center z-50" x-show="loading">
         <span class="font-bold text-white text-8xl">Loading…</span>
     </div>
-    <div class="shadow-xl py-6 px-8 flex mb-4">
-        <form action="/api/images" id="fuzzy_search" class="flex flex-1">
-            <div class="" style="margin-bottom: 0;">
-                <input type="text" name="q" class="p-2 px-3 mr-2 border border-black-500  focus:outline-none"
-                    x-model="q">
-                <button class="p-2 px-4 mr-2 border border-black-500 " @click.prevent="fetch_images">Suchen</button>
+    <div class="shadow-xl py-6 px-8 mb-4 fixed top-0 left-4 z-10 bg-white"
+        style="width: calc(100% - 4rem)"
+        :style="{ opacity: show_selection ? '0.25' : '1.0' }"
+        @mouseover="show_controls = true" @mouseleave="show_controls = false">
+        <div class="flex">
+            <form action="/api/images" id="fuzzy_search" class="flex flex-1">
+                <div class="" style="margin-bottom: 0;">
+                    <input type="text" name="q" class="p-2 px-3 mr-2 border border-black-500  focus:outline-none"
+                        x-model="q">
+                    <button class="p-2 px-4 mr-2 border border-black-500 " @click.prevent="fetch_images">Suchen</button>
+                </div>
+            </form>
+            <div class="flex flex-1 justify-end">
+                <p class="p-2">
+                    <span class="results_count is-bold" x-text="filtered_images().length"></span> Bild(er) 
+                </p>
+                <p>
+                    <button class="p-2 px-4 mr-2 border border-black-500 " type="button"
+                        @click="show_all">anzeigen.</button>
+                </p>
             </div>
-        </form>
-        <div class="flex flex-1 justify-end">
-            <p class="p-2">
-                <span class="results_count is-bold" x-text="filtered_images().length"></span> Bild(er) 
-            </p>
-            <p>
-                <button class="p-2 px-4 mr-2 border border-black-500 " type="button"
-                    @click="show_all">anzeigen.</button>
-            </p>
+        </div>
+        <div class="mt-4" x-show="show_controls" x-transition>
+            <div class="flex">
+                <input type="range" id="grid-col-size" name="grid-col-size" min="1" max="12" value="4" class="w-1/4" x-model="grid_col_size">
+                <label for="show-details" class="w-1/4 ml-4">
+                    <input type="checkbox" id="show-details" name="show-details" min="1" max="12" value="4" x-model="show_details"> Show Details
+                </label>
+            </div>
+            <div id="tags_wrapper" class="mt-4">
+                <template x-for="keyword in keywords" :key="keyword.id">
+                    <span class="text-xs px-4 py-1 border border-black mr-1 mb-1 inline-block cursor-pointer" :class="keyword.active ? 'bg-black text-white' : 'bg-white text-black'"
+                        x-text="keyword.label" @click="keyword.active = ! keyword.active"></span>
+                </template>
+                <span class="text-xs px-2 py-1 mr-1 mb-1 inline-block cursor-pointer border bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500"
+                    @click="keywords.forEach(el => el.active = true)">all</span>
+                <span class="text-xs px-2 py-1 mr-1 mb-1 inline-block cursor-pointer border bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500"
+                    @click="keywords.forEach(el => el.active = false)">none</span>
+            </div>
         </div>
     </div>
 
-    <div id="tags_wrapper" class="shadow-xl py-4 px-8 mb-4">
-        <template x-for="keyword in keywords" :key="keyword.id">
-            <span class="text-xs px-4 py-1 border border-black mr-1 mb-1 inline-block cursor-pointer" :class="keyword.active ? 'bg-black text-white' : 'bg-white text-black'"
-                x-text="keyword.label" @click="keyword.active = ! keyword.active"></span>
-        </template>
-        <span class="text-xs px-2 py-1 mr-1 mb-1 inline-block cursor-pointer border bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500"
-            @click="keywords.forEach(el => el.active = true)">all</span>
-        <span class="text-xs px-2 py-1 mr-1 mb-1 inline-block cursor-pointer border bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500"
-            @click="keywords.forEach(el => el.active = false)">none</span>
-    </div>
 
-    <div class="shadow-xl py-4 px-8 mb-4 flex">
-        <input type="range" id="grid-col-size" name="grid-col-size" min="1" max="12" value="4" class="w-3/4" x-model="grid_col_size">
-        <label for="show-details" class="w-1/4 ml-4">
-            <input type="checkbox" id="show-details" name="show-details" min="1" max="12" value="4" x-model="show_details"> Show Details
-        </label>
-    </div>
 
-    <div class="grid grid-flow-row gap-4" :class="'grid-cols-'+grid_col_size">
+    <div class="grid grid-flow-row gap-4" :class="'grid-cols-'+grid_col_size"
+        style="margin-top: 100px;"
+        :style="{ opacity: show_selection ? '0.25' : '1.0' }">
         <template x-for="image in filtered_images" :key="image.id">
-            <div class=" overflow-hidden border border-gray-100" :class="img.selected && 'border-blue-600'"
+            <div
                 x-data="{ img: image }"
                 x-init="() => {
                     for(let i = 0; i <= ids.length; i++) {
@@ -66,9 +75,10 @@
                         img.selected = true
                     }
                 }">
+                <div class="relative overflow-hidden border-2 border-gray-100" :class="img.selected && 'border-blue-600'">
                     <img class="w-full result" :class="img.visible ? '' : 'p-2 px-4 text-xs'"
                         :alt="img.title" :name="img.title" :src="img.visible && img.src" :data-src="img.src">
-                    <div x-show="show_details">
+                    <div x-show="show_details" class="absolute left-0 bottom-0">
                         <div class="flex p-2 px-4">
                             <button class="cursor-pointer mr-2" :class="img.visible && 'hidden'"
                                 @click.stop="img.visible = true">🖼️</button>
@@ -83,42 +93,32 @@
                             </template>
                         </div>
                     </div>
-            </div>
-        </template>
-    </div>
-
-    <hr class="my-6">
-
-    <h2 class="text-2xl text-bold">Selection</h2>
-
-    <div class="grid grid-flow-row gap-4 mb-8" :class="'grid-cols-'+grid_col_size">
-        <template x-for="image in selection" :key="image.id">
-            <div class=" border border-blue-600 overflow-hidden"
-                x-data="{ img: image }"
-                @click="() => {
-                    images.forEach(el => {
-                        if(el.id == img.id) {
-                            el.selected = false
-                        }
-                    })
-                    selection = selection.filter(item => item !== img)
-                }">
-                <img class="w-full" :src="img.src"
-                    :alt="img.title" :name="img.title">
-                <div class="flex p-2 px-4">
-                    <a class="" target="_blank"
-                        :href="'https://data.dasch.swiss/resources/'+img.salsah_id"
-                        @click.stop>🔗</a>
                 </div>
             </div>
         </template>
     </div>
 
-    <div class="flex bottom-8 w-full shadow-xl py-6 px-8">
-        <a class="p-2 px-4 mr-2 border border-black-500 "
-            :href="'/light-table?ids=' + ids.join(',')">💡 Lichttisch</a>
-        <a class="p-2 px-4 border border-black-500 " 
-            :href="'/map?ids=' + ids.join(',')">🗺️ Karte</a>
+    <div class="fixed top-0 h-screen w-3/4 bg-black p-8 shadow-2xl overflow-scroll z-20" style="left: 100%"
+        :style="{ left: show_selection ? '25%' : 'calc(100% - 2rem)', transition: '.25s' }"
+        @mouseover="show_selection = true" @mouseleave="show_selection = false">
+        <div class="grid grid-flow-row gap-4 mb-8" :class="'grid-cols-'+Math.ceil(grid_col_size/2)">
+            <template x-for="image in selection" :key="image.id">
+                <div>
+                    <div x-data="{ img: image }"
+                        @click="() => {
+                            images.forEach(el => {
+                                if(el.id == img.id) {
+                                    el.selected = false
+                                }
+                            })
+                            selection = selection.filter(item => item !== img)
+                        }">
+                        <img class="w-full" :src="img.src"
+                            :alt="img.title" :name="img.title">
+                    </div>
+                </div>
+            </template>
+        </div>
     </div>
 
     <script>
@@ -132,8 +132,10 @@
                 q: '',
                 loading: false,
 
-                grid_col_size: 4,
+                grid_col_size: 6,
                 show_details: true,
+                show_selection: false,
+                show_controls: false,
 
                 fetch_images() {
                     if(this.q.length >= 3) {
@@ -147,7 +149,7 @@
                                 data.map(el => {
                                     el.visible = false;
                                     el.selected = false;
-                                    el.src = image_call(el.collection, el.signature, el.salsah_id);
+                                    el.src = image_call(el.collections, el.signature, el.salsah_id);
 
                                     el.keyword_ids = [];
 
@@ -203,7 +205,7 @@
                                 data.forEach((el, i) => {
                                     el.visible = true;
                                     el.selected = true;
-                                    el.src = image_call(el.collection, el.signature, el.salsah_id);
+                                    el.src = image_call(el.collections, el.signature, el.salsah_id);
                                 })
                                 this.selection = data
                             })
@@ -268,16 +270,16 @@
             }))
         })
 
-        function image_call(collection, signature, salsah_id) {
-            /*if(collection == 'SGV_10') {
-                return `http://pia-iiif.dhlab.unibas.ch/SGV_10/${signature}.jp2/full/640,/0/default.jpg`
+        function image_call(collections, signature, salsah_id) {
+            if(collections && collections.length){
+                for(let c in collections){
+                    if(collections[c].origin == 'salsah') {
+                        return `https://pia-iiif.dhlab.unibas.ch/${collections[c].signature}/${signature}.jp2/full/640,/0/default.jpg`
+                    }
+                }
             } else {
-                return `https://data.dasch.swiss/core/sendlocdata.php?res=${salsah_id}&qtype=full&reduce=4`
-            }*/
-
-            return `https://pia-iiif.dhlab.unibas.ch/${collection.label}/${signature}.jp2/full/640,/0/default.jpg`
-
-            //return `https://data.dasch.swiss/core/sendlocdata.php?res=${salsah_id}&qtype=full&reduce=4`
+                return '';
+            }
         }
 
     </script>
