@@ -11,9 +11,9 @@
         <div class="flex">
             <form action="/api/images" id="fuzzy_search" class="flex flex-1">
                 <div class="" style="margin-bottom: 0;">
-                    <input type="text" name="q" class="p-2 px-3 mr-2 border border-black-500  focus:outline-none"
+                    <input type="text" name="q" class="p-2 px-3 mr-2 border border-blue-600 text-blue-600 focus:outline-none"
                         x-model="q">
-                    <button class="p-2 px-4 mr-2 border border-black-500 " @click.prevent="fetch_images">Suchen</button>
+                    <button class="p-2 px-4 mr-2 bg-blue-600 text-white " @click.prevent="fetch_images">Suchen</button>
                 </div>
             </form>
             <div class="flex flex-1 justify-end">
@@ -21,7 +21,7 @@
                     <span class="results_count is-bold" x-text="filtered_images().length"></span> Bild(er) 
                 </p>
                 <p>
-                    <button class="p-2 px-4 mr-2 border border-black-500 " type="button"
+                    <button class="p-2 px-4 mr-2 bg-blue-600 text-white " type="button"
                         @click="show_all">anzeigen.</button>
                 </p>
             </div>
@@ -38,9 +38,9 @@
                     <span class="text-xs px-4 py-1 border border-black mr-1 mb-1 inline-block cursor-pointer" :class="keyword.active ? 'bg-black text-white' : 'bg-white text-black'"
                         x-text="keyword.label" @click="keyword.active = ! keyword.active"></span>
                 </template>
-                <span class="text-xs px-2 py-1 mr-1 mb-1 inline-block cursor-pointer border bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500"
+                <span class="text-xs px-2 py-1 mr-1 mb-1 inline-block cursor-pointer border bg-blue-600 text-white border-blue-600 hover:bg-white hover:text-blue-600"
                     @click="keywords.forEach(el => el.active = true)">all</span>
-                <span class="text-xs px-2 py-1 mr-1 mb-1 inline-block cursor-pointer border bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500"
+                <span class="text-xs px-2 py-1 mr-1 mb-1 inline-block cursor-pointer border bg-blue-600 text-white border-blue-600 hover:bg-white hover:text-blue-600"
                     @click="keywords.forEach(el => el.active = false)">none</span>
             </div>
         </div>
@@ -97,10 +97,15 @@
         </template>
     </div>
 
+    <a href="{{ route('collections.index') }}"
+        type="button" class="fixed bg-blue-600 text-white p-2 px-6"
+        style="bottom: 10px; left: 10px;">Collections anzeigen</a>
+
     <button
         @mouseover="show_selection = true" 
-        type="button" class="fixed bg-black text-white"
-        style="bottom: 10px; right: 10px; width: 50px; line-height: 50px; border-radius: 50%;">&#9745;</button>
+        x-show="(selection.length)"
+        type="button" class="fixed bg-blue-600 text-white"
+        style="bottom: 10px; right: 10px; width: 75px; line-height: 75px; border-radius: 50%;">&#9745;</button>
 
     <div class="fixed left-0 h-full w-full bg-black p-8 shadow-2xl overflow-scroll z-20" style="top: 100%; box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.25)"
         :style="{ top: show_selection ? '0' : '100%', transition: '.25s' }"
