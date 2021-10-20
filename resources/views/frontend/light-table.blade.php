@@ -1,4 +1,4 @@
-@extends('frontend/base')
+@extends('base')
 
 @section('styles')
 <style>

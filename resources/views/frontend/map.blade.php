@@ -1,4 +1,4 @@
-@extends('frontend/base')
+@extends('base')
 
 @section('styles')
     <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css">

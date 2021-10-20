@@ -10,11 +10,18 @@ class Collection extends Model
     protected $connection = 'pia';
     
     protected $fillable = [
-        'label'
+        'label',
+        'signature',
+        'origin'
     ];
 
     public function images()
     {
-        return $this->belongsToMany(Image::Class, 'image_collection', 'image_id', 'collection_id');
+        return $this->belongsToMany(Image::Class, 'image_collection', 'collection_id', 'image_id');
+    }
+
+    public function images_ids()
+    {
+        return $this->images()->allRelatedIds();
     }
 }

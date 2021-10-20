@@ -1,12 +1,11 @@
-@extends('frontend/base')
+@extends('base')
 
 @section('content')
-<div x-data="app" class="p-4" style="margin-right: 2rem;">
+<div x-data="app" class="p-4">
     <div class="fixed top-0 left-0 h-full w-full bg-green-500 bg-opacity-50 flex justify-around items-center z-50" x-show="loading">
         <span class="font-bold text-white text-8xl">Loading…</span>
     </div>
-    <div class="shadow-xl py-6 px-8 mb-4 fixed top-0 left-4 z-10 bg-white"
-        style="width: calc(100% - 4rem)"
+    <div class="shadow-xl py-6 px-8 mb-4 fixed top-0 left-0 z-10 bg-white w-full"
         :style="{ opacity: show_selection ? '0.25' : '1.0' }"
         @mouseover="show_controls = true" @mouseleave="show_controls = false">
         <div class="flex">
@@ -49,7 +48,7 @@
 
 
 
-    <div class="grid grid-flow-row gap-4" :class="'grid-cols-'+grid_col_size"
+    <div class="grid grid-flow-row gap-4" :class="'grid-cols-'+(13-grid_col_size)"
         style="margin-top: 100px;"
         :style="{ opacity: show_selection ? '0.25' : '1.0' }">
         <template x-for="image in filtered_images" :key="image.id">
@@ -57,7 +56,7 @@
                 x-data="{ img: image }"
                 x-init="() => {
                     for(let i = 0; i <= ids.length; i++) {
-                        if(img.salsah_id == ids[i]) {
+                        if(img.id == ids[i]) {
                             img.selected = true
                             img.visible = true
                         }
@@ -66,7 +65,7 @@
                 @click="() => {
                     let contains = false;
                     selection.forEach(el => {
-                        if(el.salsah_id == img.salsah_id) {
+                        if(el.id == img.id) {
                             contains = true;
                         }
                     })
@@ -75,7 +74,7 @@
                         img.selected = true
                     }
                 }">
-                <div class="relative overflow-hidden border-2 border-gray-100" :class="img.selected && 'border-blue-600'">
+                <div class="relative overflow-hidden border-2 border-gray-100" style="cursor: copy;" :class="img.selected && 'border-blue-600'">
                     <img class="w-full result" :class="img.visible ? '' : 'p-2 px-4 text-xs'"
                         :alt="img.title" :name="img.title" :src="img.visible && img.src" :data-src="img.src">
                     <div x-show="show_details" class="absolute left-0 bottom-0">
@@ -98,10 +97,16 @@
         </template>
     </div>
 
-    <div class="fixed top-0 h-screen w-3/4 bg-black p-8 shadow-2xl overflow-scroll z-20" style="left: 100%"
-        :style="{ left: show_selection ? '25%' : 'calc(100% - 2rem)', transition: '.25s' }"
+    <button
+        @mouseover="show_selection = true" 
+        type="button" class="fixed bg-black text-white"
+        style="bottom: 10px; right: 10px; width: 50px; line-height: 50px; border-radius: 50%;">&#9745;</button>
+
+    <div class="fixed left-0 h-full w-full bg-black p-8 shadow-2xl overflow-scroll z-20" style="top: 100%; box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.25)"
+        :style="{ top: show_selection ? '0' : '100%', transition: '.25s' }"
         @mouseover="show_selection = true" @mouseleave="show_selection = false">
-        <div class="grid grid-flow-row gap-4 mb-8" :class="'grid-cols-'+Math.ceil(grid_col_size/2)">
+        <div class="grid grid-flow-row gap-4 mb-8" :class="'grid-cols-'+(7-Math.ceil(grid_col_size/2))">
+            
             <template x-for="image in selection" :key="image.id">
                 <div>
                     <div x-data="{ img: image }"
@@ -112,19 +117,30 @@
                                 }
                             })
                             selection = selection.filter(item => item !== img)
-                        }">
+                        }" style="cursor: not-allowed;">
                         <img class="w-full" :src="img.src"
                             :alt="img.title" :name="img.title">
                     </div>
                 </div>
             </template>
         </div>
+        <form action="{{ route('collections.store') }}" method="post" display="flex">
+            @csrf
+            <input type="hidden" name="image_ids" x-ref="image_ids">
+            <input type="hidden" name="collection_id" x-model="collection.id">
+            <input type="text" name="label" class="p-2 px-4 mr-2 border border-white" placeholder="Label" x-model="collection.label" required>
+            <button type="submit" class="p-2 px-4 mr-2 border border-white text-white hover:bg-white hover:text-black">Save Collection</button>
+        </form>
     </div>
 
     <script>
 
         document.addEventListener('alpine:init', () => {
             Alpine.data('app', () => ({
+                collection: {
+                    id: '',
+                    label: ''
+                },
                 images: [],
                 selection: [],
                 keywords: [],
@@ -190,10 +206,21 @@
                     }
                 },
 
+                fetch_collection() {
+                    this.loading = true;
+                    fetch('api/collection?c='+this.collection.id)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.ids = data.image_ids.split(',');
+                            this.collection.label = data.label;
+                            this.loading = false;
+                        });
+                },
+
                 get ids() {
                     let _ids = [];
                     this.selection.forEach(el => {
-                        _ids.push(el.salsah_id)
+                        _ids.push(el.id)
                     })
                     return _ids;
                 },
@@ -246,6 +273,11 @@
                         this.ids = params.get('ids');
                     }
 
+                    if(params.has('c')) {
+                        this.collection.id = params.get('c')
+                        this.fetch_collection()
+                    }
+
                     const url = new URL(window.location.href)
 
                     this.$watch('q', (value) => {
@@ -259,7 +291,8 @@
 
                     this.$watch('selection', (value) => {
                         if(this.ids.length) {
-                            url.searchParams.set('ids', this.ids.join(','))
+                            url.searchParams.set('ids', this.ids.join(','));
+                            this.$refs.image_ids.value = this.ids.join(',');
                         } else {
                             url.searchParams.delete('ids')
                         }
