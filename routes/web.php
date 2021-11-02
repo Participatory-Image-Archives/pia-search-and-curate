@@ -36,6 +36,10 @@ Route::get('/', function () {
     return view('frontend/home');
 });
 
+Route::get('/search', function () {
+    return view('frontend/search');
+});
+
 Route::get('/light-table', function () {
     return view('frontend/light-table');
 });
