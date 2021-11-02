@@ -75,11 +75,13 @@
                                     <a target="_blank" :href="`https://data.dasch.swiss/resources/${image.attributes.salsah_id}`">SALSAH</a>
                                 </div>
                                 <div class="keywords">
+                                    {{-- 
                                     <template x-for="keyword in image.relationships.keywords.data" :key="keyword.id">
                                         <span
                                             class="inline-block py-1 px-3 bg-black text-white text-xs mr-2 mt-2 rounded-full" 
                                             x-text="get_keyword_by_id(keyword.id)"></span>
                                     </template>
+                                    --}}
                                 </div>
                             </div>
                         </div>
@@ -145,9 +147,13 @@
                 },
 
                 keywords() {
-                    return this.data.included.filter(include => {
-                        return include.type == 'keywords';
-                    });
+                    if(this.data.included) {
+                        return this.data.included.filter(include => {
+                            return include.type == 'keywords';
+                        });
+                    } else {
+                        return [];
+                    }
                 },
                 get_keyword_by_id(id) {
                     let keyword = this.keywords().filter(keyword => {
@@ -205,6 +211,7 @@
                                     this.data = response;
                                     this.loading = false;
                                 }
+                                this.loading = false;
                             });
                     }
                 },
