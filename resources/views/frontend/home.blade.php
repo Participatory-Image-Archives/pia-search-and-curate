@@ -23,7 +23,7 @@
                 x-model="columns">
         </div>
         <div class="flex flex-wrap items-center">
-            <span x-text="`${images().length} Resultate`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
+            <span x-text="`${images.length}/${total} Resultate`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
             <a href="{{ route('collections.index') }}"
                 class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Collections</a>
         </div>
@@ -134,12 +134,8 @@
                     data: [],
                     included: []
                 },
-                data_images: [],
-                data_keywords: [],
 
-                images() {
-                    return this.data.data;
-                },
+                images: [],
                 selection: [],
                 collection: {
                     id: '',
@@ -163,8 +159,8 @@
                 },
 
                 page: 1,
-                page_size: 5,
-                max_results: 250,
+                page_size: 50,
+                total: 0,
 
                 loading: false,
                 columns: 9,
@@ -197,22 +193,32 @@
                     if(this.query.length >= this.query_min_chars) {
                         
                         this.loading = true;
+                        this.page = 1;
+                        this.images = [];
 
-                        fetch(`${this.api_url}images?filter[title]=${this.query}&include=keywords`)
-                            .then(response => response.json())
-                            .then(response => {
-                                console.log(response)
-                                if(response.data.length > this.max_results) {
-                                    if(confirm(`${response.data.length} Resultate gefunden. Es kann zu einer längeren Ladezeit kommen.`)) {
-                                        this.data = response;
-                                        this.loading = false;
-                                    }
-                                } else {
-                                    this.data = response;
-                                    this.loading = false;
-                                }
-                                this.loading = false;
-                            });
+                        this.fetch();
+                    }
+                },
+
+                fetch() {
+                    fetch(`${this.api_url}images?filter[title]=${this.query}&include=keywords&page[number]=${this.page}&page[size]=${this.page_size}`)
+                        .then(response => response.json())
+                        .then(response => {
+                            console.log(response)
+                            this.fetched(response);
+                        });
+                },
+
+                fetched(response) {
+                    this.images = this.images.concat(response.data);
+                    this.loading = false;
+
+                    if(response.links.next) {
+                        this.page++;
+                        this.fetch();
+                        this.total = response.meta.page.total;
+                    } else {
+                        this.total = this.images.length;
                     }
                 },
 
@@ -221,7 +227,6 @@
                     fetch(`${this.api_url}collections/${this.collection.id}?include=images`)
                         .then(response => response.json())
                         .then(response => {
-                            console.log(response)
                             this.collection.label = response.data.attributes.label;
                             this.selection = response.included;
                             this.loading = false;
