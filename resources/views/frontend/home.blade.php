@@ -22,7 +22,12 @@
                 type="range" min="1" max="12" value="9"
                 x-model="columns">
         </div>
-        <p x-text="`${images().length} Resultate`" class="text-gray-500"></p>
+        <div class="flex flex-wrap items-center">
+            <span x-text="`${images().length} Resultate`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
+            <a href="{{ route('collections.index') }}"
+                class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Collections</a>
+        </div>
+        
     </header>
 
     <main>
