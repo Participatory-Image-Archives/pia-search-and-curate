@@ -40,6 +40,10 @@ Route::get('/search', function () {
     return view('frontend/search');
 });
 
+Route::get('/petite-vue', function () {
+    return view('frontend/petite-vue');
+});
+
 Route::get('/light-table', function () {
     return view('frontend/light-table');
 });
