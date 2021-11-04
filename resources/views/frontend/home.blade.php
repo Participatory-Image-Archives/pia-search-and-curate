@@ -4,6 +4,10 @@
 
 <div id="app" class="p-4" v-scope @mounted="init">
 
+    <div class="fixed top-0 left-0 h-full w-full bg-blue-500 bg-opacity-75 flex justify-around items-center z-50" v-show="loading">
+        <span class="font-bold text-white text-8xl">Loading…</span>
+    </div>
+
     <header class="mb-6 flex justify-between">
         <form action="{{ env('API_URL') }}" class="flex">
             <input type="text" name="query"
