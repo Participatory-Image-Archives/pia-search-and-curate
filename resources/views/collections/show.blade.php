@@ -25,7 +25,7 @@
             </a>
         </div>
     </div>
-    <div class="mb-2">
+    {{--<div class="mb-2">
         <h2 class="text-xs mb-1">Documents</h2>
         <div>
             @foreach ($collection->docs as $doc)
@@ -41,7 +41,7 @@
                 <button type="submit" class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full border border-black hover:bg-black hover:text-white">+ New Document</button>
             </form>
         </div>
-    </div>
+    </div>--}}
     <h2 class="text-xs mb-1">Images</h2>
     <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
         @foreach ($collection->images as $image)
