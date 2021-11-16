@@ -8,7 +8,6 @@ use App\Models\ObjectType;
 use App\Models\ModelType;
 use App\Models\Format;
 use App\Models\Person;
-use App\Models\Literature;
 use App\Models\Date;
 use App\Models\Location;
 use App\Models\Keyword;
@@ -45,27 +44,27 @@ class Image extends Model
 
     public function objectType()
     {
-        return $this->belongsTo(ObjectType::Class);
+        return $this->hasOne(ObjectType::Class);
     }
 
     public function modelType()
     {
-        return $this->belongsTo(ModelType::Class);
+        return $this->hasOne(ModelType::Class);
     }
 
     public function format()
     {
-        return $this->belongsTo(Format::Class);
+        return $this->hasOne(Format::Class);
     }
 
     public function location()
     {
-        return $this->belongsTo(Location::Class);
+        return $this->hasOne(Location::Class);
     }
 
     public function dates()
     {
-        return $this->belongsToMany(Date::Class, 'image_date', 'image_id', 'date_id');
+        return $this->belongsToMany(Date::Class);
     }
 
     public function people()

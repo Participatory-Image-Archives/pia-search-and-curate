@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KeywordController;
 
 /*
@@ -21,6 +22,7 @@ Route::get('/', function () {
 });
 
 Route::resource('collections', CollectionController::class);
+Route::resource('images', ImageController::class);
 Route::resource('keywords', KeywordController::class);
 
 

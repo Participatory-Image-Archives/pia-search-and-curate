@@ -24,8 +24,8 @@
         @foreach ($collection->images as $image)
             @foreach ($image->collections as $c)
                 @if ($c->origin == 'salsah')
-                    <a href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank">
-                        <img class="inline-block mr-2 w-full" src="https://pia-iiif.dhlab.unibas.ch/{{$c->signature}}/{{$image->signature}}.jp2/full/480,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
+                    <a href="{{ route('images.show', [$image]) }}">
+                        <img class="inline-block mr-2 w-full" src="https://pia-iiif.dhlab.unibas.ch/{{$c->signature}}/{{$image->signature}}.jp2/full/320,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
                     </a>
                 @endif
             @endforeach

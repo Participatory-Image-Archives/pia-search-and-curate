@@ -51,6 +51,7 @@
                 <template v-for="image in images" :key="image.id">
                     <div v-scope="{loaded: false, show_meta: false}">
                         <div class="relative"
+                            
                             v-show="loaded" :style="loaded ? '' : 'height: 300px;'"
                             @mouseover="show_meta = true" @mouseout="show_meta = false">
                             
@@ -61,35 +62,26 @@
                                 :data-src="`${image.links.related}full/320,/0/default.jpg`"
                                 :alt="image.attributes.title"
 
-                                @load="loaded = true; observer.observe($el);"
-                                @click="
-                                    let contains = false;
-                                    selection.forEach(el => {
-                                        if(el.id == image.id) {
-                                            contains = true;
+                                @load="loaded = true; observer.observe($el);">
+                            <div class="meta absolute bottom-0 left-0 p-2 w-full text-right">
+                                    <a
+                                        :href="`/images/${image.id}`"
+                                        class="rounded-full bg-blue-500 text-white text-xs py-1 px-3">Details</a>
+                                    <button
+                                        type="button"
+                                        class="rounded-full bg-black text-white text-xs py-1 px-3"
+                                        @click.preventDefault="
+                                        let contains = false;
+                                        selection.forEach(el => {
+                                            if(el.id == image.id) {
+                                                contains = true;
+                                            }
+                                        })
+                                        if(! contains) {
+                                            selection.push(image)
+                                            image.selected = true
                                         }
-                                    })
-                                    if(! contains) {
-                                        selection.push(image)
-                                        image.selected = true
-                                    }
-                                ">
-                            <div class="meta absolute bottom-0 left-0 p-2 w-full text-xs underline bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500"
-                                v-show="show_meta">
-                                <div class="links">
-                                    <a target="_blank" :href="image.links.related" class="mr-2">IIIF</a>
-                                    <a target="_blank" :href="image.links.self" class="mr-2">JSON</a>
-                                    <a target="_blank" :href="`https://data.dasch.swiss/resources/${image.attributes.salsah_id}`">SALSAH</a>
-                                </div>
-                                <div class="keywords">
-                                    {{-- 
-                                    <template x-for="keyword in image.relationships.keywords.data" :key="keyword.id">
-                                        <span
-                                            class="inline-block py-1 px-3 bg-black text-white text-xs mr-2 mt-2 rounded-full" 
-                                            x-text="get_keyword_by_id(keyword.id)"></span>
-                                    </template>
-                                    --}}
-                                </div>
+                                    ">+ Add</button>
                             </div>
                         </div>
                     </div>
