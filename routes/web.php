@@ -25,6 +25,8 @@ Route::resource('collections', CollectionController::class);
 Route::resource('images', ImageController::class);
 Route::resource('keywords', KeywordController::class);
 
+Route::get('/collections/{id}/export',
+    [FrontendController::class, 'exportCollection'])->name('collections.export');
 
 Route::get('/light-table', function () {
     return view('frontend/light-table');

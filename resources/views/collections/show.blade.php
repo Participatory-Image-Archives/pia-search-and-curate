@@ -13,7 +13,13 @@
                 <button type="submit" class="inline-block py-1 px-3 text-xs ml-2 mb-2 rounded-full border border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Delete</button>
             </form>
             <a class="inline-block py-1 px-3 text-xs ml-2 mb-2 rounded-full border border-black hover:bg-black hover:text-white" href="/?collection={{ $collection->id }}">
-                Edit Collection    
+                Edit    
+            </a>
+            <a class="inline-block py-1 text-xs ml-2 mb-2 underline" target="_blank" href="{{ env('API_URL') }}collections/{{ $collection->id }}">
+                JSON    
+            </a>
+            <a class="inline-block py-1 text-xs ml-2 mb-2 underline" href="{{ route('collections.export', ['id' => $collection->id]) }}">
+                CSV    
             </a>
             <a class="inline-block py-1 px-3 text-xs ml-2 mb-2 rounded-full bg-black text-white" href="{{ route('collections.index') }}">
                 Collections
