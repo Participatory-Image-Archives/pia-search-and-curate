@@ -24,9 +24,11 @@
                 v-model="columns">
         </div>
         <div class="flex flex-wrap items-center">
-            <span v-effect="$el.textContent = `${images.length}/${total} Resultate`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
+            <span v-effect="$el.textContent = `${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
             <a href="{{ route('collections.index') }}"
                 class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Collections</a>
+                <a href="{{ route('keywords.index') }}"
+                    class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Keywords</a>
         </div>
         
     </header>
@@ -157,6 +159,10 @@
 
             images: [],
             keywords: [],
+            keyword: {
+                id: '',
+                label: ''
+            },
             selection: [],
             collection: {
                 id: '',
@@ -199,6 +205,11 @@
                 if(params.has('collection')) {
                     this.collection.id = params.get('collection')
                     this.fetch_collection()
+                }
+
+                if(params.has('keyword')) {
+                    this.keyword.id = params.get('keyword')
+                    this.fetch_keyword()
                 }
             },
 
@@ -256,6 +267,20 @@
                     .then(response => {
                         this.collection.label = response.data.attributes.label;
                         this.selection = response.included;
+                        this.loading = false;
+                    });
+            },
+
+            fetch_keyword() {
+                this.loading = true;
+                console.log(`${this.api_url}keywords/${this.keyword.id}?include=images`);
+                fetch(`${this.api_url}keywords/${this.keyword.id}?include=images`)
+                    .then(response => response.json())
+                    .then(response => {
+                        if(response.included) {
+                            this.images = response.included;
+                            this.total = this.images.length;
+                        }
                         this.loading = false;
                     });
             },

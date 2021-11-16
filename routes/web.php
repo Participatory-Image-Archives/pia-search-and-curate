@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\KeywordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,34 +16,13 @@ use App\Http\Controllers\CollectionController;
 |
 */
 
-Route::get(
-    '/api/images',
-    [FrontendController::class, 'searchImages']
-)->name('api.searchImages');
-
-Route::get(
-    '/api/ids',
-    [FrontendController::class, 'getImagesByIds']
-)->name('api.getImagesByIds');
-
-Route::get(
-    '/api/collection',
-    [FrontendController::class, 'getCollection']
-)->name('api.getCollection');
-
-Route::resource('collections', CollectionController::class);
-
 Route::get('/', function () {
     return view('frontend/home');
 });
 
-Route::get('/search', function () {
-    return view('frontend/search');
-});
+Route::resource('collections', CollectionController::class);
+Route::resource('keywords', KeywordController::class);
 
-Route::get('/petite-vue', function () {
-    return view('frontend/petite-vue');
-});
 
 Route::get('/light-table', function () {
     return view('frontend/light-table');
