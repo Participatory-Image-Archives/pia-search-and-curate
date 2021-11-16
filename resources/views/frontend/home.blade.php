@@ -27,8 +27,8 @@
             <span v-effect="$el.textContent = `${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
             <a href="{{ route('collections.index') }}"
                 class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Collections</a>
-                <a href="{{ route('keywords.index') }}"
-                    class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Keywords</a>
+            <a href="{{ route('keywords.index') }}"
+                class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Keywords</a>
         </div>
         
     </header>
@@ -69,7 +69,7 @@
                                         class="rounded-full bg-blue-500 text-white text-xs py-1 px-3">Details</a>
                                     <button
                                         type="button"
-                                        class="rounded-full bg-black text-white text-xs py-1 px-3"
+                                        class="rounded-full bg-white hover:bg-black hover:text-white text-xs py-1 px-3"
                                         @click.preventDefault="
                                         let contains = false;
                                         selection.forEach(el => {

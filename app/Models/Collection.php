@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Date;
 use App\Models\Literature;
 use App\Models\Person;
+use App\Models\PiaDocs;
 
 class Collection extends Model
 {
@@ -57,5 +58,10 @@ class Collection extends Model
     public function images_ids()
     {
         return $this->images()->allRelatedIds();
+    }
+
+    public function docs()
+    {
+        return $this->belongsToMany(PiaDoc::Class, 'pia_docs_collections', 'collection_id', 'pia_doc_id');
     }
 }
