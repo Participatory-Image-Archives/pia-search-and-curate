@@ -16,7 +16,7 @@ class CollectionController extends Controller
     public function index()
     {
         return view('collections/index', [
-            'collections' => Collection::where('origin', '!=', 'salsah')->get()
+            'collections' => Collection::where('origin', '!=', 'salsah')->orderBy('label')->get()
         ]);
     }
 
@@ -51,7 +51,7 @@ class CollectionController extends Controller
 
         $collection->images()->sync(explode(',', $request->input('image_ids')));
 
-        return redirect()->route('collections.index');
+        return redirect()->route('collections.show', [$collection]);
     }
 
     /**
@@ -62,7 +62,9 @@ class CollectionController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('collections/show', [
+            'collection' => Collection::find($id)
+        ]);
     }
 
     /**
@@ -96,6 +98,7 @@ class CollectionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Collection::destroy($id);
+        return redirect()->route('collections.index');
     }
 }
