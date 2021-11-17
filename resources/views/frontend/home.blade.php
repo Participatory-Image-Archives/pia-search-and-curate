@@ -14,15 +14,14 @@
                 class="border py-1 px-4 mr-2"
                 x-model="query">
             <button type="submit"
-                class="border py-1 px-4 text-sm bg-black text-white"
+                class="py-1 px-4 text-sm bg-black text-white"
                 @click.prevent="fetch_images">Search</button>
+            <button type="button"
+                class="py-1 px-4 text-sm"
+                @click="show_settings = ! show_settings">
+                ⚙️
+            </button>
         </form>
-        <div>
-            <input 
-                class="h-full"
-                type="range" min="1" max="12" value="9"
-                x-model="columns">
-        </div>
         <div class="flex flex-wrap items-center">
             <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
             <button type="button"
@@ -33,8 +32,30 @@
             <a href="{{ route('keywords.index') }}"
                 class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Keywords</a>
         </div>
-        
     </header>
+
+    <div class="shadow-2xl flex mb-4" x-show="show_settings">
+        <div class="p-4">
+            <h3 class="text-xs">Column Count</h3>
+            <input 
+                class="h-full"
+                type="range" min="1" max="12" value="9"
+                x-model="columns">
+        </div>
+        <div class="p-4">
+            <h3 class="text-xs">Search focus</h3>
+            <label class="block">
+                <input type="radio" name="search_focus_choices" value="fuzzy"
+                    x-model="search_focus">
+                Images: Title, Old Number, Signature
+            </label>
+            <label class="block">
+                <input type="radio" name="search_focus_choices" value="comments"
+                    x-model="search_focus">
+                Comments
+            </label>
+        </div>
+    </div>
 
     <main>
         <div id="keywords" class="mb-6" x-data="{show_keywords: false}">
@@ -177,6 +198,8 @@
 
             loading: false,
             columns: 9,
+            search_focus: 'fuzzy',
+            show_settings: false,
             
             // setters, getters
             set query(value) {
@@ -236,7 +259,14 @@
             },
 
             fetch() {
-                fetch(`${this.api_url}images?filter[title]=${this.query}&include=keywords&page[number]=${this.page}&page[size]=${this.page_size}`)
+                let query = '';
+                if(this.search_focus == 'fuzzy') {
+                    query = `${this.api_url}images?filter[omni]=${this.query}&include=keywords&page[number]=${this.page}&page[size]=${this.page_size}`
+                }
+                if(this.search_focus == 'comments') {
+                    query = `${this.api_url}comments?filter[comment]=${this.query}&include=images&page[number]=${this.page}&page[size]=${this.page_size}`
+                }
+                fetch(query)
                     .then(response => response.json())
                     .then(response => {
                         this.fetched(response);
@@ -244,20 +274,27 @@
             },
 
             fetched(response) {
-                this.images = this.images.concat(response.data);
+                if(this.search_focus == 'fuzzy') {
+                    this.images = this.images.concat(response.data);
 
-                if(response.included) {
-                    let keywords = this.keywords.concat(
-                        response.included.filter(include => {
-                            return include.type == 'keywords';
-                        })
-                    );
+                    if(response.included) {
+                        let keywords = this.keywords.concat(
+                            response.included.filter(include => {
+                                return include.type == 'keywords';
+                            })
+                        );
 
-                    this.keywords = keywords.filter((keyword, index, self) =>
-                        index === self.findIndex((kw) => (
-                            kw.id === keyword.id
-                        ))
-                    );
+                        this.keywords = keywords.filter((keyword, index, self) =>
+                            index === self.findIndex((kw) => (
+                                kw.id === keyword.id
+                            ))
+                        );
+                    }
+                }
+                if(this.search_focus == 'comments') {
+                    if(response.included) {
+                        this.images = this.images.concat(response.included);
+                    }
                 }
 
                 this.loading = false;
