@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div id="app" class="p-4" v-scope @mounted="init">
+<div id="app" class="p-4" x-data="app">
 
-    <div class="fixed top-0 left-0 h-full w-full bg-blue-500 bg-opacity-75 flex justify-around items-center z-50" v-show="loading">
+    <div class="fixed top-0 left-0 h-full w-full bg-blue-500 bg-opacity-75 flex justify-around items-center z-50" x-show="loading">
         <span class="font-bold text-white text-8xl">Loading…</span>
     </div>
 
@@ -12,7 +12,7 @@
         <form action="{{ env('API_URL') }}" class="flex">
             <input type="text" name="query"
                 class="border py-1 px-4 mr-2"
-                v-model="query">
+                x-model="query">
             <button type="submit"
                 class="border py-1 px-4 text-sm bg-black text-white"
                 @click.prevent="fetch_images">Search</button>
@@ -21,10 +21,13 @@
             <input 
                 class="h-full"
                 type="range" min="1" max="12" value="9"
-                v-model="columns">
+                x-model="columns">
         </div>
         <div class="flex flex-wrap items-center">
-            <span v-effect="$el.textContent = `${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
+            <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
+            <button type="button"
+                class="inline-block py-1 text-xs rounded-full cursor-pointer ml-4 text-red-500 underline"
+                @click="delete_selection" x-show="selection.length">Delete Selection</button>
             <a href="{{ route('collections.index') }}"
                 class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Collections</a>
             <a href="{{ route('keywords.index') }}"
@@ -34,25 +37,25 @@
     </header>
 
     <main>
-        <div id="keywords" class="mb-6" v-scope="{show_keywords: false}">
+        <div id="keywords" class="mb-6" x-data="{show_keywords: false}">
             <span @click="show_keywords = ! show_keywords"
                 class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full cursor-pointer"
                 :class="!show_keywords ? 'bg-black text-white' : ''"
-                v-effect="$el.textContent = `# ${keywords.length}`"></span>
-            <template v-for="keyword in keywords">
+                x-text="`# ${keywords.length}`"></span>
+            <template x-for="keyword in keywords">
                 <span
                     class="inline-block py-1 px-3 bg-black text-white text-xs mr-2 mb-2 rounded-full" 
-                    v-show="show_keywords">@{{ keyword.attributes.label }}</span>
+                    x-show="show_keywords" x-text="keyword.attributes.label"></span>
             </template>
         </div>
 
         <div id="images" class="pb-20">
             <div class="grid gap-4 grid-flow-row" :class="`grid-cols-${13-columns}`">
-                <template v-for="image in images" :key="image.id">
-                    <div v-scope="{loaded: false, show_meta: false}">
+                <template x-for="image in images" :key="image.id">
+                    <div x-data="{loaded: false, show_meta: false}">
                         <div class="relative"
                             
-                            v-show="loaded" :style="loaded ? '' : 'height: 300px;'"
+                            x-show="loaded" :style="loaded ? '' : 'height: 300px;'"
                             @mouseover="show_meta = true" @mouseout="show_meta = false">
                             
                             <img class="w-full"
@@ -70,7 +73,7 @@
                                     <button
                                         type="button"
                                         class="rounded-full bg-white hover:bg-black hover:text-white text-xs py-1 px-3"
-                                        @click.preventDefault="
+                                        @click="() => {
                                         let contains = false;
                                         selection.forEach(el => {
                                             if(el.id == image.id) {
@@ -81,7 +84,7 @@
                                             selection.push(image)
                                             image.selected = true
                                         }
-                                    ">+ Add</button>
+                                    }">+ Add</button>
                             </div>
                         </div>
                     </div>
@@ -93,10 +96,10 @@
             class="fixed bottom-0 left-0 w-full bg-black transition"
             style="box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);"
             :style="`transform: translateY(${translate}%)`"
-            v-scope="{resolution: 200, translate: 75}"
+            x-data="{resolution: 200, translate: 75}"
             @mouseover="translate = 0" @mouseout="translate = 75">
             <div class="overflow-x-scroll whitespace-nowrap pr-4">
-                <template v-for="image in selection" :key="image.id">
+                <template x-for="image in selection" :key="image.id">
                     <div class="inline-block my-4 ml-4"
                         @click="selection = selection.filter(item => item !== image)">
                         <img
@@ -106,13 +109,20 @@
                     </div>
                 </template>
             </div>
-            <div id="collection" class="flex pb-4 px-4" v-show="selection.length">
-                <form action="{{ route('collections.store') }}" method="post" display="flex">
+            <div id="collection" class="flex pb-4 px-4" x-show="selection.length">
+                <form action="{{ route('collections.store') }}" method="post" display="flex" x-ref="collection_form">
                     @csrf
                     <input type="hidden" name="image_ids" :value="selection.map(s => {return s.id}).join(',')">
-                    <input type="hidden" name="collection_id" v-model="collection.id">
-                    <input type="text" name="label" class="p-2 px-4 mr-2 bg-white text-black" placeholder="Label" v-model="collection.label" required>
+                    <input type="hidden" name="collection_id" x-model="collection.id">
+                    <input type="text" name="label" class="p-2 px-4 mr-2 bg-white text-black" placeholder="Label" x-model="collection.label" required>
                     <button type="submit" class="p-2 px-4 mr-2 border border-white text-white hover:bg-white hover:text-black">Save Collection</button>
+                    <button type="button" class="p-2 px-4 mr-2 text-white text-xs underline"
+                        @click.prevent="() => {
+                            collection.id = '';
+                            setTimeout(() => {
+                                $refs.collection_form.submit();
+                            }, 100);
+                        }">Add as new Collection</button>
                 </form>
             </div>
         </div>
@@ -136,8 +146,8 @@
         });
     }, config);
 
-    document.addEventListener('DOMContentLoaded', evt => {
-        PetiteVue.createApp({
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('app', () => ({
             
             api_url: '{{ env('API_URL') }}',
 
@@ -155,11 +165,11 @@
                 id: '',
                 label: ''
             },
-            selection: [],
             collection: {
                 id: '',
                 label: ''
             },
+            selection: [],
 
             page: 1,
             page_size: 50,
@@ -184,7 +194,7 @@
             get query() {
                 return this.query_string;
             },
-            
+
             // methods
             init() {
                 let params = new URLSearchParams(window.location.search);
@@ -195,6 +205,7 @@
                 }
 
                 if(params.has('collection')) {
+                    localStorage.removeItem('selection');
                     this.collection.id = params.get('collection')
                     this.fetch_collection()
                 }
@@ -203,6 +214,14 @@
                     this.keyword.id = params.get('keyword')
                     this.fetch_keyword()
                 }
+
+                if(localStorage.selection) {
+                    this.selection = JSON.parse(localStorage.selection);
+                }
+
+                this.$watch('selection', value => {
+                    localStorage.selection = JSON.stringify(value);
+                })
             },
 
             fetch_images() {
@@ -283,7 +302,17 @@
                 });
                 return keyword.length ? keyword[0].attributes.label : '' ;
             },
-        }).mount();
+
+            delete_selection() {
+                this.selection = [];
+                this.collection.id = '';
+                this.collection.label = '';
+
+                let url = new URL(window.location.href);
+                url.searchParams.delete('collection')
+                history.pushState(null, document.title, url.toString())
+            }
+        }));
     });
 
 </script>
