@@ -37,7 +37,7 @@ Route::get('/map', function () {
     return view('frontend/map');
 });
 
-Route::get('/dangerous-activity', function () {
+Route::get('/fill-base-path', function () {
 
     $images = Image::whereNull('base_path')->get();
 
