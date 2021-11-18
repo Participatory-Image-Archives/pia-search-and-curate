@@ -41,15 +41,15 @@ Route::get('/dangerous-activity', function () {
 
     $images = Image::where('base_path', '=', '')->get();
 
-    print($images->count().'<br>');
+    print($images->count().' empty<br>');
 
     $images = Image::where('base_path', '=', 'SGV_10')->get();
 
-    print($images->count().'<br>');
+    print($images->count().' SGV_10<br>');
 
     $images = Image::where('base_path', '=', 'SGV_12')->get();
 
-    print($images->count().'<br>');
+    print($images->count().' SGV_12<br>');
 
     $images = Image::all();
 
