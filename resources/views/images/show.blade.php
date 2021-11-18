@@ -18,11 +18,7 @@
     </div>
     <div class="flex">
         <div class="w-full md:w-1/2">
-            @foreach ($image->collections as $c)
-                @if ($c->origin == 'salsah')
-                    <img class="inline-block mr-2 w-full shadow-2xl" src="https://pia-iiif.dhlab.unibas.ch/{{$c->signature}}/{{$image->signature}}.jp2/full/640,/0/default.jpg" alt="{{ $image->title }}" title="{{ $image->title }}">
-                @endif
-            @endforeach
+                <img class="inline-block mr-2 w-full shadow-2xl" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/640,/0/default.jpg" alt="{{ $image->title }}" title="{{ $image->title }}">
         </div>
         <div class="w-full md:w-1/2">
 

@@ -41,6 +41,8 @@ Route::get('/dangerous-activity', function () {
 
     $images = Image::whereNull('base_path')->get();
 
+    print($images->count());
+
     foreach ($images as $i_key => $image) {
         foreach ($image->collections as $c_key => $collection) {
             if ($image->base_path == '' && $collection->origin == 'salsah') {
