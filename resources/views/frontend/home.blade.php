@@ -90,6 +90,7 @@
                             <div class="meta absolute bottom-0 left-0 p-2 w-full text-right">
                                     <a
                                         :href="`/images/${image.id}`"
+                                        target="_blank"
                                         class="rounded-full bg-blue-500 text-white text-xs py-1 px-3">Details</a>
                                     <button
                                         type="button"
@@ -138,6 +139,7 @@
                     <input type="text" name="label" class="p-2 px-4 mr-2 bg-white text-black" placeholder="Label" x-model="collection.label" required>
                     <button type="submit" class="p-2 px-4 mr-2 border border-white text-white hover:bg-white hover:text-black">Save Collection</button>
                     <button type="button" class="p-2 px-4 mr-2 text-white text-xs underline"
+                        x-show="collection.id != ''"
                         @click.prevent="() => {
                             collection.id = '';
                             setTimeout(() => {

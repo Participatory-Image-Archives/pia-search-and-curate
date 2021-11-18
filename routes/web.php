@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KeywordController;
+use App\Models\Image;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +35,19 @@ Route::get('/light-table', function () {
 
 Route::get('/map', function () {
     return view('frontend/map');
+});
+
+Route::get('/dangerous-activity', function () {
+
+    $images = Image::where('base_path', '')->get();
+
+    foreach ($images as $i_key => $image) {
+        foreach ($image->collections as $c_key => $collection) {
+            if ($image->base_path == '' && $collection->origin == 'salsah') {
+                $image->base_path = $collection->signature;
+                $image->save();
+            }
+        }
+    }
 });
 
