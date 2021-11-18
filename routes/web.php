@@ -39,7 +39,7 @@ Route::get('/map', function () {
 
 Route::get('/dangerous-activity', function () {
 
-    $images = Image::where('base_path', '')->get();
+    $images = Image::where('base_path', '=', '')->get();
 
     print($images->count());
 
