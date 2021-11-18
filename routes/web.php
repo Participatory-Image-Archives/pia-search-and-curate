@@ -39,29 +39,15 @@ Route::get('/map', function () {
 
 Route::get('/dangerous-activity', function () {
 
-    $images = Image::where('base_path', '=', '')->get();
+    $images = Image::whereNull('base_path')->get();
 
-    print($images->count().' empty<br>');
-
-    $images = Image::where('base_path', '=', 'SGV_10')->get();
-
-    print($images->count().' SGV_10<br>');
-
-    $images = Image::where('base_path', '=', 'SGV_12')->get();
-
-    print($images->count().' SGV_12<br>');
-
-    $images = Image::all();
-
-    print($images->count());
-
-    /*foreach ($images as $i_key => $image) {
+    foreach ($images as $i_key => $image) {
         foreach ($image->collections as $c_key => $collection) {
             if ($image->base_path == '' && $collection->origin == 'salsah') {
                 $image->base_path = $collection->signature;
                 $image->save();
             }
         }
-    }*/
+    }
 });
 
