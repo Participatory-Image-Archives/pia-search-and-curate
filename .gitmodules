@@ -1,6 +1,3 @@
-[submodule "app/Models"]
-	path = app/Models
-	url = git@github.com:thgie/pia-laravel-models.git
 [submodule "resources/views/components"]
 	path = resources/views/components
 	url = git@github.com:Participatory-Image-Archives/pia-laravel-components.git
