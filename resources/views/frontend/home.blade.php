@@ -14,23 +14,17 @@
                 class="border py-1 px-4 mr-2"
                 x-model="query">
             <button type="submit"
-                class="py-1 px-4 text-sm bg-black text-white"
+                class="py-1 px-4 mr-10 text-sm bg-black text-white"
                 @click.prevent="fetch_images">Search</button>
-            <button type="button"
-                class="py-1 px-4 text-sm"
-                @click="show_settings = ! show_settings">
-                ⚙️
-            </button>
+
+            <x-buttons.ghost label="⚙️" @click="show_settings = ! show_settings"/>
         </form>
-        <div class="flex flex-wrap items-center">
+        <div>
             <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
-            <button type="button"
-                class="inline-block py-1 text-xs rounded-full cursor-pointer ml-4 text-red-500 underline"
-                @click="delete_selection" x-show="selection.length">Delete Selection</button>
-            <a href="{{ route('collections.index') }}"
-                class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Collections</a>
-            <a href="{{ route('keywords.index') }}"
-                class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white ml-4">Keywords</a>
+
+            <x-buttons.bare label="Delete Selection" @click="delete_selection" x-show="selection.length"/>
+            <x-links.default label="Collections" :href="route('collections.index')"/>
+            <x-links.default label="Keywords" :href="route('keywords.index')"/>
         </div>
     </header>
 
@@ -58,15 +52,13 @@
     </div>
 
     <main>
-        <div id="keywords" class="mb-6" x-data="{show_keywords: false}">
-            <span @click="show_keywords = ! show_keywords"
-                class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full cursor-pointer"
-                :class="!show_keywords ? 'bg-black text-white' : ''"
-                x-text="`# ${keywords.length}`"></span>
+        <div id="keywords" class="mb-6" x-data="{show_keywords: false}" x-show="keywords.length">
+            <x-buttons.default x-text="`# ${keywords.length}`" @click="show_keywords = ! show_keywords"/>
+
             <template x-for="keyword in keywords">
-                <span
-                    class="inline-block py-1 px-3 bg-black text-white text-xs mr-2 mb-2 rounded-full" 
-                    x-show="show_keywords" x-text="keyword.attributes.label"></span>
+                <x-links.default class="mb-2 mr-1"
+                    x-bind:href="`/?keyword=${keyword.id}`"
+                    x-show="show_keywords" x-text="keyword.attributes.label"/>
             </template>
         </div>
 
