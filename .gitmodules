@@ -1,0 +1,3 @@
+[submodule "app/Models"]
+	path = app/Models
+	url = git@github.com:thgie/pia-laravel-models.git

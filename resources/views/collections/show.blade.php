@@ -31,23 +31,43 @@
             </a>
         </div>
     </div>
-    {{--<div class="mb-2">
-        <h2 class="text-xs mb-1">Documents</h2>
+    <div class="mb-2 flex">
         <div>
-            @foreach ($collection->docs as $doc)
-                <a class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full bg-black text-white" href="{{ env('DOCS_URL') }}/{{ $doc->id }}/edit">
-                    {{ $doc->label }}  
-                </a>
-            @endforeach
+            <h2 class="text-xs mb-1">Documents</h2>
+            <div>
+                @foreach ($collection->docs as $doc)
+                    <a class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full bg-black text-white" href="{{ env('DOCS_URL') }}/{{ $doc->id }}/edit">
+                        {{ $doc->label }}  
+                    </a>
+                @endforeach
 
-            <form action="{{ env('DOCS_URL') }}/create" method="get" class="inline-block">
-                @csrf
-                <input type="hidden" name="collections" value="{{ $collection->id }}">
-                <input type="hidden" name="label" value="{{ $collection->label }}">
-                <button type="submit" class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full border border-black hover:bg-black hover:text-white">+ New Document</button>
-            </form>
+                <form action="{{ env('DOCS_URL') }}/create" method="get" class="inline-block">
+                    @csrf
+                    <input type="hidden" name="collections" value="{{ $collection->id }}">
+                    <input type="hidden" name="label" value="{{ $collection->label }}">
+                    <button type="submit" class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full border border-black hover:bg-black hover:text-white">+ New Document</button>
+                </form>
+            </div>
         </div>
-    </div>--}}
+        <div>
+
+            <h2 class="text-xs mb-1">Maps</h2>
+            <div>
+                {{--@foreach ($collection->docs as $doc)
+                    <a class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full bg-black text-white" href="{{ env('DOCS_URL') }}/{{ $doc->id }}/edit">
+                        {{ $doc->label }}  
+                    </a>
+                @endforeach--}}
+
+                <form action="{{ env('MAPS_URL') }}/create" method="get" class="inline-block">
+                    @csrf
+                    <input type="hidden" name="collections" value="{{ $collection->id }}">
+                    <input type="hidden" name="label" value="{{ $collection->label }}">
+                    <button type="submit" class="inline-block py-1 px-3 text-xs mr-2 mb-2 rounded-full border border-black hover:bg-black hover:text-white">+ New Map</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <h2 class="text-xs mb-1">Images</h2>
     <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
         @foreach ($collection->images as $image)
