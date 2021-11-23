@@ -17,6 +17,12 @@
                     <x-buttons.delete/>
                 </form>
 
+                <form class="inline-block" x-data x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
+                    @csrf
+                    <input x-ref="image" @change="$refs.imageupload.submit()" class="hidden" type="file" name="image" accept="image/*" required>
+                    <x-buttons.default @click="$refs.image.click()" label="Add image to collection"/>
+                </form>
+
                 <x-links.bare label="JSON" href="{{ env('API_URL') }}collections/{{ $collection->id }}" target="_blank"/>
                 <x-links.bare label="CSV" :href="route('collections.export', ['id' => $collection->id])"/>
             </div>
@@ -28,7 +34,7 @@
         </div>
     </div>
     <div class="flex mb-10">
-        {{--<div class="w-1/2">
+        <div class="w-1/2">
             <h2 class="text-xs mb-1">Documents</h2>
             <div>
                 @foreach ($collection->docs as $doc)
@@ -43,7 +49,7 @@
                     <x-buttons.default label="New Document" type="submit"/>
                 </form>
             </div>
-        </div>--}}
+        </div>
         <div class="w-1/2">
             <h2 class="text-xs mb-1">Maps</h2>
             <div>
