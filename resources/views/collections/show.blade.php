@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="flex mb-10">
-        <div class="w-1/2">
+        {{--<div class="w-1/2">
             <h2 class="text-xs mb-1">Documents</h2>
             <div>
                 @foreach ($collection->docs as $doc)
@@ -49,7 +49,7 @@
                     <x-buttons.default label="New Document" type="submit"/>
                 </form>
             </div>
-        </div>
+        </div>--}}
         <div class="w-1/2">
             <h2 class="text-xs mb-1">Maps</h2>
             <div>
