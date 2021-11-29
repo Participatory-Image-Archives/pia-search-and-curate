@@ -23,8 +23,7 @@
             <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
 
             <x-buttons.bare label="Delete Selection" @click="delete_selection" x-show="selection.length"/>
-            <x-links.default label="Collections" :href="route('collections.index')"/>
-            <x-links.default label="Keywords" :href="route('keywords.index')"/>
+            @include('partials.lists-dropdown')
         </div>
     </header>
 

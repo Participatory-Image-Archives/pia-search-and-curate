@@ -4,7 +4,7 @@
 <div class="p-4">
     <div class="md:flex mb-4">
         <h2 class="text-2xl mb-2 md:w-1/2">
-            Keywords
+            People
         </h2>
         <div class="md:w-1/2 md:text-right">
             @include('partials.lists-dropdown')
@@ -18,16 +18,16 @@
     <div id="searchable-list">
         <input class="search border-b border-black mb-8 focus:outline-none" placeholder="Search…"/>
         <ul class="list">
-        @foreach ($keywords as $keyword)
-            @if ($keyword->label)
-                @if ($current != $keyword->label[0])
+        @foreach ($people as $person)
+            @if ($person->name)
+                @if ($current != $person->name[0])
                     @php
-                        $current = $keyword->label[0];
+                        $current = $person->name[0];
                     @endphp
                     <h2 class="text-2xl mt-2 mb-2">{{ $current }}</h2>
                 @endif
                 <li class="inline">
-                    <x-links.default :label="$keyword->label" href="/?keyword={{ $keyword->id }}" class="mb-2 name"/>
+                    <x-links.default :label="$person->name" href="/?person={{ $person->id }}" class="mb-2 name"/>
                 </li>
             @endif
         @endforeach
