@@ -183,6 +183,10 @@
                 id: '',
                 label: ''
             },
+            person: {
+                id: '',
+                name: ''
+            },
             selection: [],
 
             page: 1,
@@ -229,6 +233,11 @@
                 if(params.has('keyword')) {
                     this.keyword.id = params.get('keyword')
                     this.fetch_keyword()
+                }
+
+                if(params.has('person')) {
+                    this.person.id = params.get('person')
+                    this.fetch_person()
                 }
 
                 if(localStorage.selection) {
@@ -314,8 +323,20 @@
 
             fetch_keyword() {
                 this.loading = true;
-                console.log(`${this.api_url}keywords/${this.keyword.id}?include=images`);
                 fetch(`${this.api_url}keywords/${this.keyword.id}?include=images`)
+                    .then(response => response.json())
+                    .then(response => {
+                        if(response.included) {
+                            this.images = response.included;
+                            this.total = this.images.length;
+                        }
+                        this.loading = false;
+                    });
+            },
+
+            fetch_person() {
+                this.loading = true;
+                fetch(`${this.api_url}people/${this.person.id}?include=images`)
                     .then(response => response.json())
                     .then(response => {
                         if(response.included) {
