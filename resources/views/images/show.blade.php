@@ -16,9 +16,9 @@
 
                     <x-buttons.delete/>
                 </form>
-                <x-links.bare label="IIIF" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max,/0/default.jpg" target="_blank"/>
-                <x-links.bare label="Manifest" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/" target="_blank"/>
-                <x-links.bare label="JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
+                <x-links.bare label="IIIF Image API" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>
+                <x-links.bare label="info.json" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/" target="_blank"/>
+                <x-links.bare label="API JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
                 <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
             </div>
         </div>
