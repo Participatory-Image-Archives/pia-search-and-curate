@@ -1,5 +1,9 @@
 @extends('base')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('node_modules/leaflet/dist/leaflet.css') }}">
+@endsection
+
 @section('content')
 <div class="p-4">
 
@@ -17,7 +21,7 @@
                     <x-buttons.delete/>
                 </form>
                 <x-links.bare label="IIIF Image API" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>
-                <x-links.bare label="info.json" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/" target="_blank"/>
+                <x-links.bare label="info.json" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
                 <x-links.bare label="API JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
                 <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
             </div>
@@ -30,7 +34,8 @@
 
     <div class="flex">
         <div class="w-full md:w-1/2">
-                <img class="inline-block mr-2 w-full shadow-2xl" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/640,/0/default.jpg" alt="{{ $image->title }}" title="{{ $image->title }}">
+            {{--<img class="inline-block mr-2 w-full shadow-2xl" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/640,/0/default.jpg" alt="{{ $image->title }}" title="{{ $image->title }}">--}}
+            <div id="iiif-image" class="min-h-full"></div>
         </div>
         <div class="w-full md:w-1/2">
 
@@ -179,4 +184,23 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('node_modules/leaflet/dist/leaflet.js') }}"></script>
+    <script src="{{ asset('node_modules/leaflet-iiif/leaflet-iiif.js') }}"></script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            var image = L.map('iiif-image', {
+                center: [0, 0],
+                crs: L.CRS.Simple,
+                zoom: 0,
+            });
+
+            L.tileLayer.iiif('https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json').addTo(image);
+        })
+
+    </script>
 @endsection
