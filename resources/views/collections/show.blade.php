@@ -28,8 +28,7 @@
             </div>
         </div>
         <div class="md:w-1/2 md:text-right">
-            <x-links.default label="Collections" :href="route('collections.index')"/>
-            <x-links.default label="Keywords" :href="route('keywords.index')"/>
+            @include('partials.lists-dropdown')
             <x-links.default label="Home" href="/"/>
         </div>
     </div>

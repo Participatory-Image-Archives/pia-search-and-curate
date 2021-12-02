@@ -7,6 +7,7 @@
     <title>PIA Search and Curate</title>
 
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/slim-select/dist/slimselect.min.css">
     
     @yield('styles')
 
@@ -18,6 +19,7 @@
     <!--<script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>-->
     <!--<script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>-->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/node_modules/slim-select/dist/slimselect.min.js"></script>
 
     @yield('scripts')
 

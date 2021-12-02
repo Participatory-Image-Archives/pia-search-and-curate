@@ -25,6 +25,7 @@
     "leaflet.markercluster": "^1.5.1",
     "list.js": "^2.3.1",
     "papaparse": "^5.3.1",
+    "slim-select": "^1.27.0",
     "timeline": "git+https://github.com/squarechip/timeline.git"
   }
 }

@@ -2,20 +2,32 @@
 
 @section('content')
 <div class="p-4">
-    <div class="md:flex mb-4">
-        <h2 class="text-2xl mb-2 md:w-1/2">
-            {{ $image->title }}
-        </h2>
+
+    <div class="md:flex mb-10">
+        <div class="md:w-1/2">
+            <h2 class="text-2xl mb-2">
+                {{ $image->title }}
+            </h2>
+            <div>
+                <x-links.cta label="Edit" :href="route('images.edit', [$image])"/>
+                <form action="{{ route('images.destroy', [$image]) }}" method="post" class="inline-block mr-2">
+                    @csrf
+                    @method('delete')
+
+                    <x-buttons.delete/>
+                </form>
+                <x-links.bare label="IIIF" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max,/0/default.jpg" target="_blank"/>
+                <x-links.bare label="Manifest" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/" target="_blank"/>
+                <x-links.bare label="JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
+                <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
+            </div>
+        </div>
         <div class="md:w-1/2 md:text-right">
-            <a href="{{ route('collections.index') }}"
-                class="ml-2 inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white">Collections</a>
-            <a href="{{ route('keywords.index') }}"
-                class="ml-2 inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white">Keywords</a>
-            <a class="ml-2 inline-block py-1 text-xs mb-2 underline" href="/">
-                ///
-            </a>
+            @include('partials.lists-dropdown')
+            <x-links.default label="Home" href="/"/>
         </div>
     </div>
+
     <div class="flex">
         <div class="w-full md:w-1/2">
                 <img class="inline-block mr-2 w-full shadow-2xl" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/640,/0/default.jpg" alt="{{ $image->title }}" title="{{ $image->title }}">
@@ -23,6 +35,7 @@
         <div class="w-full md:w-1/2">
 
             <div class="py-4 px-6">
+
                 <table class="w-full">
                     <thead class="text-xs">
                         <tr>
@@ -47,10 +60,6 @@
                         <td>{{ $image->original_title ?? '–' }}</td>
                     </tr>
                     <tr>
-                        <td>Original File Name</td>
-                        <td>{{ $image->original_file_name ?? '–' }}</td>
-                    </tr>
-                    <tr>
                         <td>Sequence Number</td>
                         <td>{{ $image->sequence_number ?? '–' }}</td>
                     </tr>
@@ -72,15 +81,13 @@
                     <tr>
                         <td>Object Type</td>
                         <td>
-                            {{ $image->objectType->label ?? '–' }} / 
-                            {{ $image->objectType->comment ?? '–' }}
+                            {{ $image->objectType->label ?? '–' }}
                         </td>
                     </tr>
                     <tr>
                         <td>Model Type</td>
                         <td>
-                            {{ $image->modelType->label ?? '–' }} / 
-                            {{ $image->modelType->comment ?? '–' }}
+                            {{ $image->modelType->label ?? '–' }}
                         </td>
                     </tr>
                     <tr>
@@ -96,22 +103,20 @@
 
                 <div>
                     <h3 class="mb-1 text-xs">Keywords</h3>
-                    <div class="flex mb-2">
+                    <div class="mb-2">
                         @forelse ($image->keywords as $keyword)
                             @if ($keyword->label)
-                                <a href="/?keyword={{ $keyword->id }}"
-                                class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white mr-2 mb-2">{{ $keyword->label }}</a>
+                                <x-links.default href="/?keyword={{ $keyword->id }}" :label="$keyword->label" class="mb-2"/>
                             @endif
                         @empty
                         –
                         @endforelse
                     </div>
                     <h3 class="mb-1 text-xs">Collections</h3>
-                    <div class="flex mb-2">
+                    <div class="mb-2">
                         @forelse ($image->collections as $collection)
                             @if ($collection->label)
-                                <a href="{{ route('collections.show', [$collection]) }}"
-                                class="inline-block py-1 px-3 text-xs rounded-full cursor-pointer bg-black text-white mr-2 mb-2">{{ $collection->label }}</a>
+                                <x-links.default :href="route('collections.show', [$collection])" :label="$collection->label" class="mb-2"/>
                             @endif
                         @empty
                         –
@@ -136,10 +141,10 @@
 
                 <div>
                     <h3 class="mb-1 text-xs">People</h3>
-                    <div class="flex mb-2">
+                    <div class="mb-2">
                         @forelse ($image->people as $person)
                             @if ($person->name)
-                                <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">{{ $person->label }}</span>
+                                <x-links.default href="/?person={{ $person->id }}" :label="$person->name" class="mb-2"/>
                             @endif
                         @empty
                         –
@@ -168,21 +173,6 @@
                         -
                         @endforelse
                     </div>
-                </div>
-                
-                <hr class="my-4">
-                
-                <div>
-                    <h3 class="mb-1 text-xs">Links</h3>
-                    <ul class="text-sm">
-                        @foreach ($image->collections as $c)
-                            @if ($c->origin == 'salsah')
-                                <li>– <a target="_blank" class="underline" href="https://pia-iiif.dhlab.unibas.ch/{{$c->signature}}/{{$image->signature}}.jp2/full/max,/0/default.jpg">IIIF</a> <a target="_blank" class="underline" href="https://pia-iiif.dhlab.unibas.ch/{{$c->signature}}/{{$image->signature}}.jp2/">Manifest</a></li>
-                            @endif
-                        @endforeach
-                        <li>– <a target="_blank" class="underline" href="{{ env('API_URL') }}images/{{ $image->id }}">JSON</a></li>
-                        <li>– <a target="_blank" class="underline" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}">SALSAH</a></li>
-                    </ul>
                 </div>
             </div>
         
