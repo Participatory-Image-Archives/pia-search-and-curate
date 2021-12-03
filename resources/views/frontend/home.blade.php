@@ -175,15 +175,23 @@
 
             images: [],
             keywords: [],
-            keyword: {
+            collection: {
+                model: 'collections',
                 id: '',
                 label: ''
             },
-            collection: {
+            keyword: {
+                model: 'keywords',
                 id: '',
                 label: ''
             },
             person: {
+                model: 'people',
+                id: '',
+                name: ''
+            },
+            location: {
+                model: 'locations',
                 id: '',
                 name: ''
             },
@@ -227,17 +235,22 @@
                 if(params.has('collection')) {
                     localStorage.removeItem('selection');
                     this.collection.id = params.get('collection')
-                    this.fetch_collection()
+                    this.fetch_by_relation(this.collection)
                 }
 
                 if(params.has('keyword')) {
                     this.keyword.id = params.get('keyword')
-                    this.fetch_keyword()
+                    this.fetch_by_relation(this.keyword)
                 }
 
                 if(params.has('person')) {
                     this.person.id = params.get('person')
-                    this.fetch_person()
+                    this.fetch_by_relation(this.person)
+                }
+
+                if(params.has('location')) {
+                    this.location.id = params.get('location')
+                    this.fetch_by_relation(this.location)
                 }
 
                 if(localStorage.selection) {
@@ -310,37 +323,18 @@
                 }
             },
 
-            fetch_collection() {
+            fetch_by_relation(relation) {
                 this.loading = true;
-                fetch(`${this.api_url}collections/${this.collection.id}?include=images`)
-                    .then(response => response.json())
-                    .then(response => {
-                        this.collection.label = response.data.attributes.label;
-                        this.selection = response.included;
-                        this.loading = false;
-                    });
-            },
-
-            fetch_keyword() {
-                this.loading = true;
-                fetch(`${this.api_url}keywords/${this.keyword.id}?include=images`)
+                fetch(`${this.api_url}${relation.model}/${relation.id}?include=images`)
                     .then(response => response.json())
                     .then(response => {
                         if(response.included) {
-                            this.images = response.included;
-                            this.total = this.images.length;
-                        }
-                        this.loading = false;
-                    });
-            },
-
-            fetch_person() {
-                this.loading = true;
-                fetch(`${this.api_url}people/${this.person.id}?include=images`)
-                    .then(response => response.json())
-                    .then(response => {
-                        if(response.included) {
-                            this.images = response.included;
+                            relation.label = response.data.attributes.label;
+                            if(relation.object == 'collection') {
+                                this.selection = response.included;
+                            } else {
+                                this.images = response.included;
+                            }
                             this.total = this.images.length;
                         }
                         this.loading = false;

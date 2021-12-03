@@ -4,4 +4,5 @@
     <option value="{{ route('collections.index') }}">Collections</option>
     <option value="{{ route('keywords.index') }}">Keywords</option>
     <option value="{{ route('people.index') }}">People</option>
+    <option value="{{ route('locations.index') }}">Locations</option>
 </select>

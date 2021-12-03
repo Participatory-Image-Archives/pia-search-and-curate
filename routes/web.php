@@ -6,6 +6,7 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KeywordController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\LocationController;
 use App\Models\Image;
 
 /*
@@ -27,6 +28,7 @@ Route::resource('collections', CollectionController::class);
 Route::resource('images', ImageController::class);
 Route::resource('keywords', KeywordController::class);
 Route::resource('people', PersonController::class);
+Route::resource('locations', LocationController::class);
 
 Route::get('/collections/{id}/export',
     [FrontendController::class, 'exportCollection'])->name('collections.export');
