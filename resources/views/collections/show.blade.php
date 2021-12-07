@@ -10,12 +10,14 @@
             <div>
                 <x-links.cta label="Edit" href="/?collection={{ $collection->id }}"/>
 
+                @if($collection->origin != 'salsah')
                 <form action="{{ route('collections.destroy', [$collection]) }}" method="post" class="inline-block">
                     @csrf
                     @method('delete')
 
                     <x-buttons.delete/>
                 </form>
+                @endif
 
                 <form class="inline-block" x-data x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
                     @csrf

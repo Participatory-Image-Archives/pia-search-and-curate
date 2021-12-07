@@ -14,12 +14,12 @@
             </h2>
             <div>
                 <x-links.cta label="Edit" :href="route('images.edit', [$image])"/>
-                <form action="{{ route('images.destroy', [$image]) }}" method="post" class="inline-block mr-2">
+                {{--<form action="{{ route('images.destroy', [$image]) }}" method="post" class="inline-block mr-2">
                     @csrf
                     @method('delete')
 
                     <x-buttons.delete/>
-                </form>
+                </form>--}}
                 <x-links.bare label="IIIF Image API" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>
                 <x-links.bare label="info.json" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
                 <x-links.bare label="API JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>

@@ -330,7 +330,7 @@
                     .then(response => {
                         if(response.included) {
                             relation.label = response.data.attributes.label;
-                            if(relation.object == 'collection') {
+                            if(relation.model == 'collections') {
                                 this.selection = response.included;
                             } else {
                                 this.images = response.included;
