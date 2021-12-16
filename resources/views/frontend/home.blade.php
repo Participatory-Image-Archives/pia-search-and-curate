@@ -61,6 +61,10 @@
             </template>
         </div>
 
+        @if($tagcloud)
+            <div id="html-tagcloud" class="mx-auto w-full" style="height: 800px"></div>
+        @endif
+
         <div id="images" class="pb-20">
             <div class="grid gap-4 grid-flow-row" :class="`grid-cols-${13-columns}`">
                 <template x-for="image in images" :key="image.id">
@@ -175,6 +179,7 @@
 
             images: [],
             keywords: [],
+            consolidated_keywords: [],
             collection: {
                 model: 'collections',
                 id: '',
@@ -298,6 +303,47 @@
                                 return include.type == 'keywords';
                             })
                         );
+                        
+                        @if($tagcloud)
+
+                        let counted_keywords = [], consolidated_keywords = [];
+
+                        keywords.forEach(el => {
+                            if(!counted_keywords[el.id]) {
+                                counted_keywords[el.id] = {
+                                    'id': el.id,
+                                    'label': el.attributes.label,
+                                    'count': 1
+                                }
+                            } else {
+                                counted_keywords[el.id].count++;
+                            }
+                        });
+
+                        counted_keywords.forEach(el => {
+                            consolidated_keywords.push([
+                                el.label,
+                                el.count,
+                                el.id
+                            ])
+                        });
+
+                        WordCloud(document.getElementById('html-tagcloud'), {
+                            list: consolidated_keywords,
+                            gridSize: Math.round(16 * document.querySelector('#html-tagcloud').offsetWidth / 1024),
+                            weightFactor: function (size) {
+                                return Math.pow(size+1.5, 3) * document.querySelector('#html-tagcloud').offsetWidth / 1024;
+                            },
+                            minSize: '40px',
+                            rotateRatio: 0.5,
+                            rotationSteps: 2,
+                            classes: 'cursor-pointer',
+                            click: function(item) {
+                                window.location = '/?keyword='+item[2];
+                            }
+                        } );
+
+                        @endif
 
                         this.keywords = keywords.filter((keyword, index, self) =>
                             index === self.findIndex((kw) => (
@@ -361,4 +407,9 @@
     });
 
 </script>
+
+@if($tagcloud)
+<script src="{{ asset('js/wordcloud2.js') }}"></script>
+@endif
+
 @endsection

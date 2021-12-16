@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CollectionController;
@@ -20,8 +21,10 @@ use App\Models\Image;
 |
 */
 
-Route::get('/', function () {
-    return view('frontend/home');
+Route::get('/', function (Request $request) {
+    return view('frontend/home', [
+        'tagcloud' => $request->has('tagcloud')
+    ]);
 });
 
 Route::resource('collections', CollectionController::class);
