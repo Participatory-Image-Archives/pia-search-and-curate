@@ -47,6 +47,23 @@
                     x-model="search_focus">
                 Comments
             </label>
+            <label class="block">
+                <input type="radio" name="search_focus_choices" value="dates"
+                    x-model="search_focus">
+                Dates
+            </label>
+        </div>
+        <div class="p-4" x-show="search_focus == 'dates'">
+            <h3 class="text-xs">By Date</h3>
+            <div>
+                <label for="from" class="inline-block">On/From</label>
+                <input type="date" name="from" class="border-b" x-model="date_from">
+            </div>
+            <div class="mb-2">
+                <label for="to" class="inline-block">To</label>
+                <input type="date" name="to" class="border-b" x-model="date_to">
+            </div>
+            <x-buttons.default label="Search" @click="fetch_images"/>
         </div>
     </div>
 
@@ -172,6 +189,9 @@
             query_string: '',
             query_min_chars: 3,
 
+            date_from: '',
+            date_to: '',
+
             data: {
                 data: [],
                 included: []
@@ -228,12 +248,36 @@
                 return this.query_string;
             },
 
+            set dates(value) {
+                let dates = value.split(',');
+                this.date_from = dates[0];
+                this.date_to = dates[1];
+
+                let url = new URL(window.location.href);
+
+                if(value.length) {
+                    url.searchParams.set('dates', value)
+                } else {
+                    url.searchParams.delete('dates')
+                }
+                history.pushState(null, document.title, url.toString())
+            },
+            get dates() {
+                return this.date_from+','+this.date_to;
+            },
+
             // methods
             init() {
                 let params = new URLSearchParams(window.location.search);
 
                 if(params.has('query')) {
                     this.query = params.get('query')
+                    this.fetch_images()
+                }
+
+                if(params.has('dates')) {
+                    this.dates = params.get('dates')
+                    this.search_focus = 'dates'
                     this.fetch_images()
                 }
 
@@ -268,13 +312,15 @@
             },
 
             fetch_images() {
-                if(this.query.length >= this.query_min_chars) {
+                if(this.query.length >= this.query_min_chars || this.dates.length == 11 || this.dates.length == 21) {
                     
                     this.loading = true;
                     this.page = 1;
                     this.images = [];
 
                     this.fetch();
+                } else {
+                    alert('Nah…')
                 }
             },
 
@@ -285,6 +331,10 @@
                 }
                 if(this.search_focus == 'comments') {
                     query = `${this.api_url}comments?filter[comment]=${this.query}&include=images&page[number]=${this.page}&page[size]=${this.page_size}`
+                }
+                if(this.search_focus == 'dates') {
+                    this.dates = this.dates;
+                    query = `${this.api_url}dates?filter[dates]=${this.dates}&include=images&page[number]=${this.page}&page[size]=${this.page_size}`
                 }
                 fetch(query)
                     .then(response => response.json())
@@ -353,6 +403,11 @@
                     }
                 }
                 if(this.search_focus == 'comments') {
+                    if(response.included) {
+                        this.images = this.images.concat(response.included);
+                    }
+                }
+                if(this.search_focus == 'dates') {
                     if(response.included) {
                         this.images = this.images.concat(response.included);
                     }
