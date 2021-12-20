@@ -16,7 +16,7 @@ class LocationController extends Controller
     public function index()
     {
         return view('locations/index', [
-            'locations' => Location::orderBy('label')->get()
+            'locations' => Location::orderBy('label')->where('provenance', 'salsah')->get()
         ]);
     }
 
