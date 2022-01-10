@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="p-4">
-    <div class="md:flex mb-10">
+    <div class="md:flex mb-4">
         <div class="md:w-1/2">
             <h2 class="text-2xl mb-2">
                 {{ $collection->label }}
@@ -33,6 +33,9 @@
             @include('partials.lists-dropdown')
             <x-links.default label="Home" href="/"/>
         </div>
+    </div>
+    <div class="w-full mb-10">
+        {!! $collection->description !!}
     </div>
     <div class="flex mb-10">
         <div class="w-1/2">

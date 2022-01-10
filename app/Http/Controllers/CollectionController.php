@@ -42,6 +42,7 @@ class CollectionController extends Controller
         if($request->input('collection_id') != '') {
             $collection = Collection::find($request->input('collection_id'));
             $collection->label = $request->input('label');
+            $collection->description = $request->input('description');
             $collection->save();
         } else {
             $collection = Collection::create([

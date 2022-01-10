@@ -130,8 +130,8 @@
             class="fixed bottom-0 left-0 w-full bg-black transition"
             style="box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);"
             :style="`transform: translateY(${translate}%)`"
-            x-data="{resolution: 200, translate: 75}"
-            @mouseover="translate = 0" @mouseout="translate = 75">
+            x-data="{resolution: 200, translate: 85}"
+            @mouseover="translate = 0" @mouseout="translate = 85">
             <div class="overflow-x-scroll whitespace-nowrap pr-4">
                 <template x-for="image in selection" :key="image.id">
                     <div class="inline-block my-4 ml-4"
@@ -143,13 +143,15 @@
                     </div>
                 </template>
             </div>
-            <div id="collection" class="flex pb-4 px-4" x-show="selection.length">
-                <form action="{{ route('collections.store') }}" method="post" display="flex" x-ref="collection_form">
+            <div id="collection" class="pb-4 px-4" x-show="selection.length">
+                <form action="{{ route('collections.store') }}" method="post" x-ref="collection_form">
                     @csrf
                     <input type="hidden" name="image_ids" :value="selection.map(s => {return s.id}).join(',')">
                     <input type="hidden" name="collection_id" x-model="collection.id">
-                    <input type="text" name="label" class="p-2 px-4 mr-2 bg-white text-black" placeholder="Label" x-model="collection.label" required>
-                    <button type="submit" class="p-2 px-4 mr-2 border border-white text-white hover:bg-white hover:text-black">Save Collection</button>
+                    <input type="text" name="label" class="w-full p-2 px-4 mb-2 bg-white text-black" placeholder="Label" x-model="collection.label" required>
+                    <textarea name="description" class="w-full p-2 px-4 mb-2 bg-white text-black" placeholder="Description" x-model="collection.description"></textarea>
+                    <div>
+                        <button type="submit" class="p-2 px-4 mr-2 border border-white text-white hover:bg-white hover:text-black">Save Collection</button>
                     <button type="button" class="p-2 px-4 mr-2 text-white text-xs underline"
                         x-show="collection.id != ''"
                         @click.prevent="() => {
@@ -158,6 +160,7 @@
                                 $refs.collection_form.submit();
                             }, 100);
                         }">Add as new Collection</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -203,7 +206,8 @@
             collection: {
                 model: 'collections',
                 id: '',
-                label: ''
+                label: '',
+                description: ''
             },
             keyword: {
                 model: 'keywords',
@@ -433,6 +437,7 @@
                             relation.label = response.data.attributes.label;
                             if(relation.model == 'collections') {
                                 this.selection = response.included;
+                                relation.description = response.data.attributes.description;
                             } else {
                                 this.images = response.included;
                             }
@@ -453,6 +458,7 @@
                 this.selection = [];
                 this.collection.id = '';
                 this.collection.label = '';
+                this.collection.description = '';
 
                 let url = new URL(window.location.href);
                 url.searchParams.delete('collection')
