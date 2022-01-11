@@ -21,8 +21,8 @@
 
                 <form class="inline-block" x-data x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
                     @csrf
-                    <input x-ref="image" @change="$refs.imageupload.submit()" class="hidden" type="file" name="image" accept="image/*" required>
-                    <x-buttons.default @click="$refs.image.click()" label="Add image to collection"/>
+                    <input x-ref="images" @change="$refs.imageupload.submit()" class="hidden" type="file" name="images[]" accept="image/*" required multiple>
+                    <x-buttons.default @click="$refs.images.click()" label="Add images to collection"/>
                 </form>
 
                 <x-links.bare label="JSON" href="{{ env('API_URL') }}collections/{{ $collection->id }}" target="_blank"/>
