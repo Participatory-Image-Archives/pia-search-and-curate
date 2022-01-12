@@ -35,7 +35,10 @@ Route::resource('locations', LocationController::class);
 
 Route::get('/collections/{id}/export',
     [FrontendController::class, 'exportCollection'])->name('collections.export');
-Route::post('/collections/{id}/upload-image', [CollectionController::class, 'uploadImage'])->name('collections.uploadImage');
+Route::post('/collections/{id}/upload-image',
+    [CollectionController::class, 'uploadImage'])->name('collections.uploadImage');
+Route::post('/collections/{id}/upload-documents',
+    [CollectionController::class, 'uploadDocuments'])->name('collections.uploadDocuments');
 
 Route::get('/light-table', function () {
     return view('frontend/light-table');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Collection;
 use App\Models\Image;
+use App\Models\Document;
 
 class CollectionController extends Controller
 {
@@ -150,6 +151,41 @@ class CollectionController extends Controller
                 $image->collections()->sync($id);
 
                 $image->save();
+            }
+        }
+
+        return redirect()->route('collections.show', [$id]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadDocuments(Request $request, $id)
+    {
+        $collection = Collection::find($id);
+
+        if($files = $request->file('documents')){
+            foreach($files as $file){
+
+                $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
+                $original_file_name = $file->getClientOriginalName();
+                $file_name = time().'_'.$original_file_name;
+                $base_path = 'documents';
+
+                $document = $collection->documents()->create([
+                    'label' => $label,
+                    'file_name' => $file_name,
+                    'original_file_name' => $original_file_name,
+                    'base_path' => $base_path,
+                ]);
+
+                $file->storeAs(
+                    'public/'.$base_path, $file_name
+                );
             }
         }
 
