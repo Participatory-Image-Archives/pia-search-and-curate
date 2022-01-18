@@ -84,7 +84,7 @@
                 let image_{{ $image->id }} = new L.Marker([{{$image->location->latitude}}, {{$image->location->longitude}}]);
 
                 image_{{ $image->id }}
-                    .bindTooltip('{{ $image->label }}')
+                    .bindTooltip('{{ $image->title }}')
                     .addEventListener('click', function(e) {
                         window.location = '{{ route('images.show', [$image]) }}';
                     })

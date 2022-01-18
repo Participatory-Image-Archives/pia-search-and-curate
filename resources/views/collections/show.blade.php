@@ -62,9 +62,11 @@
             <div class="mb-10">
                 <h2 class="text-xs mb-1">Notes</h2>
                 <div>
+                    <ul>
                     @foreach ($collection->docs as $doc)
-                        <x-links.default :label="$doc->label" href="{{ env('DOCS_URL') }}/{{ $doc->id }}/edit"/>
+                        <li class="mb-2"><x-links.default :label="$doc->label" href="{{ env('DOCS_URL') }}/{{ $doc->id }}/edit"/></li>
                     @endforeach
+                    </ul>
     
                     <form action="{{ env('DOCS_URL') }}/create" method="get" class="inline-block">
                         @csrf
@@ -78,9 +80,11 @@
             <div class="">
                 <h2 class="text-xs mb-1">Maps</h2>
                 <div>
+                    <ul>
                     @foreach ($collection->maps as $map)
-                        <x-links.default :label="$map->label" href="{{ env('MAPS_URL') }}/{{ $map->id }}"/>
+                        <li class="mb-2"><x-links.default :label="$map->label" href="{{ env('MAPS_URL') }}/{{ $map->id }}"/></li>
                     @endforeach
+                    </ul>
     
                     <form action="{{ env('MAPS_URL') }}/create" method="get" class="inline-block">
                         @csrf
