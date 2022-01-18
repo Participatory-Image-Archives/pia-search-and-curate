@@ -31,6 +31,8 @@
                     <x-buttons.default @click="$refs.documents.click()" label="Add documents to collection"/>
                 </form>
 
+                <x-links.cta label="View on Map" :href="route('collections.map', ['id' => $collection->id])"/>
+
                 <x-links.bare label="JSON" href="{{ env('API_URL') }}collections/{{ $collection->id }}" target="_blank"/>
                 <x-links.bare label="CSV" :href="route('collections.export', ['id' => $collection->id])"/>
             </div>

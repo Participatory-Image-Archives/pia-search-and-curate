@@ -191,4 +191,18 @@ class CollectionController extends Controller
 
         return redirect()->route('collections.show', [$id]);
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function map(Request $request, $id)
+    {
+        return view('collections/map', [
+            'collection' => Collection::find($id)
+        ]);
+    }
 }
