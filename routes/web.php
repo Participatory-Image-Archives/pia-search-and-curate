@@ -42,13 +42,9 @@ Route::post('/collections/{id}/upload-documents',
 Route::get('/collections/{id}/map',
     [CollectionController::class, 'map'])->name('collections.map');
 
-Route::get('/light-table', function () {
-    return view('frontend/light-table');
-});
-
-Route::get('/map', function () {
-    return view('frontend/map');
-});
+Route::get('/coordinates', function (Request $request) {
+    return view('frontend/coordinates');
+})->name('coordinates');
 
 Route::get('/fill-base-path', function () {
 

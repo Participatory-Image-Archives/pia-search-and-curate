@@ -17,7 +17,7 @@
                 class="py-1 px-4 mr-10 text-sm bg-black text-white"
                 @click.prevent="fetch_images">Search</button>
 
-            <x-buttons.ghost label="⚙️" @click="show_settings = ! show_settings"/>
+            <x-buttons.ghost label="Search Settings" class="underline text-xs" @click="show_settings = ! show_settings"/>
         </form>
         <div>
             <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
@@ -52,18 +52,38 @@
                     x-model="search_focus">
                 Dates
             </label>
+            <label class="block">
+                <input type="radio" name="search_focus_choices" value="coordinates"
+                x-model="search_focus">
+                Coordinates
+            </label>
         </div>
         <div class="p-4" x-show="search_focus == 'dates'">
             <h3 class="text-xs">By Date</h3>
             <div>
-                <label for="from" class="inline-block">On/From</label>
+                <label for="from" class="inline-block" style="width: 75px">On/From</label>
                 <input type="date" name="from" class="border-b" x-model="date_from">
             </div>
             <div class="mb-2">
-                <label for="to" class="inline-block">To</label>
+                <label for="to" class="inline-block" style="width: 75px">To</label>
                 <input type="date" name="to" class="border-b" x-model="date_to">
             </div>
             <x-buttons.default label="Search" @click="fetch_images"/>
+        </div>
+        <div class="p-4" x-show="search_focus == 'coordinates'">
+            <h3 class="text-xs">By Coordinates</h3>
+            <div>
+                <label for="tlc" class="inline-block text-xs" style="width: 135px">Top Left Corner</label>
+                <input type="number" name="top_left_lat" class="border-b" x-model="top_left_lat">
+                <input type="number" name="top_left_lng" class="border-b" x-model="top_left_lng">
+            </div>
+            <div class="mb-2">
+                <label for="brc" class="inline-block text-xs" style="width: 135px">Bottom Right Corner</label>
+                <input type="number" name="bottom_right_lat" class="border-b" x-model="bottom_right_lat">
+                <input type="number" name="bottom_right_lng" class="border-b" x-model="bottom_right_lng">
+            </div>
+            <x-buttons.default label="Search" @click="fetch_images"/>
+            <x-links.bare label="Choose coordinates on map" href="{{ route('coordinates') }}"/>
         </div>
     </div>
 
@@ -195,6 +215,11 @@
             date_from: '',
             date_to: '',
 
+            top_left_lat: '',
+            top_left_lng: '',
+            bottom_right_lat: '',
+            bottom_right_lng: '',
+
             data: {
                 data: [],
                 included: []
@@ -270,6 +295,27 @@
                 return this.date_from+','+this.date_to;
             },
 
+            set coordinates(value) {
+                let coordinates = value.split(',');
+                
+                this.top_left_lat = coordinates[0];
+                this.top_left_lng = coordinates[1];
+                this.bottom_right_lat = coordinates[2];
+                this.bottom_right_lng = coordinates[3];
+
+                let url = new URL(window.location.href);
+
+                if(value.length) {
+                    url.searchParams.set('coordinates', value)
+                } else {
+                    url.searchParams.delete('coordinates')
+                }
+                history.pushState(null, document.title, url.toString())
+            },
+            get coordinates() {
+                return this.top_left_lat+','+this.top_left_lng+','+this.bottom_right_lat+','+this.bottom_right_lng
+            },
+
             // methods
             init() {
                 let params = new URLSearchParams(window.location.search);
@@ -282,6 +328,12 @@
                 if(params.has('dates')) {
                     this.dates = params.get('dates')
                     this.search_focus = 'dates'
+                    this.fetch_images()
+                }
+
+                if(params.has('coordinates')) {
+                    this.coordinates = params.get('coordinates')
+                    this.search_focus = 'coordinates'
                     this.fetch_images()
                 }
 
@@ -316,7 +368,7 @@
             },
 
             fetch_images() {
-                if(this.query.length >= this.query_min_chars || this.dates.length == 11 || this.dates.length == 21) {
+                if(this.query.length >= this.query_min_chars || this.dates.length == 11 || this.dates.length == 21 || this.coordinates.length > 0) {
                     
                     this.loading = true;
                     this.page = 1;
@@ -339,6 +391,10 @@
                 if(this.search_focus == 'dates') {
                     this.dates = this.dates;
                     query = `${this.api_url}dates?filter[dates]=${this.dates}&include=images&page[number]=${this.page}&page[size]=${this.page_size}`
+                }
+                if(this.search_focus == 'coordinates') {
+                    this.coordinates = this.coordinates;
+                    query = `${this.api_url}locations?filter[coordinates]=${this.coordinates}&include=images&page[number]=${this.page}&page[size]=${this.page_size}`
                 }
                 fetch(query)
                     .then(response => response.json())
@@ -412,6 +468,11 @@
                     }
                 }
                 if(this.search_focus == 'dates') {
+                    if(response.included) {
+                        this.images = this.images.concat(response.included);
+                    }
+                }
+                if(this.search_focus == 'coordinates') {
                     if(response.included) {
                         this.images = this.images.concat(response.included);
                     }
