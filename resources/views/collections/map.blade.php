@@ -62,6 +62,7 @@
             map = L.map('map', {
                 center: center,
                 zoom: 8,
+                maxZoom: 18,
                 doubleClickZoom: false
             }),
             markers = L.markerClusterGroup();
