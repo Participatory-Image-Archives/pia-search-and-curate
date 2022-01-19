@@ -24,6 +24,7 @@
                 <x-links.bare label="info.json" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
                 <x-links.bare label="API JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
                 <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
+                <span class="text-xs">{{ $_SERVER['REMOTE_ADDR'] }}</span>
             </div>
         </div>
         <div class="md:w-1/2 md:text-right">
