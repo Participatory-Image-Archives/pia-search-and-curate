@@ -8,6 +8,7 @@
 
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/node_modules/slim-select/dist/slimselect.min.css">
+    <link rel="stylesheet" href="/css/app.css">
     
     @yield('styles')
 

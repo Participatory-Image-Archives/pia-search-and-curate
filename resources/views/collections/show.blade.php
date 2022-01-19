@@ -7,7 +7,7 @@
             <h2 class="text-2xl mb-2">
                 {{ $collection->label }}
             </h2>
-            <div>
+            <div class="print-hidden">
                 <x-links.cta label="Edit" href="/?collection={{ $collection->id }}"/>
 
                 @if($collection->origin != 'salsah')
@@ -37,7 +37,7 @@
                 <x-links.bare label="CSV" :href="route('collections.export', ['id' => $collection->id])"/>
             </div>
         </div>
-        <div class="md:w-1/2 md:text-right">
+        <div class="md:w-1/2 md:text-right print-hidden">
             @include('partials.lists-dropdown')
             <x-links.default label="Home" href="/"/>
         </div>
@@ -46,10 +46,10 @@
         {!! $collection->description !!}
     </div>
     <div class="flex">
-        <div class="w-1/5 mr-8">
+        <div class="w-1/5 mr-8 print-hidden">
             @if($collection->documents->count())
             <div class="mb-10">
-                <h2 class="text-xs mb-1">Documents</h2>
+                <h2 class="text-xs mb-2">Documents</h2>
                 <div>
                     <ul>
                     @foreach ($collection->documents as $document)
@@ -60,7 +60,7 @@
             </div>
             @endif
             <div class="mb-10">
-                <h2 class="text-xs mb-1">Notes</h2>
+                <h2 class="text-xs mb-2">Notes</h2>
                 <div>
                     <ul>
                     @foreach ($collection->docs as $doc)
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div class="">
-                <h2 class="text-xs mb-1">Maps</h2>
+                <h2 class="text-xs mb-2">Maps</h2>
                 <div>
                     <ul>
                     @foreach ($collection->maps as $map)
@@ -97,11 +97,14 @@
             </div>
         </div>
         <div>
-            <h2 class="text-xs mb-1">Images</h2>
-            <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+            <h2 class="text-xs mb-2 print-hidden">Images</h2>
+            <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 print-grid print-w-full">
                 @foreach ($collection->images as $image)
-                    <a href="{{ route('images.show', [$image]) }}">
-                        <img class="inline-block mr-2 w-full" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/320,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
+                    <a href="{{ route('images.show', [$image]) }}" class="print-image">
+                        <img class="inline-block mr-2 w-full" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/480,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
+                        <div class="print-image-meta p-2">
+                            <span class="text-xs">{{ $image->title }}</span>
+                        </div>
                     </a>
                 @endforeach
             </div>

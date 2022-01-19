@@ -1,1 +1,40 @@
+/* print styles */
+@page {
+    size: A4;
+    margin: 10mm;
+}
+.print-image-meta {
+    display: none;
+}
+@media print {
+    html, body {
+        width: 210mm;
+        height: 297mm;
+        overflow: visible;
+    }
 
+    body {
+        font-size: 15pt;
+        hyphens: auto;
+    }
+
+    .print-hidden {
+        display: none;
+    }
+    .print-w-full {
+        width: 100%;
+    }
+    .print-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    .print-grid a {
+        break-inside: avoid;
+    }
+    .print-image-meta {
+        display: block;
+    }
+    .print-image-meta span {
+        display: block;
+    }
+}
