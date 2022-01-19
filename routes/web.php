@@ -46,6 +46,9 @@ Route::get('/coordinates', function (Request $request) {
     return view('frontend/coordinates');
 })->name('coordinates');
 
+Route::get('/images/{id}/similar',
+    [ImageController::class, 'findSimilar'])->name('images.similar');
+
 Route::get('/fill-base-path', function () {
 
     $images = Image::whereNull('base_path')->get();
