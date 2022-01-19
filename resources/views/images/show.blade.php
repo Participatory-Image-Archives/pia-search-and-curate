@@ -20,7 +20,6 @@
 
                     <x-buttons.delete/>
                 </form>--}}
-                <x-links.cta label="Find similar" :href="route('images.similar', [$image])"/>
                 <x-links.bare label="IIIF Image API (Full Image)" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>
                 <x-links.bare label="IIIF Image API (info.json)" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
                 <x-links.bare label="API JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
