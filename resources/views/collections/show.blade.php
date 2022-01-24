@@ -19,21 +19,8 @@
                 </form>
                 @endif
 
-                <form class="inline-block" x-data x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
-                    @csrf
-                    <input x-ref="images" @change="$refs.imageupload.submit()" class="hidden" type="file" name="images[]" accept="image/*" required multiple>
-                    <x-buttons.default @click="$refs.images.click()" label="Add images to collection"/>
-                </form>
-
-                <form class="inline-block" x-data x-ref="documentsupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadDocuments', [$collection]) }}">
-                    @csrf
-                    <input x-ref="documents" @change="$refs.documentsupload.submit()" class="hidden" type="file" name="documents[]" required multiple>
-                    <x-buttons.default @click="$refs.documents.click()" label="Add documents to collection"/>
-                </form>
-
-                <x-links.cta label="View on Map" :href="route('collections.map', ['id' => $collection->id])"/>
-
-                <x-links.bare label="JSON" href="{{ env('API_URL') }}collections/{{ $collection->id }}" target="_blank"/>
+                <span class="text-xs ml-2 mr-1">Download </span>
+                <x-links.bare label="JSON" href="{{ env('API_URL') }}collections/{{ $collection->id }}" target="_blank" class="mr-2 text-xs underline"/>
                 <x-links.bare label="CSV" :href="route('collections.export', ['id' => $collection->id])"/>
             </div>
         </div>
@@ -47,7 +34,6 @@
     </div>
     <div class="flex">
         <div class="w-1/4 pr-4 print-hidden">
-            @if($collection->documents->count())
             <div class="mb-10">
                 <h2 class="text-xs mb-2">Documents</h2>
                 <div>
@@ -57,8 +43,12 @@
                     @endforeach
                     </ul>
                 </div>
+                <form class="inline-block" x-data x-ref="documentsupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadDocuments', [$collection]) }}">
+                    @csrf
+                    <input x-ref="documents" @change="$refs.documentsupload.submit()" class="hidden" type="file" name="documents[]" required multiple>
+                    <x-buttons.default @click="$refs.documents.click()" label="Upload documents"/>
+                </form>
             </div>
-            @endif
             <div class="mb-10">
                 <h2 class="text-xs mb-2">Notes</h2>
                 <div>
@@ -97,7 +87,7 @@
             </div>
         </div>
         <div class="w-3/4">
-            <div class="flex items-center print-hidden mb-2">
+            <div class="flex items-center print-hidden mb-2" x-data>
                 <h2 class="text-xs mr-2">Images</h2>
                 <a href="{{ route('collections.show', [$collection]) }}" class="mr-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,6 +99,22 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                     </svg>
                 </a>
+                <a href="{{ route('collections.map', [$collection]) }}" class="mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                    </svg>
+                </a>
+                <form x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
+                    @csrf
+                    <input x-ref="images" @change="$refs.imageupload.submit()" class="hidden" type="file" name="images[]" accept="image/*" required multiple>
+                </form>
+
+                <button type="button" @click="$refs.images.click()" label="Add images to collection">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </button>
+                
             </div>
             <div class="grid gap-4 {{ $display == 'list' ? '' : 'grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6' }} print-grid print-w-full">
                 @foreach ($collection->images as $image)
