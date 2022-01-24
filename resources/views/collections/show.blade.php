@@ -46,7 +46,7 @@
         {!! $collection->description !!}
     </div>
     <div class="flex">
-        <div class="w-1/5 mr-8 print-hidden">
+        <div class="w-1/4 pr-4 print-hidden">
             @if($collection->documents->count())
             <div class="mb-10">
                 <h2 class="text-xs mb-2">Documents</h2>
@@ -96,16 +96,80 @@
                 </div>
             </div>
         </div>
-        <div>
-            <h2 class="text-xs mb-2 print-hidden">Images</h2>
-            <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 print-grid print-w-full">
+        <div class="w-3/4">
+            <div class="flex items-center print-hidden mb-2">
+                <h2 class="text-xs mr-2">Images</h2>
+                <a href="{{ route('collections.show', [$collection]) }}" class="mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
+                </a>
+                <a href="{{ route('collections.show', [$collection]) }}?display=list" class="mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    </svg>
+                </a>
+            </div>
+            <div class="grid gap-4 {{ $display == 'list' ? '' : 'grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6' }} print-grid print-w-full">
                 @foreach ($collection->images as $image)
+                    @if($display == 'list')
+                    <div class="flex">
+                        <a href="{{ route('images.show', [$image]) }}" class="pr-2 w-1/4 print-image">
+                            <img class="inline-block" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
+                        </a>
+                        <div class="image-meta w-3/4 pl-2">
+                            <table class="w-full mb-4">
+                                <thead class="text-xs">
+                                    <tr>
+                                        <td class="pb-2 w-1/5">Field</td>
+                                        <td class="pb-2">Value</td>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td>Title</td>
+                                    <td>{{ $image->title ?? '–' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Signature</td>
+                                    <td>{{ $image->signature ?? '–' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Old Nr</td>
+                                    <td>{{ $image->oldnr ?? '–' }}</td>
+                                </tr>
+                            </table>
+                            <div class="inline-block w-full">
+                                <h3 class="mb-1 text-xs">Keywords</h3>
+                                <div class="mb-2">
+                                    @forelse ($image->keywords as $keyword)
+                                        @if ($keyword->label)
+                                            <x-links.default href="/?keyword={{ $keyword->id }}" :label="$keyword->label" class="mb-2"/>
+                                        @endif
+                                    @empty
+                                    –
+                                    @endforelse
+                                </div>
+                                <h3 class="mb-1 text-xs">Collections</h3>
+                                <div class="mb-2">
+                                    @forelse ($image->collections as $collection)
+                                        @if ($collection->label)
+                                            <x-links.default :href="route('collections.show', [$collection])" :label="$collection->label" class="mb-2"/>
+                                        @endif
+                                    @empty
+                                    –
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @else
                     <a href="{{ route('images.show', [$image]) }}" class="print-image">
                         <img class="inline-block mr-2 w-full" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
                         <div class="print-image-meta p-2">
                             <span class="text-xs">{{ $image->title }}</span>
                         </div>
                     </a>
+                    @endif
                 @endforeach
             </div>
         </div>

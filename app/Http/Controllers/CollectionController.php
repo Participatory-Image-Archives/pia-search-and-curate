@@ -60,13 +60,15 @@ class CollectionController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         return view('collections/show', [
-            'collection' => Collection::find($id)
+            'collection' => Collection::find($id),
+            'display' => $request->input('display')
         ]);
     }
 
