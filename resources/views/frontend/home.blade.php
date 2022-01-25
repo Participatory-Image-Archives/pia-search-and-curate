@@ -10,6 +10,9 @@
 
     <header class="mb-6 flex justify-between">
         <form action="{{ env('API_URL') }}" class="flex">
+            <a href="/">
+                <img src="{{ asset('pia-rat.svg') }}" alt="PIA Logo Rat" style="width: 40px; margin-right: 10px">
+            </a>
             <input type="text" name="query"
                 class="border py-1 px-4 mr-2"
                 x-model="query">

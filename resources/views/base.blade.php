@@ -17,6 +17,10 @@
 
     @yield('content')
     
+    <a href="/" class="fixed bottom-4 right-4">
+        <img class="w-10" src="{{ asset('pia-rat.svg') }}" alt="PIA Logo Rat">
+    </a>
+
     <!--<script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>-->
     <!--<script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>-->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
