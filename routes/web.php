@@ -41,6 +41,10 @@ Route::post('/collections/{id}/upload-documents',
     [CollectionController::class, 'uploadDocuments'])->name('collections.uploadDocuments');
 Route::get('/collections/{id}/map',
     [CollectionController::class, 'map'])->name('collections.map');
+Route::get('/collections/{id}/copy',
+    [CollectionController::class, 'copy'])->name('collections.copy');
+Route::post('/collections/{id}/do-copy',
+    [CollectionController::class, 'doCopy'])->name('collections.doCopy');
 
 Route::get('/coordinates', function (Request $request) {
     return view('frontend/coordinates');

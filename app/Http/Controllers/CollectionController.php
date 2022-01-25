@@ -207,4 +207,50 @@ class CollectionController extends Controller
             'collection' => Collection::find($id)
         ]);
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function copy(Request $request, $id)
+    {
+        return view('collections/copy', [
+            'collection' => Collection::find($id),
+            'collections' => Collection::all()
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function doCopy(Request $request, $id)
+    {
+        if($request->collection_id != '') {
+            $collection = Collection::find($request->collection_id);
+        } else {
+            $collection = Collection::create([
+                'label' => $request->collection_label,
+                'origin' => 'pia'
+            ]);
+        }
+
+        $images = [];
+
+        foreach ($request->all() as $key => $input) {
+            if(strpos($key, 'image_') !== false){
+                $images[] = explode('_', $key)[1];
+            }
+        }
+
+        $collection->images()->syncWithoutDetaching($images);
+
+        return redirect()->route('collections.show', [$collection]);
+    }
 }
