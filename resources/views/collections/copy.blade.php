@@ -22,7 +22,7 @@
     <form action="{{ route('collections.doCopy', [$collection]) }}" method="POST" class="flex">
         @csrf
 
-        <div class="w-1/6 pr-4">
+        <div class="w-1/4 pr-4">
             <p class="text-xs mb-2">Choose the collection to which you want to copy the images you selected on the right. Leave empty and enter a label to start a new collection.</p>
 
                 <label for="collection_id">Collection…</label>
@@ -38,7 +38,8 @@
                 <input type="text" name="collection_label" class="w-full text-xs px-2 border border-black rounded-full mb-4" style="height: 26px;" paceholder="Collection label">
                 <x-buttons.default type="submit" label="Copy"/>
         </div>
-        <div class="w-5/6">
+        <div class="w-3/4">
+            @include('collections.image-actions')
             <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
                 @foreach ($collection->images as $image)
                     <div class="relative">

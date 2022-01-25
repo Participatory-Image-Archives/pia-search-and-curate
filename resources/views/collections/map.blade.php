@@ -20,7 +20,7 @@
         {!! $collection->description !!}
     </div>
     <div class="flex">
-        <div class="w-1/6 mr-8">
+        <div class="w-1/4 pr-4">
             <p class="text-xs mb-2">These images do not have a location attached.</p>
             @foreach ($collection->images as $image)
                 @if (!$image->location)
@@ -30,7 +30,8 @@
                 @endif
             @endforeach
         </div>
-        <div class="w-full">
+        <div class="w-3/4">
+            @include('collections.image-actions')
             <div id="map" class="w-full" style="height: 800px"></div>
         </div>
     </div>
