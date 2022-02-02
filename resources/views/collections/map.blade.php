@@ -11,10 +11,7 @@
                 <x-links.cta label="Back" :href="route('collections.show', [$collection])"/>
             </div>
         </div>
-        <div class="md:w-1/2 md:text-right">
-            @include('partials.lists-dropdown')
-            <x-links.default label="Home" href="/"/>
-        </div>
+        
     </div>
     <div class="w-full mb-10">
         {!! $collection->description !!}

@@ -6,10 +6,7 @@
         <h2 class="text-2xl mb-2 md:w-1/2">
             People
         </h2>
-        <div class="md:w-1/2 md:text-right">
-            @include('partials.lists-dropdown')
-            <x-links.default label="Home" href="/"/>
-        </div>
+        
     </div>
 
     @php

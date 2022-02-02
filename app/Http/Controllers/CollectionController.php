@@ -68,6 +68,7 @@ class CollectionController extends Controller
     {
         return view('collections/show', [
             'collection' => Collection::find($id),
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
             'display' => $request->input('display')
         ]);
     }

@@ -13,13 +13,13 @@
     @yield('styles')
 
 </head>
-<body>
+<body class="min-h-screen">
 
     @yield('content')
     
-    <a href="/" class="fixed bottom-4 right-4">
-        <img class="w-10" src="{{ asset('pia-rat.svg') }}" alt="PIA Logo Rat">
-    </a>
+    <div class="fixed bottom-4 left-4">
+        @include('partials.nav')
+    </div>
 
     <!--<script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>-->
     <!--<script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>-->

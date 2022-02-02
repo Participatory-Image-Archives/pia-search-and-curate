@@ -26,10 +26,7 @@
                 <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
             </div>
         </div>
-        <div class="md:w-1/2 md:text-right">
-            @include('partials.lists-dropdown')
-            <x-links.default label="Home" href="/"/>
-        </div>
+        
     </div>
 
     <div class="flex">

@@ -17,10 +17,6 @@
                     <x-buttons.default type="submit" label="Save"/>
                 </div>
             </div>
-            <div class="md:w-1/2 md:text-right">
-                @include('partials.lists-dropdown')
-                <x-links.default label="Home" href="/"/>
-            </div>
         </div>
 
         <div class="flex">

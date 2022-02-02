@@ -2,95 +2,49 @@
 
 @section('content')
 
-<div id="app" class="p-4" x-data="app">
+<div id="app" class="p-4 bg-gray-100 min-h-screen" x-data="app">
 
-    <div class="fixed top-0 left-0 h-full w-full bg-blue-500 bg-opacity-75 flex justify-around items-center z-50" x-show="loading">
+    <div class="fixed top-0 left-0 h-full w-full bg-gray-100 bg-opacity-75 flex justify-around items-center z-50" x-show="loading">
         <span class="font-bold text-white text-8xl">Loading…</span>
     </div>
 
-    <header class="mb-6 flex justify-between">
-        <form action="{{ env('API_URL') }}" class="flex">
-            <a href="/">
-                <img src="{{ asset('pia-rat.svg') }}" alt="PIA Logo Rat" style="width: 40px; margin-right: 10px">
-            </a>
+    <section class="my-10">
+        <form action="{{ env('API_URL') }}" class="flex justify-center">
+
             <input type="text" name="query"
-                class="border py-1 px-4 mr-2"
-                x-model="query">
+                class="py-2 px-6 w-1/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10"
+                x-model="query" autocomplete="new-password">
             <button type="submit"
-                class="py-1 px-4 mr-10 text-sm bg-black text-white"
+                class="relative -left-5 text-lg z-0 border border-gray-700 bg-white hover:bg-gray-700 hover:text-white pl-8 pr-6"
                 @click.prevent="fetch_images">Search</button>
-
-            <x-buttons.ghost label="Search Settings" class="underline text-xs" @click="show_settings = ! show_settings"/>
         </form>
-        <div>
-            <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
-
-            <x-buttons.bare label="Delete Selection" @click="delete_selection" x-show="selection.length"/>
-            @include('partials.lists-dropdown')
-        </div>
-    </header>
-
-    <div class="shadow-2xl flex mb-4" x-show="show_settings">
-        <div class="p-4">
-            <h3 class="text-xs">Column Count</h3>
-            <input 
-                class="h-full"
-                type="range" min="1" max="12" value="9"
-                x-model="columns">
-        </div>
-        <div class="p-4">
-            <h3 class="text-xs">Search focus</h3>
-            <label class="block">
+        <div class="flex justify-center mt-2">
+            <label class="inline-block cursor-pointer" title="Search through title, signature and old number">
                 <input type="radio" name="search_focus_choices" value="fuzzy"
-                    x-model="search_focus">
-                Images: Title, Old Number, Signature
-            </label>
-            <label class="block">
+                    x-model="search_focus" >
+                Fuzzy
+            <label class="inline-block cursor-pointer ml-6">
                 <input type="radio" name="search_focus_choices" value="comments"
                     x-model="search_focus">
                 Comments
             </label>
-            <label class="block">
+            <label class="inline-block ml-6">
+                <input type="radio" name="search_focus_choices" value="coordinates"
+                    x-model="search_focus">
+                <a href="{{ route('search.byCoordinates') }}">Map</a>
+            </label>
+            <label class="inline-block ml-6">
                 <input type="radio" name="search_focus_choices" value="dates"
                     x-model="search_focus">
-                Dates
-            </label>
-            <label class="block">
-                <input type="radio" name="search_focus_choices" value="coordinates"
-                x-model="search_focus">
-                Coordinates
+                <a href="{{ route('search.byDates') }}">Dates</a>
             </label>
         </div>
-        <div class="p-4" x-show="search_focus == 'dates'">
-            <h3 class="text-xs">By Date</h3>
-            <div>
-                <label for="from" class="inline-block" style="width: 75px">On/From</label>
-                <input type="date" name="from" class="border-b" x-model="date_from">
-            </div>
-            <div class="mb-2">
-                <label for="to" class="inline-block" style="width: 75px">To</label>
-                <input type="date" name="to" class="border-b" x-model="date_to">
-            </div>
-            <x-buttons.default label="Search" @click="fetch_images"/>
+        <div class="hidden">
+            <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
         </div>
-        <div class="p-4" x-show="search_focus == 'coordinates'">
-            <h3 class="text-xs">By Coordinates</h3>
-            <div>
-                <label for="tlc" class="inline-block text-xs" style="width: 135px">Top Left Corner</label>
-                <input type="number" name="top_left_lat" class="border-b" x-model="top_left_lat">
-                <input type="number" name="top_left_lng" class="border-b" x-model="top_left_lng">
-            </div>
-            <div class="mb-2">
-                <label for="brc" class="inline-block text-xs" style="width: 135px">Bottom Right Corner</label>
-                <input type="number" name="bottom_right_lat" class="border-b" x-model="bottom_right_lat">
-                <input type="number" name="bottom_right_lng" class="border-b" x-model="bottom_right_lng">
-            </div>
-            <x-buttons.default label="Search" @click="fetch_images"/>
-            <x-links.bare label="Choose coordinates on map" href="{{ route('coordinates') }}"/>
-        </div>
-    </div>
+    </section>
 
-    <main>
+    <main class="pr-20">
         <div id="keywords" class="mb-6" x-data="{show_keywords: false}" x-show="keywords.length">
             <x-buttons.default x-text="`# ${keywords.length}`" @click="show_keywords = ! show_keywords"/>
 
@@ -102,11 +56,11 @@
         </div>
 
         @if($tagcloud)
-            <div id="html-tagcloud" class="mx-auto w-full" style="height: 800px"></div>
+            <div id="html-tagcloud" class="mx-auto w-full mb-8" style="height: 800px"></div>
         @endif
 
         <div id="images" class="pb-20">
-            <div class="grid gap-4 grid-flow-row" :class="`grid-cols-${13-columns}`">
+            <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6" :class="`grid-cols-${13-columns}`">
                 <template x-for="image in images" :key="image.id">
                     <div x-data="{loaded: false, show_meta: false}">
                         <div class="relative"
@@ -148,47 +102,63 @@
                 </template>
             </div>
         </div>
-
-        <div id="selection" x-ref="selection"
-            class="fixed bottom-0 left-0 w-full bg-black transition"
-            style="box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);"
-            :style="`transform: translateY(${translate}%)`"
-            x-data="{resolution: 200, translate: 85}"
-            @mouseover="translate = 0" @mouseout="translate = 85">
-            <div class="overflow-x-scroll whitespace-nowrap pr-4">
-                <template x-for="image in selection" :key="image.id">
-                    <div class="inline-block my-4 ml-4"
-                        @click="selection = selection.filter(item => item !== image)">
-                        <img
-                            :src="`${image.links.related}full/${resolution},/0/default.jpg`"
-                            :alt="image.attributes.title"
-                            style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
-                    </div>
-                </template>
-            </div>
-            <div id="collection" class="pb-4 px-4" x-show="selection.length">
-                <form action="{{ route('collections.store') }}" method="post" x-ref="collection_form">
-                    @csrf
-                    <input type="hidden" name="image_ids" :value="selection.map(s => {return s.id}).join(',')">
-                    <input type="hidden" name="collection_id" x-model="collection.id">
-                    <input type="text" name="label" class="w-full p-2 px-4 mb-2 bg-white text-black" placeholder="Label" x-model="collection.label" required>
-                    <textarea name="description" class="w-full p-2 px-4 mb-2 bg-white text-black" placeholder="Description" x-model="collection.description"></textarea>
-                    <div>
-                        <button type="submit" class="p-2 px-4 mr-2 border border-white text-white hover:bg-white hover:text-black">Save Collection</button>
-                    <button type="button" class="p-2 px-4 mr-2 text-white text-xs underline"
-                        x-show="collection.id != ''"
-                        @click.prevent="() => {
-                            collection.id = '';
-                            setTimeout(() => {
-                                $refs.collection_form.submit();
-                            }, 100);
-                        }">Add as new Collection</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </main>
 
+    <aside id="sidebar"
+        x-data="{translate: '80px', expand_collections: false}"
+        @mouseover="translate = '100%'" @mouseleave="translate = '80px'; expand_collections = false;"
+        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50"
+        :style="`transform: translateX(calc(100% - ${translate}))`">
+        
+        @include('frontend.partials.aside-collections')
+
+        <div id="selection" x-ref="selection"
+            class="min-h-screen max-h-screen w-80 bg-black p-4 overflow-y-auto overflow-x-hidden"
+            x-data="{resolution: 280}" x-show="selection.length">
+            <div>
+                <div id="collection">
+                    <form action="{{ route('collections.store') }}" method="post" x-ref="collection_form">
+                        @csrf
+                        <input type="hidden" name="image_ids" :value="selection.map(s => {return s.id}).join(',')">
+                        <input type="hidden" name="collection_id" x-model="collection.id">
+                        
+                        <div class="flex">
+                            <input type="text" name="label" class="py-2 px-6 w-56 focus:outline-none text-lg z-10 bg-white text-black rounded-full" placeholder="Label" x-model="collection.label" required>
+                            <button type="submit" class="relative -left-5 text-lg z-0 pl-7 pr-3 border border-white text-white hover:bg-white hover:text-black">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                            </button>
+                        </div>
+                        
+                        <button type="button" class="p-2 px-4 text-white text-xs underline"
+                            x-show="collection.id != ''"
+                            @click.prevent="() => {
+                                collection.id = '';
+                                setTimeout(() => {
+                                    $refs.collection_form.submit();
+                                }, 100);
+                            }">Add as new Collection</button>
+                    </form>
+                </div>
+                <div>
+                    <template x-for="image in selection" :key="image.id">
+                        <div class="mt-4"
+                            @click="if (confirm('Really remove?')) {
+                                selection = selection.filter(item => item !== image)
+                            }">
+                            <img
+                                class="w-full cursor-not-allowed"
+                                :src="`${image.links.related}full/${resolution},/0/default.jpg`"
+                                :alt="image.attributes.title"
+                                style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                        </div>
+                    </template>
+                </div>
+                <div class="my-4">
+                    <button @click="delete_selection" x-show="selection.length" class="py-2 px-4 rounded-full border border-white text-white hover:bg-red-500 hover:text-white text-sm">Delete Selection</button>
+                </div>
+            </div>
+        </div>
+    </aside>
 </div>
 
 <script>

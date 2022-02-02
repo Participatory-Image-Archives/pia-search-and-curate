@@ -8,7 +8,9 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KeywordController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\LocationController;
+
 use App\Models\Image;
+use App\Models\Collection;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +25,8 @@ use App\Models\Image;
 
 Route::get('/', function (Request $request) {
     return view('frontend/home', [
-        'tagcloud' => $request->has('tagcloud')
+        'tagcloud' => $request->has('tagcloud'),
+        'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
     ]);
 });
 
@@ -46,9 +49,12 @@ Route::get('/collections/{id}/copy',
 Route::post('/collections/{id}/do-copy',
     [CollectionController::class, 'doCopy'])->name('collections.doCopy');
 
-Route::get('/coordinates', function (Request $request) {
-    return view('frontend/coordinates');
-})->name('coordinates');
+Route::get('/by-coordinates', function (Request $request) {
+    return view('frontend/search-by-coordinates');
+})->name('search.byCoordinates');
+Route::get('/by-dates', function (Request $request) {
+    return view('frontend/search-by-dates');
+})->name('search.byDates');
 
 Route::get('/fill-base-path', function () {
 
