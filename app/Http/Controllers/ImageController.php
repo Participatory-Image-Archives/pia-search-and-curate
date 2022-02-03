@@ -126,16 +126,28 @@ class ImageController extends Controller
     /**
      * Find similar images from the collection.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function findSimilar($id) {
+    public function findSimilar(Request $request, $id) {
 
         $image = Image::find($id);
+        $category = $request->input('category', 'localcolor');
+
+        $url = 'http://pia-iiif.dhlab.unibas.ch/'.$image->base_path.'/'.$image->signature.'.jp2/full/320,/0/default.png';
+        $img = file_get_contents($url);
+        if ($img !== false){
+            $base64 = 'data:image/png;base64,'.base64_encode($img);
+        } else {
+            $base64 = '';
+        }
 
         // curl call by signature
         // curl -X POST "http://10.34.58.72:4567/api/v1/find/segments/similar" -H "accept: application/json" -H "Content-Type: application/json" -d '{"containers":[{"terms":[{"type":"ID","data":"i_SGV_10D_00500_1","categories":["localfeatures"]}]}]}'
         // curl -X POST "http://10.34.58.72:4567/api/v1/find/segments/similar" -H "accept: application/json" -H "Content-Type: application/json" -d '{"containers":[{"terms":[{"type":"BOOLEAN","data":"data:application/json;base64,W3siYXR0cmlidXRlIjoiZmVhdHVyZXNfdGFibGVfcGlhX21ldGEuY29sbGVjdGlvbiIsIm9wZXJhdG9yIjoiSU4iLCJ2YWx1ZXMiOlsiU0dWIDEwIl19XQ==","categories":["boolean"]}]}]}’
+        // "type”:"IMAGE","data":"data:image/png;base64,...","categories":["localfeatures”]}
+        // "data": "i_'.$image->signature.'_1",
 
         $curl = curl_init();
 
@@ -153,10 +165,10 @@ class ImageController extends Controller
                     {
                         "terms": [
                             {
-                                "type": "ID",
-                                "data": "i_'.$image->signature.'_1",
+                                "type": "IMAGE",
+                                "data": "'.$base64.'",
                                 "categories": [
-                                    "localfeatures"
+                                    "'.$category.'"
                                 ]
                             }
                         ]
@@ -176,9 +188,11 @@ class ImageController extends Controller
 
         $similar = [];
 
-        foreach ($passed_threshold as $key => $item) {
+        foreach (json_decode($response)->results[0]->content as $key => $item) {
             $similar[] = ltrim(rtrim($item->key, '_1'), 'i_');
         }
+
+        $similar = array_slice($similar, 0, 100);
 
         return view('images/similar', [
             'image' => $image,
