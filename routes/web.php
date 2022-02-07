@@ -8,6 +8,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KeywordController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PiaDocsController;
 
 use App\Models\Image;
 use App\Models\Collection;
@@ -40,32 +41,12 @@ Route::get('/', function (Request $request) {
     ]);
 });
 
-function checkRemoteFile($url)
-{
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL,$url);
-    // don't download content
-    curl_setopt($ch, CURLOPT_NOBODY, 1);
-    curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-    $result = curl_exec($ch);
-    curl_close($ch);
-    if($result !== FALSE)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 Route::resource('collections', CollectionController::class);
 Route::resource('images', ImageController::class);
 Route::resource('keywords', KeywordController::class);
 Route::resource('people', PersonController::class);
 Route::resource('locations', LocationController::class);
+Route::resource('docs', PiaDocsController::Class);
 
 Route::get('/collections/{id}/export',
     [FrontendController::class, 'exportCollection'])->name('collections.export');

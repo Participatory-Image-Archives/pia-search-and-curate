@@ -1,5 +1,5 @@
 <div class="grid gap-4 grid-flow-row print-grid print-w-full" :class="`grid-cols-`+cols">
-    @foreach ($collection->images as $image)
+    @foreach ($images as $image)
     <a href="{{ route('images.show', [$image]) }}" class="print-image">
         <img class="inline-block mr-2 w-full"
             src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
