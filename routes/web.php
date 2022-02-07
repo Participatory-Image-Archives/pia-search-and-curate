@@ -24,11 +24,42 @@ use App\Models\Collection;
 */
 
 Route::get('/', function (Request $request) {
+    $images_otd = [];
+    $total_count = Image::count();
+
+    while (count($images_otd) <= 6) {
+        srand(floor(time()/86400)+count($images_otd));
+        $image = Image::find(rand(0, $total_count));
+        $images_otd[] = $image;
+    }
+
     return view('frontend/home', [
         'tagcloud' => $request->has('tagcloud'),
-        'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
+        'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
+        'images_otd' => $images_otd
     ]);
 });
+
+function checkRemoteFile($url)
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL,$url);
+    // don't download content
+    curl_setopt($ch, CURLOPT_NOBODY, 1);
+    curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+    $result = curl_exec($ch);
+    curl_close($ch);
+    if($result !== FALSE)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 Route::resource('collections', CollectionController::class);
 Route::resource('images', ImageController::class);
@@ -50,10 +81,10 @@ Route::post('/collections/{id}/do-copy',
     [CollectionController::class, 'doCopy'])->name('collections.doCopy');
 
 Route::get('/by-coordinates', function (Request $request) {
-    return view('frontend/search-by-coordinates');
+    return view('frontend/partials/search-by-coordinates');
 })->name('search.byCoordinates');
 Route::get('/by-dates', function (Request $request) {
-    return view('frontend/search-by-dates');
+    return view('frontend/partials/search-by-dates');
 })->name('search.byDates');
 
 Route::get('/fill-base-path', function () {

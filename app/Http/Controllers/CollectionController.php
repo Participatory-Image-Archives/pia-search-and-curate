@@ -18,7 +18,7 @@ class CollectionController extends Controller
     public function index()
     {
         return view('collections/index', [
-            'collections' => Collection::where('origin', '=', 'pia')->orderBy('label')->get()
+            'collections' => Collection::where('origin', 'pia')->orderBy('label')->get()
         ]);
     }
 
@@ -220,7 +220,7 @@ class CollectionController extends Controller
     {
         return view('collections/copy', [
             'collection' => Collection::find($id),
-            'collections' => Collection::all()
+            'collections' => Collection::where('origin', 'pia')->orderBy('label')->get()
         ]);
     }
 

@@ -33,7 +33,7 @@
                 </select>
                 <label for="collection_label" class="mt-2 inline-block">… or collection label</label>
                 <input type="text" name="collection_label" class="w-full text-xs px-2 border border-black rounded-full mb-4" style="height: 26px;" paceholder="Collection label">
-                <x-buttons.default type="submit" label="Copy"/>
+                <input type="submit">
         </div>
         <div class="w-3/4">
             @include('collections.image-actions')

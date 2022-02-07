@@ -1,33 +1,22 @@
-@extends('base')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIA Search and Curate</title>
 
-@section('content')
-<div class="p-4">
-    <div class="w-full mb-10">
-        <p>Your selection of the view becomes the bounding box from which the coordinates are generated.</p>
-    </div>
-    <div class="flex">
-        <div id="map" style="height: 600px; width: 600px;"></div>
-        <div class="ml-4">
-            <table class="mb-4">
-                <tr>
-                    <td>Top left corner</td>
-                    <td>
-                        <span class="top_left_latitude"></span>
-                        <span class="top_left_longitude"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Bottom right corner</td>
-                    <td>
-                        <span class="bottom_right_latitude"></span>
-                        <span class="bottom_right_longitude"></span>
-                    </td>
-                </tr>
-            </table>
-            <x-links.cta id="search" href="javascript:;" label="Search with these coordinates"/>
-        </div>
-    </div>
-</div>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+    
+    @yield('styles')
+
+</head>
+
+<body>
+    
+<div id="map" class="mb-4" style="height: 400px; width: 400px;"></div>
+<x-links.cta id="search" href="javascript:;" label="Search on this map section" target="_top"/>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
@@ -56,11 +45,6 @@
         map.on('moveend', function(e) {
             var bounds = map.getBounds();
             
-            document.querySelector('.top_left_latitude').innerHTML = bounds.getNorthWest().lat;
-            document.querySelector('.top_left_longitude').innerHTML = bounds.getNorthWest().lng;
-            document.querySelector('.bottom_right_latitude').innerHTML = bounds.getSouthEast().lat;
-            document.querySelector('.bottom_right_longitude').innerHTML = bounds.getSouthEast().lng;
-
             document.querySelector('#search').href = '/?coordinates='+bounds.getNorthWest().lat+','+bounds.getNorthWest().lng+','+bounds.getSouthEast().lat+','+bounds.getSouthEast().lng;
         });
 
@@ -68,4 +52,6 @@
     });
 
 </script>
-@endsection
+
+</body>
+</html>

@@ -31,18 +31,28 @@
             <label class="inline-block ml-6">
                 <input type="radio" name="search_focus_choices" value="coordinates"
                     x-model="search_focus">
-                <a href="{{ route('search.byCoordinates') }}">Map</a>
+                <a href="javascript:;" @click="modal_map = true">Map</a>
             </label>
             <label class="inline-block ml-6">
                 <input type="radio" name="search_focus_choices" value="dates"
                     x-model="search_focus">
-                <a href="{{ route('search.byDates') }}">Dates</a>
+                <a href="javascript:;" @click="modal_dates = true">Dates</a>
             </label>
         </div>
         <div class="hidden">
             <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
         </div>
     </section>
+
+    <div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
+        x-show="modal_map || modal_dates">
+        <div class="modal-map inline-block bg-white p-4 rounded-xl" x-show="modal_map">
+            <iframe src="{{ route('search.byCoordinates') }}" frameborder="0" width="400px" height="450px"></iframe>
+        </div>
+        <div class="modal-map inline-block bg-white p-4 rounded-xl" x-show="modal_dates">
+            <iframe src="{{ route('search.byDates') }}" frameborder="0" width="400px" height="150px"></iframe>
+        </div>
+    </div>
 
     <main class="pr-20">
         <div id="keywords" class="mb-6" x-data="{show_keywords: false}" x-show="keywords.length">
@@ -58,6 +68,19 @@
         @if($tagcloud)
             <div id="html-tagcloud" class="mx-auto w-full mb-8" style="height: 800px"></div>
         @endif
+
+        <div x-show="show_images_otd" class="px-20 pb-20">
+            <h2 class="text-center text-2xl mb-10">Images of the day</h2>
+            <div class="grid gap-10 grid-cols-3 grid-flow-row">
+                @foreach ($images_otd as $image)
+                <a href="{{ route('images.show', [$image]) }}" class="print-image" x-data="{show: false}" x-show="show">
+                    <img class="inline-block mr-2 w-full"
+                        src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/480,/0/default.jpg"
+                        alt="{{$image->title}}" title="{{$image->title}}" @load="show = true">
+                </a>
+                @endforeach
+            </div>
+        </div>
 
         <div id="images" class="pb-20">
             <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6" :class="`grid-cols-${13-columns}`">
@@ -187,6 +210,10 @@
 
             date_from: '',
             date_to: '',
+
+            modal_map: false,
+            modal_dates: false,
+            show_images_otd: true,
 
             top_left_lat: '',
             top_left_lng: '',
@@ -341,6 +368,8 @@
             },
 
             fetch_images() {
+                this.show_images_otd = false;
+
                 if(this.query.length >= this.query_min_chars || this.dates.length == 11 || this.dates.length == 21 || this.coordinates.length > 0) {
                     
                     this.loading = true;
