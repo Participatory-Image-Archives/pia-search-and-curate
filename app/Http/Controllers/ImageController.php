@@ -55,7 +55,8 @@ class ImageController extends Controller
     public function show($id)
     {
         return view('images/show', [
-            'image' => Image::find($id)
+            'image' => Image::find($id),
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
         ]);
     }
 

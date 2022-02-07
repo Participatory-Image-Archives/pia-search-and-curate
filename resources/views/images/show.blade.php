@@ -5,38 +5,27 @@
 @endsection
 
 @section('content')
-<div class="p-4">
-
-    <div class="md:flex mb-10">
-        <div class="md:w-1/2">
-            <h2 class="text-2xl mb-2">
-                {{ $image->title }}
-            </h2>
-            <div>
-                <x-links.cta label="Edit" :href="route('images.edit', [$image])"/>
-                {{--<form action="{{ route('images.destroy', [$image]) }}" method="post" class="inline-block mr-2">
-                    @csrf
-                    @method('delete')
-
-                    <x-buttons.delete/>
-                </form>--}}
-                <x-links.bare label="IIIF Image API (Full Image)" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>
-                <x-links.bare label="IIIF Image API (info.json)" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
-                <x-links.bare label="API JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
-                <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
-            </div>
+<div class="bg-gray-100 min-h-screen" x-data="{cols: 3}">
+    <div class="flex" id="searchable-list" >
+        <div class="fixed h-screen w-1/2 overflow-hidden">
+            <div id="iiif-image" class="w-full min-h-full"></div>
         </div>
-        
-    </div>
 
-    <div class="flex">
-        <div class="w-full md:w-1/2">
-            {{--<img class="inline-block mr-2 w-full shadow-2xl" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/640,/0/default.jpg" alt="{{ $image->title }}" title="{{ $image->title }}">--}}
-            <div id="iiif-image" class="min-h-full"></div>
-        </div>
-        <div class="w-full md:w-1/2">
+        <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
+            <div class="pt-14 pb-20 pl-14 pr-4">
+                <div class="flex items-center justify-between mb-12 ">
+                    <h2 class="text-4xl text-center">
+                        {{ $image->title }}
+                    </h2>
+                </div>
 
-            <div class="py-4 px-6">
+                <div class="mb-10">
+                    <span class="text-xs">View </span>
+                    <x-links.bare label="IIIF Image API (Full Image)" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>
+                    <x-links.bare label="IIIF Image API (info.json)" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
+                    <x-links.bare label="API JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
+                    <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
+                </div>
 
                 <table class="w-full">
                     <thead class="text-xs">
@@ -155,12 +144,14 @@
                     <h3 class="mb-1 text-xs">Dates</h3>
                     <div class="flex mb-2">
                         @forelse ($image->dates as $date)
-                            @if ($date->date)
-                                <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">{{ date('d. M Y', strtotime($date->date)); }}</span>
-                            @endif
-                            @if ($date->date_string)
-                                <span class="inline-block py-1 px-3 text-xs underline mr-2 mb-2">{{ $date->date_string }}</span>
-                            @endif
+                            <div>
+                                @if ($date->date)
+                                    <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">{{ date('d. M Y', strtotime($date->date)); }}</span>
+                                @endif
+                                @if ($date->date_string)
+                                    <span class="inline-block py-1 px-3 text-xs underline mr-2 mb-2">{{ $date->date_string }}</span>
+                                @endif
+                            </div>
                         @empty
                         –
                         @endforelse
@@ -176,10 +167,37 @@
                         @endforelse
                     </div>
                 </div>
+
+                <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
+                    <a class="hover:underline" href="{{ route('images.edit', [$image]) }}">Edit info</a>
+                    @php
+                        $deletable = true
+                    @endphp
+                    @foreach ($image->collections as $c)
+                        @if($c->origin == 'salsah')
+                            {{ $deletable = false }}
+                        @endif
+                    @endforeach
+                    @if($deletable)
+                    <form action="{{ route('images.destroy', [$image]) }}" method="post" class="inline-block">
+                        @csrf
+                        @method('delete')
+    
+                        <x-buttons.delete/>
+                    </form>
+                    @endif
+                </div>
             </div>
-        
         </div>
     </div>
+
+    <aside id="sidebar"
+        x-data="{expand_collections: false}"
+        @mouseleave="expand_collections = false;"
+        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
+        
+        @include('frontend.partials.aside-collections')
+    </aside>
 </div>
 @endsection
 
