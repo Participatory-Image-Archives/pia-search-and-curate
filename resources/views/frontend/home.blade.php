@@ -70,7 +70,7 @@
         @endif
 
         <div x-show="show_images_otd" class="px-20 pb-20">
-            <h2 class="text-center text-2xl mb-10">Images of the day</h2>
+            <h2 class="text-center text-2xl mb-10">Random images of the day</h2>
             <div class="grid gap-10 grid-cols-3 grid-flow-row">
                 @foreach ($images_otd as $image)
                 <a href="{{ route('images.show', [$image]) }}" class="print-image" x-data="{show: false}" x-show="show">
