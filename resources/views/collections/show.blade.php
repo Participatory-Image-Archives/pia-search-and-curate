@@ -3,7 +3,7 @@
 @section('content')
 <div class="bg-gray-100 min-h-screen" x-data="{cols: 3}">
     <div class="flex" id="searchable-list" >
-        <div class="fixed h-screen w-1/2 {{ $display != 'map' ? 'p-4 overflow-y-auto' : 'overflow-hidden' }}">
+        <div class="fixed bg-black h-screen w-1/2 {{ $display != 'map' ? 'p-4 overflow-y-auto' : 'overflow-hidden' }}">
             <div>
                 @if($display != 'map')
                 <section class="my-10 print-hidden">
