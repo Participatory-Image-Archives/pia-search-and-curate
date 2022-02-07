@@ -148,6 +148,17 @@ class ImageController extends Controller
         // curl -X POST "http://10.34.58.72:4567/api/v1/find/segments/similar" -H "accept: application/json" -H "Content-Type: application/json" -d '{"containers":[{"terms":[{"type":"BOOLEAN","data":"data:application/json;base64,W3siYXR0cmlidXRlIjoiZmVhdHVyZXNfdGFibGVfcGlhX21ldGEuY29sbGVjdGlvbiIsIm9wZXJhdG9yIjoiSU4iLCJ2YWx1ZXMiOlsiU0dWIDEwIl19XQ==","categories":["boolean"]}]}]}’
         // "type”:"IMAGE","data":"data:image/png;base64,...","categories":["localfeatures”]}
         // "data": "i_'.$image->signature.'_1",
+        /*
+        "terms": [
+            {
+                "type": "TEXT",
+                "data": "dog",
+                "categories": [
+                    "visualtextcoembedding"
+                ]
+            }
+        ]
+        */
 
         $curl = curl_init();
 
