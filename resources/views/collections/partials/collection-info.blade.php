@@ -12,7 +12,7 @@
     </div>
 
     @php
-    $image = $collection->images[rand(0, $collection->images()->count())];
+    $image = $collection->images[rand(0, $collection->images()->count()-1)];
     @endphp
     <div class="h-96 bg-center bg-cover mb-10"
         style="background-image: url('https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/960,/0/default.jpg')">
