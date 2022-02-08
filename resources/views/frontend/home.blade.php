@@ -492,6 +492,7 @@
             },
 
             fetch_by_relation(relation) {
+                this.show_images_otd = false;
                 this.loading = true;
                 fetch(`${this.api_url}${relation.model}/${relation.id}?include=images`)
                     .then(response => response.json())
