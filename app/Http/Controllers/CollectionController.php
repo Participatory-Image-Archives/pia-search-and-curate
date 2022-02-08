@@ -135,9 +135,12 @@ class CollectionController extends Controller
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_POSTFIELDS => array(
                         'Datei'=> new \CURLFile(
-                            $file->getPathName()
+                            $file->getPathName(),
+                            mime_content_type($file->getPathName()),
+                            pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
                         ),
-                        'Cuse_sop' => 'yes'
+                        'Cuse_sop' => 'yes',
+                        'origname' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
                     ),
                 ));
 
