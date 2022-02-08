@@ -91,8 +91,9 @@ class MapsController extends Controller
      */
     public function destroy($id)
     {
+        $collection = Map::find($id)->collections->get(0);
         Map::destroy($id);
-        return redirect('/');
+        return redirect()->route('collections.show', [$collection]);
     }
 
     /**

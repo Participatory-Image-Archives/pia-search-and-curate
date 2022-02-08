@@ -96,8 +96,9 @@ class PiaDocsController extends Controller
      */
     public function destroy($id)
     {
+        $collection = PiaDoc::find($id)->collections->get(0);
         PiaDoc::destroy($id);
-        return redirect('/');
+        return redirect()->route('collections.show', [$collection]);
     }
 
     /**
