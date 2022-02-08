@@ -97,7 +97,7 @@ class PiaDocsController extends Controller
     public function destroy($id)
     {
         PiaDoc::destroy($id);
-        return redirect()->route('docs.index');
+        return redirect('/');
     }
 
     /**

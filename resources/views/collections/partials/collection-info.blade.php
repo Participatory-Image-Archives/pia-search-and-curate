@@ -79,13 +79,14 @@
                 <ul>
                     @foreach ($collection->maps as $map)
                     <li class="mb-2">
-                        <x-links.default :label="$map->label" href="{{ env('MAPS_URL') }}/{{ $map->id }}" />
+                        <x-links.default :label="$map->label" href="{{ route('maps.images', [$map]) }}" />
                     </li>
                     @endforeach
                 </ul>
 
-                <form action="{{ env('MAPS_URL') }}/create" method="get" class="inline-block">
+                <form action="{{ route('maps.store') }}" method="post" class="inline-block">
                     @csrf
+
                     <input type="hidden" name="collections" value="{{ $collection->id }}">
                     <input type="hidden" name="label" value="{{ $collection->label }}">
 

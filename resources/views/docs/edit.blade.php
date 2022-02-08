@@ -102,18 +102,26 @@
     </div>
 
     <div class="h-screen overflow-hidden transition-all pb-16" :class="minimize_collection ? 'w-2/3' : 'w-1/4'">
-        <form action="{{ route('docs.update', [$doc]) }}" method="post">
+        <form action="{{ route('docs.update', [$doc]) }}" method="post" x-ref="noteform">
             @csrf
             @method('patch')
 
             <textarea name="content" id="document-markdown" class="outline-none w-full pb-20" @drop="drop"
                 @dragover="dragover">{{ $doc->content }}</textarea>
-
-            <div class="flex justify-between absolute bottom-0 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white"
-                :class="minimize_collection ? 'w-2/3' : 'w-1/4'">
-                <button type="submit" class="hover:underline">Save</button>
-            </div>
+            
         </form>
+
+        <div class="flex justify-between absolute bottom-0 px-8 py-2 border-t leading-10 border-gray-700 bg-white"
+            :class="minimize_collection ? 'w-2/3' : 'w-1/4'">
+            <button type="button" class="hover:underline" @click="$refs.noteform.submit()">Save</button>
+
+            <form action="{{ route('docs.destroy', [$doc]) }}" method="post" class="inline-block">
+                @csrf
+                @method('delete')
+
+                <x-buttons.delete/>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
