@@ -47,6 +47,12 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>Signature</td>
+                                <td>
+                                    <input type="text" name="signature" value="{{ $image->signature ?? '' }}" class="w-full">
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Title</td>
                                 <td>
                                     <input type="text" name="title" value="{{ $image->title ?? '' }}" class="w-full">

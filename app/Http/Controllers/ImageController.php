@@ -93,7 +93,9 @@ class ImageController extends Controller
 
         $image->salsah_id = $request->salsah_id;
         $image->oldnr = $request->oldnr;
+        $image->signature = $request->signature;
         $image->title = $request->title;
+        $image->original_title = $request->original_title;
         $image->sequence_number = $request->sequence_number;
 
         $image->object_type_id = $request->object_type_id;
