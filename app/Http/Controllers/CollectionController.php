@@ -146,6 +146,7 @@ class CollectionController extends Controller
                 $data = json_decode($response);
 
                 $image = Image::create([
+                    'title' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
                     'label' => $data->signature,
                     'signature' => $data->signature,
                     'base_path' => 'upload',

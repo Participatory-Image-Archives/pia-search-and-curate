@@ -49,13 +49,13 @@
                             <tr>
                                 <td>Signature</td>
                                 <td>
-                                    <input type="text" name="signature" value="{{ $image->signature ?? '' }}" class="w-full">
+                                    <input type="text" name="signature" value="{{ $image->signature ?? '' }}" class="w-full" disabled>
                                 </td>
                             </tr>
                             <tr>
-                                <td>Original Title</td>
+                                <td>Title</td>
                                 <td>
-                                    <input type="text" name="original_title" value="{{ $image->original_title ?? '' }}" class="w-full">
+                                    <input type="text" name="title" value="{{ $image->title ?? '' }}" class="w-full">
                                 </td>
                             </tr>
                             <tr>
