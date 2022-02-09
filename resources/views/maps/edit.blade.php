@@ -30,7 +30,7 @@
             @include('collections.partials.collection-info')
         </div>
         <div x-show="minimize_collection">
-            <h2 class="text-4xl mt-14 ml-1" style="text-orientation: upright; writing-mode: vertical-rl;">
+            <h2 class="text-4xl mt-14 ml-1 whitespace-nowrap" style="text-orientation: upright; writing-mode: vertical-rl;">
                 {{ $collection->label }}</h2>
         </div>
     </div>
