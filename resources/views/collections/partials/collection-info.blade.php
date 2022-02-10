@@ -12,7 +12,7 @@
     </div>
 
     @php
-    if($collection->images()->count) {
+    if($collection->images()->count()) {
         $image = $collection->images[rand(0, $collection->images()->count()-1)];
     } else {
         $image = undefined;
