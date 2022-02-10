@@ -14,8 +14,6 @@
     @php
     if($collection->images()->count()) {
         $image = $collection->images[rand(0, $collection->images()->count()-1)];
-    } else {
-        $image = undefined;
     }
     @endphp
     @if($image)
