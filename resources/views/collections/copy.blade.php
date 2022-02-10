@@ -33,10 +33,9 @@
                 </select>
                 <label for="collection_label" class="mt-2 inline-block">… or collection label</label>
                 <input type="text" name="collection_label" class="w-full text-xs px-2 border border-black rounded-full mb-4" style="height: 26px;" paceholder="Collection label">
-                <input type="submit">
+                <button type="submit">Copy</button>
         </div>
         <div class="w-3/4">
-            @include('collections.image-actions')
             <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
                 @foreach ($collection->images as $image)
                     <div class="relative">
