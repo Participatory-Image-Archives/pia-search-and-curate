@@ -135,7 +135,8 @@ class MapsController extends Controller
             $location = Location::create([
                 'label' => $marker->alt,
                 'latitude' => $marker->coordinates->latitude,
-                'longitude' => $marker->coordinates->longitude
+                'longitude' => $marker->coordinates->longitude,
+                'origin' => 'manual-localization'
             ]);
 
             $entry->location_id = $location->id;

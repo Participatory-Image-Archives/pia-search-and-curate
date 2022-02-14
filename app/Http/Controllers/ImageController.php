@@ -73,7 +73,7 @@ class ImageController extends Controller
             'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
             'keywords' => Keyword::all(),
             'people' => Person::all(),
-            'locations' => Location::all(),
+            'locations' => Location::whereIn('origin', ['salsah', 'pia'])->get(),
             'model_types' => ModelType::all(),
             'object_types' => ObjectType::all(),
             'formats' => Format::all(),
