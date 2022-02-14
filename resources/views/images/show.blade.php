@@ -124,7 +124,11 @@
                     <div class="mb-2">
                         @forelse ($image->collections as $collection)
                             @if ($collection->label)
-                                <x-links.default :href="route('collections.show', [$collection])" :label="$collection->label" class="mb-2"/>
+                                @if($collection->origin != 'salsah')
+                                    <x-links.default :href="route('collections.show', [$collection])" :label="$collection->label" class="mb-2"/>
+                                @else
+                                    <span class="inline-block py-1 px-3 text-xs rounded-full border border-black">{{ $collection->label }}</span>
+                                @endif
                             @endif
                         @empty
                         –
@@ -163,7 +167,7 @@
                         @forelse ($image->dates as $date)
                             <div>
                                 @if ($date->date)
-                                    <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">{{ date('d. M Y', strtotime($date->date)); }}</span>
+                                    <x-links.default label="{{ date('d. M Y', strtotime($date->date)); }}" href="/?dates={{ date('Y-m-d', strtotime($date->date)); }},{{ date('Y-m-d', strtotime($date->date)); }}" class="mb-2 name"/>
                                 @endif
                                 @if ($date->date_string)
                                     <span class="inline-block py-1 px-3 text-xs underline mr-2 mb-2">{{ $date->date_string }}</span>
@@ -177,7 +181,7 @@
                     <div class="flex mb-2">
                         @if ($image->location)
                             @if ($image->location->label)
-                                <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">{{ $image->location->label }}</span>
+                                <x-links.default :label="$image->location->label" href="/?location={{ $image->location->id }}" class="mb-2 name"/>
                             @endif
                         @else
                         -

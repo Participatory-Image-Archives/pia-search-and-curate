@@ -70,7 +70,7 @@ class ImageController extends Controller
     {
         return view('images/edit', [
             'image' => Image::find($id),
-            'collections' => Collection::all(),
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
             'keywords' => Keyword::all(),
             'people' => Person::all(),
             'locations' => Location::all(),
@@ -102,9 +102,25 @@ class ImageController extends Controller
 
         $image->keywords()->sync($request->keywords);
         $image->collections()->sync($request->collections);
+
         $image->people()->sync($request->people);
 
+        if($request->append_person != '') {
+            $person = Person::create([
+                'name' => $request->append_person
+            ]);
+            $image->people()->attach([$person->id]);
+        }
+
         $image->location_id = $request->location_id;
+
+        if($request->append_location != '') {
+            $location = Location::create([
+                'label' => $request->append_location,
+                'origin' => 'pia'
+            ]);
+            $image->location_id = $location->id;
+        }
 
         $image->save();
 
