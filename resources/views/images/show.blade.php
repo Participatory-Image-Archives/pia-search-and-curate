@@ -2,6 +2,13 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('node_modules/leaflet/dist/leaflet.css') }}">
+    <style>
+
+        .leaflet-container {
+            background: #181818;
+        }
+
+    </style>
 @endsection
 
 @section('content')
@@ -13,10 +20,20 @@
 
         <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
             <div class="pt-14 pb-20 pl-14 pr-4">
-                <div class="flex items-center justify-between mb-12 ">
+                <div class="relative flex items-center justify-between mb-12 ">
                     <h2 class="text-4xl text-center">
                         {{ $image->title }}
                     </h2>
+                    <span class="inline-block w-10 h-10 leading-10 border border-gray-500 text-center text-xs">
+                        @php
+                            $total_count = 0;
+                            foreach ($image->collections as $c) {
+                                $total_count += $c->maps()->count();
+                                $total_count += $c->docs()->count();
+                            }
+                        @endphp
+                        {{ $total_count }}
+                    </span>
                 </div>
 
                 <div class="mb-10">
@@ -25,6 +42,37 @@
                     <x-links.bare label="IIIF Image API (info.json)" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
                     <x-links.bare label="API JSON" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/>
                     <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
+                </div>
+
+                <div class="flex mb-10">
+                    <div class="w-1/3">
+                        <h2 class="text-xs mb-2">Used in Notes</h2>
+                        <div>
+                            <ul>
+                                @foreach ($image->collections as $c)
+                                    @foreach ($c->docs as $doc)
+                                    <li class="mb-2">
+                                        <x-links.default :label="$doc->label" href="{{ route('docs.edit', [$doc]) }}" />
+                                    </li>
+                                    @endforeach
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="w-1/3">
+                        <h2 class="text-xs mb-2">Used in Maps</h2>
+                        <div>
+                            <ul>
+                                @foreach ($image->collections as $c)
+                                    @foreach ($c->maps as $map)
+                                    <li class="mb-2">
+                                        <x-links.default :label="$map->label" href="{{ route('maps.images', [$map]) }}" />
+                                    </li>
+                                    @endforeach
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
                 <table class="w-full">
