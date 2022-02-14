@@ -44,37 +44,6 @@
                     <x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/>
                 </div>
 
-                <div class="flex mb-10">
-                    <div class="w-1/3">
-                        <h2 class="text-xs mb-2">Used in Notes</h2>
-                        <div>
-                            <ul>
-                                @foreach ($image->collections as $c)
-                                    @foreach ($c->docs as $doc)
-                                    <li class="mb-2">
-                                        <x-links.default :label="$doc->label" href="{{ route('docs.edit', [$doc]) }}" />
-                                    </li>
-                                    @endforeach
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="w-1/3">
-                        <h2 class="text-xs mb-2">Used in Maps</h2>
-                        <div>
-                            <ul>
-                                @foreach ($image->collections as $c)
-                                    @foreach ($c->maps as $map)
-                                    <li class="mb-2">
-                                        <x-links.default :label="$map->label" href="{{ route('maps.images', [$map]) }}" />
-                                    </li>
-                                    @endforeach
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
                 <table class="w-full">
                     <thead class="text-xs">
                         <tr>
@@ -213,6 +182,37 @@
                         @else
                         -
                         @endforelse
+                    </div>
+                </div>
+
+                <div class="flex mb-10">
+                    <div class="w-1/3">
+                        <h2 class="text-xs mb-2">Used in Notes</h2>
+                        <div>
+                            <ul>
+                                @foreach ($image->collections as $c)
+                                    @foreach ($c->docs as $doc)
+                                    <li class="mb-2">
+                                        <x-links.default :label="$doc->label" href="{{ route('docs.edit', [$doc]) }}" />
+                                    </li>
+                                    @endforeach
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="w-1/3">
+                        <h2 class="text-xs mb-2">Used in Maps</h2>
+                        <div>
+                            <ul>
+                                @foreach ($image->collections as $c)
+                                    @foreach ($c->maps as $map)
+                                    <li class="mb-2">
+                                        <x-links.default :label="$map->label" href="{{ route('maps.images', [$map]) }}" />
+                                    </li>
+                                    @endforeach
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
