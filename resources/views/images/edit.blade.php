@@ -183,7 +183,7 @@
                 </div>
 
                 <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-300 bg-white">
-                    <button type="submit" class="hover:underline" href="{{ route('images.edit', [$image]) }}">Save info</button>
+                    <button type="submit" class="hover:underline">Save info</button>
                     <a class="hover:underline" href="{{ route('images.show', [$image]) }}">View image</a>
                 </div>
 

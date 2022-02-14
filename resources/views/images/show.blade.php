@@ -181,7 +181,7 @@
                     <div class="flex mb-2">
                         @if ($image->location)
                             @if ($image->location->label)
-                                <x-links.default :label="$image->location->label" href="/?location={{ $image->location->id }}" class="mb-2 name"/>
+                                <x-links.default :label="$image->location->label" href="{{ route('locations.show', [$image->location]) }}" class="mb-2 name"/>
                             @endif
                         @else
                         -
