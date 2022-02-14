@@ -126,18 +126,16 @@
                     </div>
                 </div>
                 
-                {{--<hr class="my-4">
 
-                <div>
-                    <h3 class="mb-1 text-xs">Comments</h3>
-                    @forelse ($image->comments as $comment)
+                <div class="mb-6">
+                    <h3 class="mb-2 text-xs">Comments</h3>
+                    @foreach ($image->comments as $comment)
                         @if ($comment->comment)
                             <p class="mb-2 text-sm">– {{ $comment->comment }}</p>
                         @endif
-                    @empty
-                    -
-                    @endforelse
-                </div>--}}
+                    @endforeach
+                    <textarea name="append_comment" placeholder="Add new comment" class="w-full mt-1 border border-gray-300 p-1 px-2"></textarea>
+                </div>
                 
                 <div class="mb-6">
                     <h3 class="mb-2 text-xs">People</h3>

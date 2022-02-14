@@ -12,6 +12,7 @@ use App\Models\Location;
 use App\Models\ModelType;
 use App\Models\ObjectType;
 use App\Models\Format;
+use App\Models\Comment;
 
 class ImageController extends Controller
 {
@@ -109,7 +110,7 @@ class ImageController extends Controller
             $person = Person::create([
                 'name' => $request->append_person
             ]);
-            $image->people()->attach([$person->id]);
+            $image->people()->attach($person);
         }
 
         $image->location_id = $request->location_id;
@@ -120,6 +121,13 @@ class ImageController extends Controller
                 'origin' => 'pia'
             ]);
             $image->location_id = $location->id;
+        }
+
+        if($request->append_comment != '') {
+            $comment = Comment::create([
+                'comment' => $request->append_comment
+            ]);
+            $image->comments()->attach($comment);
         }
 
         $image->save();
