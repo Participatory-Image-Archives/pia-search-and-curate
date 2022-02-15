@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="p-4">
-    <div class="md:flex mb-4">
-        <h2 class="text-2xl mb-2 md:w-1/2">
+    <div class="mb-10">
+        <h2 class="text-2xl md:w-1/2">
             Locations
         </h2>
-        
+        <span class="text-xs">Images without location: {{ $location_count }}</span>
     </div>
 
     @php

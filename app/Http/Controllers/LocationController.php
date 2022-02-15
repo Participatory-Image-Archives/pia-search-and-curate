@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Location;
 use App\Models\Collection;
+use App\Models\Image;
 
 class LocationController extends Controller
 {
@@ -39,6 +40,7 @@ class LocationController extends Controller
 
         return view('locations/index', [
             'locations' => $locations,
+            'location_count' => Image::where('location_id', null)->count(),
             'codes' => $codes,
             'levels' => $levels
         ]);
