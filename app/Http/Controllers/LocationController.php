@@ -16,8 +16,31 @@ class LocationController extends Controller
      */
     public function index()
     {
+        $locations = Location::orderBy('label')->whereIn('origin', ['salsah', 'pia'])->get();
+        $codes = [];
+        $levels = [];
+
+        foreach ($locations as $key => $location) {
+            if(isset($codes[$location->geonames_code]) && $location->geonames_code != '') {
+                $codes[$location->geonames_code] += 1;
+            } else {
+                $codes[$location->geonames_code] = 1;
+            }
+
+            if(isset($levels[$location->geonames_division_level]) && $location->geonames_division_level != '') {
+                $levels[$location->geonames_division_level] += 1;
+            } else {
+                $levels[$location->geonames_division_level] = 1;
+            }
+        }
+
+        ksort($codes);
+        ksort($levels);
+
         return view('locations/index', [
-            'locations' => Location::orderBy('label')->whereIn('origin', ['salsah', 'pia'])->get()
+            'locations' => $locations,
+            'codes' => $codes,
+            'levels' => $levels
         ]);
     }
 
@@ -52,7 +75,8 @@ class LocationController extends Controller
     {
         return view('locations/show', [
             'location' => Location::find($id),
-            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
+            'image_count' => Location::find($id)->images()->count()
         ]);
     }
 

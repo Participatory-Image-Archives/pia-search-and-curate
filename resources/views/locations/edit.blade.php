@@ -51,15 +51,34 @@
                         </td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td>Geonames Code</td>
                         <td>
-                            <span class="text-xs">Search on <a href="https://www.geonames.org/" class="underline" target="_blank">Geonames</a>.</span>
+                            <input type="text" name="geonames_code" value="{{ $location->geonames_code ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Geonames Code Name</td>
+                        <td>
+                            <input type="text" name="geonames_code_name" value="{{ $location->geonames_code_name ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Geonames Division Level</td>
+                        <td>
+                            <input type="text" name="geonames_division_level" value="{{ $location->geonames_division_level ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Wikipedia</td>
+                        <td>
+                            <input type="text" name="wiki_url" value="{{ $location->wiki_url ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
                         </td>
                     </tr>
                 </table>
 
                 <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-300 bg-white">
                     <button type="submit" class="hover:underline">Save info</button>
+                    <span>Search on <a href="https://www.geonames.org/" class="underline" target="_blank">Geonames</a></span>
                 </div>
 
                 </form>

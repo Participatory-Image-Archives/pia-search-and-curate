@@ -22,7 +22,7 @@
                 <div class="mb-10">
                     <span class="text-xs">View </span>
                     <x-links.bare label="API JSON" href="{{ env('API_URL') }}locations/{{ $location->id }}" target="_blank"/>, 
-                    <x-links.bare label="All related images" href="/?location={{ $location->id }}"/>
+                    <x-links.bare label="All related images ({{ $image_count }})" href="/?location={{ $location->id }}"/>
                 </div>
 
                 <table class="w-full">
@@ -47,10 +47,36 @@
                     <tr>
                         <td>Geonames URL</td>
                         <td>
-                            @if ($location->geonames_url != '')
-                                <a href="{{ $location->geonames_url }}">{{ $location->geonames_url }}</a>
+                            @if ($location->geonames_uri != '')
+                                <a href="{{ $location->geonames_uri }}" class="underline" target="_blank">{{ $location->geonames_uri }}</a>
                             @else
                                 -
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Geonames Code</td>
+                        <td>{{ $location->geonames_code ?? '–' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Geonames Code Name</td>
+                        <td>{{ $location->geonames_code_name ?? '–' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Geonames Division Level</td>
+                        <td>{{ $location->geonames_division_level ?? '–' }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><p class="text-xs my-2">The division level shows how deep this entry is in the administrative division. The exactitude of this information can change from country to country, is crowdsourced, and is not formative or set by any standards.</p></td>
+                    </tr>
+                    <tr>
+                        <td>Wikipedia</td>
+                        <td>
+                            @if ($location->wiki_url != '')
+                                <a href="{{ $location->wiki_url }}" class="underline" target="_blank">{{ $location->wiki_url }}</a>
+                            @else
+                                –
                             @endif
                         </td>
                     </tr>
@@ -104,6 +130,15 @@
             }).addTo(map);
 
             marker = new L.Marker(center).addTo(map);
+
+            @if ($location->geometry)
+                let outline = L.geoJSON({
+                    "type": "Feature",
+                    "geometry": {!! $location->geometry !!}
+                }).addTo(map);
+
+                map.fitBounds(outline.getBounds());
+            @endif
 
         });
 
