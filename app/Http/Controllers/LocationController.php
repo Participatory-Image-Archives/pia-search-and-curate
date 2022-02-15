@@ -85,7 +85,7 @@ class LocationController extends Controller
         $location->latitude = $request->latitude;
         $location->longitude = $request->longitude;
         $location->geonames_id = $request->geonames_id;
-        $location->geonames_url = 'https://www.geonames.org/'.$request->geonames_id;
+        $location->geonames_url = 'https://sws.geonames.org/'.$request->geonames_id;
 
         $location->save();
 
