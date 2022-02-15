@@ -10,7 +10,6 @@
 
     <section class="my-10">
         <form action="{{ env('API_URL') }}" class="flex justify-center">
-
             <input type="text" name="query"
                 class="py-2 px-6 w-1/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10"
                 x-model="query" autocomplete="new-password">
@@ -39,9 +38,6 @@
                 <a href="javascript:;" @click="modal_dates = true">Dates</a>
             </label>
         </div>
-        <div class="hidden">
-            <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block py-1 px-3 text-gray-500 text-xs"></span>
-        </div>
     </section>
 
     <div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
@@ -55,7 +51,7 @@
     </div>
 
     <main class="pr-20">
-        <div id="keywords" class="mb-6" x-data="{show_keywords: false}" x-show="keywords.length">
+        <div id="keywords" x-data="{show_keywords: false}" x-show="keywords.length">
             <x-buttons.default x-text="`# ${keywords.length}`" @click="show_keywords = ! show_keywords"/>
 
             <template x-for="keyword in keywords">
@@ -83,7 +79,12 @@
         </div>
 
         <div id="images" class="pb-20">
-            <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6" :class="`grid-cols-${13-columns}`">
+            
+            <div class="text-right mb-2">
+                <span x-text="`${images.length} of ${total} Results loaded`" class="inline-block text-gray-500 text-xs"></span>
+            </div>
+
+            <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
                 <template x-for="image in images" :key="image.id">
                     <div x-data="{loaded: false, show_meta: false}">
                         <div class="relative"
@@ -125,6 +126,11 @@
                 </template>
             </div>
         </div>
+
+        <div class="mb-28 text-center" x-show="images.length < total">
+            <button @click="fetch_more" class="text-4xl rounded-full px-8 py-2 border border-black transition-all hover:bg-black hover:text-white">Load more results</button>
+        </div>
+
     </main>
 
     <aside id="sidebar"
@@ -483,12 +489,16 @@
                 this.loading = false;
 
                 if(response.links.next) {
-                    this.page++;
-                    this.fetch();
                     this.total = response.meta.page.total;
                 } else {
                     this.total = this.images.length;
                 }
+            },
+
+            fetch_more() {
+                this.loading = true;
+                this.page++;
+                this.fetch();
             },
 
             fetch_by_relation(relation) {
