@@ -29,8 +29,7 @@ class DateController extends Controller
         })->count();
 
         return view('dates/index', [
-            'dates' => Date::all(),
-            'images' => Image::all()->count(),
+            'images' => Image::count(),
             'images_wo' => Image::doesnthave('dates')->count(),
             'images_w_acc_1' => $images_w_acc_1,
             'images_w_acc_2' => $images_w_acc_2,
