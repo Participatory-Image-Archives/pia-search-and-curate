@@ -167,10 +167,45 @@
                         @forelse ($image->dates as $date)
                             <div>
                                 @if ($date->date)
-                                    <x-links.default label="{{ date('d. M Y', strtotime($date->date)); }}" href="/?dates={{ date('Y-m-d', strtotime($date->date)); }},{{ date('Y-m-d', strtotime($date->date)); }}" class="mb-2 name"/>
-                                @endif
-                                @if ($date->date_string)
-                                    <span class="inline-block py-1 px-3 text-xs underline mr-2 mb-2">{{ $date->date_string }}</span>
+                                    @php
+                                        // preparing string for display
+                                        $display_format = 'd. M Y';
+
+                                        if($date->accuracy == 2) {
+                                            $display_format = 'M Y';
+                                        } else if ($date->accuracy == 3) {
+                                            $display_format = 'Y';
+                                        }
+
+                                        $start_date = date($display_format, strtotime($date->date));
+                                        $end_date = date($display_format, strtotime($date->date));
+
+                                        if($date->end_date) {
+                                            $end_date = date($display_format, strtotime($date->end_date));
+                                            $date_string = $start_date . ' - ' . $end_date;
+                                        } else {
+                                            $date_string = $start_date;
+                                        }
+
+                                        // preparing string for search
+                                        $search_start_date = date('Y-m-d', strtotime($date->date));
+
+                                        if($date->end_date) {
+                                            $search_end_date = date('Y-m-d', strtotime($date->end_date));
+                                        } else {
+                                            $search_end_date = $search_start_date;
+                                        }
+
+                                        if($date->accuracy == 2) {
+                                            $search_end_date = date('Y-m-t', strtotime($end_date));
+                                        } else if ($date->accuracy == 3) {
+                                            $search_end_date = $end_date . '-12-31';
+                                        }
+                                        
+                                        $search_string = $search_start_date.','.$search_end_date;
+
+                                    @endphp
+                                    <x-links.default label="{{ $date_string }}" href="/?dates={{ $search_string }}" class="mb-2 name"/>
                                 @endif
                             </div>
                         @empty

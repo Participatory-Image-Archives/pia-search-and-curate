@@ -10,6 +10,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PiaDocsController;
 use App\Http\Controllers\MapsController;
+use App\Http\Controllers\DateController;
 
 use App\Models\Image;
 use App\Models\Collection;
@@ -49,6 +50,7 @@ Route::resource('people', PersonController::class);
 Route::resource('locations', LocationController::class);
 Route::resource('docs', PiaDocsController::Class);
 Route::resource('maps', MapsController::Class);
+Route::resource('dates', DateController::Class);
 
 Route::get('/maps/{id}/images', [MapsController::class, 'images'])->name('maps.images');
 Route::patch('/maps/{id}/imagesUpdate', [MapsController::class, 'imagesUpdate'])->name('maps.imagesUpdate');
