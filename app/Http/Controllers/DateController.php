@@ -15,7 +15,28 @@ class DateController extends Controller
      */
     public function index()
     {
-        return 'hello';
+        $images_w_acc_1 = Image::whereHas('dates', function($q){
+            $q->where('accuracy', '1');
+        })->count();
+        $images_w_acc_2 = Image::whereHas('dates', function($q){
+            $q->where('accuracy', '2');
+        })->count();
+        $images_w_acc_3 = Image::whereHas('dates', function($q){
+            $q->where('accuracy', '3');
+        })->count();
+        $images_w_date_range = Image::whereHas('dates', function($q){
+            $q->whereNotNull('end_date');
+        })->count();
+
+        return view('dates/index', [
+            'dates' => Date::all(),
+            'images' => Image::all()->count(),
+            'images_wo' => Image::doesnthave('dates')->count(),
+            'images_w_acc_1' => $images_w_acc_1,
+            'images_w_acc_2' => $images_w_acc_2,
+            'images_w_acc_3' => $images_w_acc_3,
+            'images_w_date_range' => $images_w_date_range
+        ]);
     }
 
     /**
