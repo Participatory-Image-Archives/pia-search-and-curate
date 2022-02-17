@@ -10,27 +10,27 @@
         <table class="table">
             <tr>
                 <td>Images without a date: </td>
-                <td>{{ number_format($images_wo, 0, '.', '\'') }} <span class="text-xs">({{ number_format(100 / $images * $images_wo, 2) }}%)</span></td>
+                <td>{{ $images_wo }}</td>
             </tr>
             <tr>
                 <td>Images with accuracy to the day: </td>
-                <td>{{ number_format($images_w_acc_1, 0, '.', '\'') }} <span class="text-xs">({{ number_format(100 / $images * $images_w_acc_1, 2) }}%)</td>
+                <td>{{ $images_w_acc_1 }}</td>
             </tr>
             <tr>
                 <td>Images with accuracy to the month: </td>
-                <td>{{ number_format($images_w_acc_2, 0, '.', '\'') }} <span class="text-xs">({{ number_format(100 / $images * $images_w_acc_2, 2) }}%)</td>
+                <td>{{ $images_w_acc_2 }}</td>
             </tr>
             <tr>
                 <td>Images with accuracy to the year: </td>
-                <td>{{ number_format($images_w_acc_3, 0, '.', '\'') }} <span class="text-xs">({{ number_format(100 / $images * $images_w_acc_3, 2) }}%)</td>
+                <td>{{ $images_w_acc_3 }}</td>
             </tr>
             <tr>
                 <td>Images with date ranges: </td>
-                <td>{{ number_format($images_w_date_range, 0, '.', '\'') }} <span class="text-xs">({{ number_format(100 / $images * $images_w_date_range, 2) }}%)</td>
+                <td>{{ $images_w_date_range }}</td>
             </tr>
             <tr>
                 <td>Total images count: </td>
-                <td class="underline">{{ number_format($images, 0, '.', '\'') }}</td>
+                <td class="underline">{{ $images }}</td>
             </tr>
         </table>
     </div>
