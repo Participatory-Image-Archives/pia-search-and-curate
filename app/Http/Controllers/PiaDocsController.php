@@ -82,6 +82,7 @@ class PiaDocsController extends Controller
     public function update(Request $request, $id)
     {
         $doc = PiaDoc::find($id);
+        $doc->label = $request->label;
         $doc->content = $request->content;
         $doc->save();
 

@@ -30,11 +30,13 @@
 
     /* some editor fixes */
     .EasyMDEContainer {
-        height: 100%;
+        overflow: scroll;
+        min-height: calc(100% - 70px);
+        max-height: calc(100% - 70px);
     }
 
-    .EasyMDEContainer .CodeMirror {
-        height: calc(100% - 60px);
+    .EasyMDEContainer .CodeMirror-scroll {
+        min-height: calc(100% - 60px) !important;
         border: 0;
     }
 
@@ -102,9 +104,11 @@
     </div>
 
     <div class="h-screen overflow-hidden transition-all pb-16" :class="minimize_collection ? 'w-2/3' : 'w-1/4'">
-        <form action="{{ route('docs.update', [$doc]) }}" method="post" x-ref="noteform">
+        <form action="{{ route('docs.update', [$doc]) }}" method="post" x-ref="noteform" class="h-full">
             @csrf
             @method('patch')
+
+            <input type="text" name="label" value="{{ $doc->label }}" class="text-4xl p-4 w-full border-b border-gray-300">
 
             <textarea name="content" id="document-markdown" class="outline-none w-full pb-20" @drop="drop"
                 @dragover="dragover">{{ $doc->content }}</textarea>
