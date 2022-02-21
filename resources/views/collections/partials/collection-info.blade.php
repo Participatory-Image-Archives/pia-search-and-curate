@@ -23,10 +23,12 @@
     @endif
 
     @if($collection->description)
-    <div class="w-full mb-10">
-        {!! $collection->description !!}
+    <div class="w-full">
+        {!! nl2br($collection->description) !!}
     </div>
     @endif
+
+    <hr class="my-10">
 
     <div class="mb-10">
         <span class="text-xs">Download </span>

@@ -34,9 +34,7 @@
                     </div>
                     <div class="w-full">
                         <label for="description" class="block">Description</label>
-                        <textarea name="description" id="description" class="border border-gray-500 p-2 w-full" oninput="auto_grow(this)">
-                            {{ $collection->description ?? '' }}
-                        </textarea>
+                        <textarea name="description" id="description" class="border border-gray-500 p-2 w-full" oninput="auto_grow(this)">{{ $collection->description ?? '' }}</textarea>
                     </div>
                 </div>
 
