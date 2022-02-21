@@ -40,7 +40,7 @@
             <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
                 <a href="/?collection={{ $collection->id }}" class="hover:underline">Edit selection</a>
 
-                <a href="javascript:;" class="hover:underline">Edit info</a>
+                <a href="{{ route('collections.edit', [$collection]) }}" class="hover:underline">Edit info</a>
 
                 <form class="hidden" x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
                     @csrf

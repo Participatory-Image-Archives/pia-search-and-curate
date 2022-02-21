@@ -81,7 +81,10 @@ class CollectionController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('collections/edit', [
+            'collection' => Collection::find($id),
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
+        ]);
     }
 
     /**
@@ -93,7 +96,12 @@ class CollectionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $collection = Collection::find($id);
+        $collection->label = $request->label;
+        $collection->description = $request->description;
+        $collection->save();
+
+        return redirect()->route('collections.show', [$collection]);
     }
 
     /**
