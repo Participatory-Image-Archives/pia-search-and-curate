@@ -14,6 +14,9 @@ use App\Http\Controllers\DateController;
 
 use App\Models\Image;
 use App\Models\Collection;
+use App\Models\Location;
+use App\Models\Date;
+use App\Models\Keyword;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +77,121 @@ Route::get('/by-coordinates', function (Request $request) {
 Route::get('/by-dates', function (Request $request) {
     return view('frontend/partials/search-by-dates');
 })->name('search.byDates');
+
+Route::get('/stats', function(Request $request) {
+    $images_total = Image::count();
+
+    $images_wo_date = Image::doesnthave('dates')->count();
+    $images_wo_location = Image::doesnthave('location')->count();
+    $images_wo_keywords = Image::doesnthave('keywords')->count();
+
+    $images_wo_date_location = Image::doesnthave('dates')->where('location_id', null)->count();
+    $images_wo_keywords_location = Image::doesnthave('keywords')->where('location_id', null)->count();
+    $images_wo_date_keywords = Image::doesnthave('keywords')->doesnthave('dates')->count();
+    $images_wo_date_keywords_location = Image::doesnthave('keywords')->doesnthave('dates')->where('location_id', null)->count();
+
+    $images_w_date_location = Image::has('dates')->where('location_id', '!=', null)->count();
+    $images_w_date_keywords = Image::has('dates')->has('keywords')->count();
+    $images_w_keywords_location = Image::has('keywords')->where('location_id', '!=', null)->count();
+    $images_w_date_keywords_location = Image::has('keywords')->has('dates')->where('location_id', '!=', null)->count();
+
+    $images_w_acc_1 = Image::whereHas('dates', function($q){
+        $q->where('accuracy', '1');
+    })->count();
+    $images_w_acc_2 = Image::whereHas('dates', function($q){
+        $q->where('accuracy', '2');
+    })->count();
+    $images_w_acc_3 = Image::whereHas('dates', function($q){
+        $q->where('accuracy', '3');
+    })->count();
+    $images_w_date_range = Image::whereHas('dates', function($q){
+        $q->whereNotNull('end_date');
+    })->count();
+
+//number_format(100 / $images * $images_wo, 2)
+
+    echo('<table cellpadding="8" border style="font-family: sans-serif;">');
+    echo('<tr>');
+    echo('<td>Total Image Count</td>');
+    echo('<td>'.number_format($images_total, 0, '.', '\'').'</td>');
+    echo('<td></td>');
+    echo('</tr>');
+    echo('<tr><td colspan="3">&nbsp;</td></tr>');
+    echo('<tr>');
+    echo('<td>Images without date</td>');
+    echo('<td>'.number_format($images_wo_date, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_wo_date, 0, '.', '\'').'% (of total images)</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images without location</td>');
+    echo('<td>'.number_format($images_wo_location, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_wo_location, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images without keywords</td>');
+    echo('<td>'.number_format($images_wo_keywords, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_wo_keywords, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr><td colspan="3">&nbsp;</td></tr>');
+    echo('<tr>');
+    echo('<td>Images with neither date nor a location</td>');
+    echo('<td>'.number_format($images_wo_date_location, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_wo_date_location, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images with neither keywords nor a location</td>');
+    echo('<td>'.number_format($images_wo_keywords_location, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_wo_keywords_location, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images with neither date nor keywords</td>');
+    echo('<td>'.number_format($images_wo_date_keywords, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_wo_date_keywords, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images without anything</td>');
+    echo('<td>'.number_format($images_wo_date_keywords_location, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_wo_date_keywords_location, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr><td colspan="3">&nbsp;</td></tr>');
+    echo('<tr>');
+    echo('<td>Images with date and location</td>');
+    echo('<td>'.number_format($images_w_date_location, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_w_date_location, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images with keywords and location</td>');
+    echo('<td>'.number_format($images_w_date_location, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_w_keywords_location, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images with date and keywords</td>');
+    echo('<td>'.number_format($images_w_date_location, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_w_date_keywords, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images with everything</td>');
+    echo('<td>'.number_format($images_w_date_keywords_location, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_w_date_keywords_location, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr><td colspan="3">&nbsp;</td></tr>');
+    echo('<tr>');
+    echo('<td>Images with location accuracy 1, Kanton</td>');
+    echo('<td>'.number_format($images_w_acc_1, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_w_acc_1, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images with location accuracy 2, Region</td>');
+    echo('<td>'.number_format($images_w_acc_2, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_w_acc_2, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('<tr>');
+    echo('<td>Images with location accuracy 3, Stadt, Dorf, etc</td>');
+    echo('<td>'.number_format($images_w_acc_3, 0, '.', '\'').'</td>');
+    echo('<td>'.number_format(100 / $images_total * $images_w_acc_3, 0, '.', '\'').'%</td>');
+    echo('</tr>');
+    echo('</table>');
+});
 
 Route::get('/fill-base-path', function () {
 
