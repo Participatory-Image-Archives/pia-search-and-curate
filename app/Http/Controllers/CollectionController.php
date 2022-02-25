@@ -52,7 +52,9 @@ class CollectionController extends Controller
             ]);
         }
 
-        $collection->images()->sync(explode(',', $request->input('image_ids')));
+        if($request->input('image_ids') != '') {
+            $collection->images()->sync(explode(',', $request->input('image_ids')));
+        }
 
         return redirect()->route('collections.show', [$collection]);
     }

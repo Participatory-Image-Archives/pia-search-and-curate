@@ -143,7 +143,7 @@
 
         <div id="selection" x-ref="selection"
             class="min-h-screen max-h-screen w-80 bg-black p-4 overflow-y-auto overflow-x-hidden"
-            x-data="{resolution: 280}" x-show="selection.length">
+            x-data="{resolution: 280}">
             <div>
                 <div id="collection">
                     <form action="{{ route('collections.store') }}" method="post" x-ref="collection_form">
