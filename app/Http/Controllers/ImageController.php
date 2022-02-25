@@ -172,16 +172,12 @@ class ImageController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS =>'{
-                "containers": [
+                "terms": [
                     {
-                        "terms": [
-                            {
-                                "type": "IMAGE",
-                                "data": "'.$base64.'",
-                                "categories": [
-                                    "'.$category.'"
-                                ]
-                            }
+                        "type": "IMAGE",
+                        "data": "'.$base64.'",
+                        "categories": [
+                            "'.$category.'"
                         ]
                     }
                 ]
