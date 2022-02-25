@@ -256,6 +256,14 @@
                 </div>
 
                 <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
+                    <div>
+                        @if($prev ?? false)
+                        <a class="p-1 px-4 rounded-full bg-black text-white" href="{{ route('images.show', [$prev]) }}?cid={{ $cid }}&iid={{ $prev->id }}" title="Show previous image from collection"><</a>
+                        @endif
+                        @if($next ?? false)
+                        <a class="p-1 px-4 rounded-full bg-black text-white" href="{{ route('images.show', [$next]) }}?cid={{ $cid }}&iid={{ $next->id }}" title="Show next image from collection">></a>
+                        @endif
+                    </div>
                     <a class="hover:underline" href="{{ route('images.edit', [$image]) }}">Edit info</a>
                     @php
                         $deletable = true

@@ -50,15 +50,40 @@ class ImageController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return view('images/show', [
+        $data = [
             'image' => Image::find($id),
             'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
-        ]);
+        ];
+
+        if($request->cid && $request->iid){
+            $collection = Collection::find($request->cid);
+            $index = 0;
+            
+            foreach ($collection->images as $key => $image) {
+                if($image->id == $request->iid) {
+                    break;
+                }
+                $index++;
+            }
+
+            if($index > 0){
+                $data['prev'] = $collection->images->get($index-1);
+                $data['cid'] = $collection->id;
+            }
+
+            if($index < $collection->images()->count() - 1){
+                $data['next'] = $collection->images->get($index+1);
+                $data['cid'] = $collection->id;
+            }
+        }
+
+        return view('images/show', $data);
     }
 
     /**
