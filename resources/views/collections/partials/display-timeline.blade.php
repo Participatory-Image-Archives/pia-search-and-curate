@@ -55,6 +55,7 @@
                             'year': '{{ $date->accuracy <= 3 ? date('Y', strtotime($date->date)) : '' }}'
                         }
                     }
+                    @endif
                 @endif
             @endforeach
             /*
