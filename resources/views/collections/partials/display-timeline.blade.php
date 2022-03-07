@@ -12,7 +12,7 @@
     }
 
     @foreach ($collection->images as $image)
-        @if ($image->dates)
+        @if ($image->dates->count())
             let event_{{ $image->id }} = {
                 'title': '{{ $image->title }}',
                 'media': {
@@ -47,15 +47,6 @@
                         'month': '{{ $date->accuracy <= 2 ? date('m', strtotime($date->end_date)) : '' }}',
                         'year': '{{ $date->accuracy <= 3 ? date('Y', strtotime($date->end_date)) : '' }}'
                     }
-                @else
-                    @if($date->accuracy > 1) {
-                        event_{{ $image->id }}.end_date = {
-                            'day': '{{ $date->accuracy <= 1 ? date('d', strtotime($date->date)) : '' }}',
-                            'month': '{{ $date->accuracy <= 2 ? date('m', strtotime($date->date)) : '' }}',
-                            'year': '{{ $date->accuracy <= 3 ? date('Y', strtotime($date->date)) : '' }}'
-                        }
-                    }
-                    @endif
                 @endif
             @endforeach
             /*
