@@ -70,6 +70,8 @@ Route::get('/collections/{id}/copy',
     [CollectionController::class, 'copy'])->name('collections.copy');
 Route::post('/collections/{id}/do-copy',
     [CollectionController::class, 'doCopy'])->name('collections.doCopy');
+Route::get('/collections/{id}/timeline',
+    [CollectionController::class, 'timeline'])->name('collections.timeline');
 
 Route::get('/by-coordinates', function (Request $request) {
     return view('frontend/partials/search-by-coordinates');

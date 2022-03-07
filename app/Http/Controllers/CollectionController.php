@@ -76,6 +76,20 @@ class CollectionController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function timeline(Request $request, $id)
+    {
+        return view('collections/partials/display-timeline', [
+            'collection' => Collection::find($id)
+        ]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id

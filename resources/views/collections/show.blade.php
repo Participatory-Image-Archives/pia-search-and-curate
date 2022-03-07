@@ -3,9 +3,9 @@
 @section('content')
 <div class="bg-gray-100 min-h-screen" x-data="{cols: 3}">
     <div class="flex" id="searchable-list" >
-        <div class="fixed bg-black h-screen w-1/2 {{ $display != 'map' ? 'p-4 overflow-y-auto' : 'overflow-hidden' }}">
+        <div class="fixed bg-black h-screen w-1/2 {{ !in_array($display, ['map', 'timeline']) ? 'p-4 overflow-y-auto' : 'overflow-hidden' }}">
             <div>
-                @if($display != 'map')
+                @if(!in_array($display, ['map', 'timeline']))
                 <section class="my-10 print-hidden">
                     <div class="flex gap-6 items-center">
             
@@ -21,11 +21,13 @@
                 @endif
             
                 <main>
-                    <div id="images" class="pb-20">
+                    <div id="images" class="{{ !in_array($display, ['map', 'timeline']) ? 'pb-20' : 'min-h-screen' }}">
                         @if($display == 'list')
                             @include('collections.partials.display-list')
                         @elseif($display == 'map')
                             @include('collections.partials.display-map')
+                        @elseif($display == 'timeline')
+                            @include('collections.partials.display-timeline')
                         @else
                             @include('collections.partials.display-grid', ['images' => $collection->images])
                         @endif
