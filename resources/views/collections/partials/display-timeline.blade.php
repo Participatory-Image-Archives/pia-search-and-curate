@@ -36,22 +36,16 @@
             @foreach ($image->dates as $date)
                 @if ($date->date)
                     event_{{ $image->id }}.start_date = {
-                        'day': '{{ date('d', strtotime($date->date)) }}',
-                        'month': '{{ date('m', strtotime($date->date)) }}',
-                        'year': '{{ date('Y', strtotime($date->date)) }}'
+                        'day': '{{ $date->accuracy <= 1 ? date('d', strtotime($date->date)) : '' }}',
+                        'month': '{{ $date->accuracy <= 2 ? date('m', strtotime($date->date)) : '' }}',
+                        'year': '{{ $date->accuracy <= 3 ? date('Y', strtotime($date->date)) : '' }}'
                     }
                 @endif
                 @if ($date->end_date)
                     event_{{ $image->id }}.end_date = {
-                        'day': '{{ date('d', strtotime($date->end_date)) }}',
-                        'month': '{{ date('m', strtotime($date->end_date)) }}',
-                        'year': '{{ date('Y', strtotime($date->end_date)) }}'
-                    }
-                @else
-                    event_{{ $image->id }}.end_date = {
-                        'day': '{{ date('d', strtotime($date->date)) }}',
-                        'month': '{{ date('m', strtotime($date->date)) }}',
-                        'year': '{{ date('Y', strtotime($date->date)) }}'
+                        'day': '{{ $date->accuracy <= 1 ? date('d', strtotime($date->end_date)) : '' }}',
+                        'month': '{{ $date->accuracy <= 2 ? date('m', strtotime($date->end_date)) : '' }}',
+                        'year': '{{ $date->accuracy <= 3 ? date('Y', strtotime($date->end_date)) : '' }}'
                     }
                 @endif
             @endforeach
