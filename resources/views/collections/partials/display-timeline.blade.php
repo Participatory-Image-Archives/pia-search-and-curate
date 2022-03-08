@@ -49,17 +49,6 @@
                     }
                 @endif
             @endforeach
-            /*
-            if(el.date) {
-                event_{{ $image->id }}.start_date = format_date(el.date);
-            }
-            if(el.daterange_0) {
-                event_{{ $image->id }}.start_date = format_date(el.daterange_0);
-            }
-            if(el.daterange_1) {
-                event_{{ $image->id }}.end_date = format_date(el.daterange_1);
-            }
-            */
             timeline_data.events.push(event_{{ $image->id }});
         @endif
     @endforeach
