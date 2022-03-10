@@ -4,43 +4,15 @@
 
 <div id="app" class="p-4 bg-gray-100 min-h-screen" x-data="app">
 
-    <div class="fixed top-0 left-0 h-full w-full bg-gray-100 bg-opacity-75 flex justify-around items-center z-50" x-show="loading">
+    <div class="fixed top-0 left-0 h-full w-full bg-gray-100 bg-opacity-75 justify-around items-center z-50 hidden">
         <span class="font-bold text-white text-8xl">Loading…</span>
     </div>
 
-    <section class="my-10">
-        <form action="{{ env('API_URL') }}" class="flex justify-center">
-            <input type="text" name="query"
-                class="py-2 px-6 w-1/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10"
-                x-model="query" autocomplete="new-password">
-            <button type="submit"
-                class="relative -left-5 text-lg z-0 border border-gray-700 bg-white hover:bg-gray-700 hover:text-white pl-8 pr-6"
-                @click.prevent="fetch_images">Search</button>
-        </form>
-        <div class="flex justify-center mt-2">
-            <label class="inline-block cursor-pointer" title="Search through title, signature and old number">
-                <input type="radio" name="search_focus_choices" value="fuzzy"
-                    x-model="search_focus" >
-                Fuzzy
-            <label class="inline-block cursor-pointer ml-6">
-                <input type="radio" name="search_focus_choices" value="comments"
-                    x-model="search_focus">
-                Comments
-            </label>
-            <label class="inline-block ml-6">
-                <input type="radio" name="search_focus_choices" value="coordinates"
-                    x-model="search_focus">
-                <a href="javascript:;" @click="modal_map = true">Map</a>
-            </label>
-            <label class="inline-block ml-6">
-                <input type="radio" name="search_focus_choices" value="dates"
-                    x-model="search_focus">
-                <a href="javascript:;" @click="modal_dates = true">Dates</a>
-            </label>
-        </div>
-    </section>
+    <livewire:search />
 
-    <div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
+</div>
+
+    {{--<div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
         x-show="modal_map || modal_dates">
         <div class="modal-map inline-block bg-white p-4 rounded-xl" x-show="modal_map">
             <iframe src="{{ route('search.byCoordinates') }}" frameborder="0" width="400px" height="450px"></iframe>
@@ -546,5 +518,7 @@
 @if($tagcloud)
 <script src="{{ asset('js/wordcloud2.js') }}"></script>
 @endif
+
+--}}
 
 @endsection
