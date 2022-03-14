@@ -96,7 +96,7 @@ class ImageController extends Controller
     {
         return view('images/edit', [
             'image' => Image::find($id),
-            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
+            'collections' => Collection::all(),
             'keywords' => Keyword::all(),
             'people' => Person::all(),
             'locations' => Location::whereIn('origin', ['salsah', 'pia'])->get(),
