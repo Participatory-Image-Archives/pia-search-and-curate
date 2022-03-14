@@ -1,10 +1,19 @@
 <div>
     <section class="my-10">
-        <form wire:submit.prevent="update" class="flex justify-center">
-            <input type="text" name="query" wire:model.defer="query" autocomplete="new-password" value="{{ $query }}"
+        <form wire:submit.prevent="update">
+            <div class="flex justify-center">
+                <input type="text" name="query" wire:model.defer="query" autocomplete="new-password" value="{{ $query }}"
                 class="py-2 px-6 w-1/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10">
             <button type="submit"
                 class="relative -left-5 text-lg z-0 border border-gray-700 bg-white hover:bg-gray-700 hover:text-white pl-8 pr-6">Search</button>
+            </div>
+
+            <div class="flex justify-center mt-4">
+                <label for="from" class="py-2 pr-1">From</label>
+                <input type="date" name="from" wire:model.defer="from" autocomplete="new-password" value="{{ $from }}" class="p-1 m-1">
+                <label for="to" class="py-2 pr-1 ml-4">to</label>
+                <input type="date" name="to" wire:model.defer="to" autocomplete="new-password" value="{{ $to }}" class="p-1 m-1">
+            </div>
         </form>
         {{--<div class="flex justify-center mt-2">
             <label class="inline-block cursor-pointer" title="Search through title, signature and old number">
@@ -41,8 +50,8 @@
                     @foreach ($images as $image)
                         <div wire:key="image_{{ $image->id }}" class="bg-gray-100 relative"
                             x-data="{loaded: false, show_meta: false}"
-                            style="height: 300px;"
-                            :style="loaded ? '' : 'height: 300px;'"
+                            style="height: 200px;"
+                            :style="loaded ? '' : 'height: 200px;'"
                             @mouseover="show_meta = true" @mouseout="show_meta = false">
                             <img class="w-full"
                                 style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
