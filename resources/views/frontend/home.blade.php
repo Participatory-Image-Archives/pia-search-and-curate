@@ -4,15 +4,22 @@
 
 <div id="app" class="p-4 bg-gray-100 min-h-screen" x-data="app">
 
-    <div class="fixed top-0 left-0 h-full w-full bg-gray-100 bg-opacity-75 justify-around items-center z-50 hidden">
-        <span class="font-bold text-white text-8xl">Loading…</span>
-    </div>
-
     <livewire:search />
 
 </div>
 
-    {{--<div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
+    {{--
+    <div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
+        x-show="modal_map || modal_dates">
+        <div class="modal-map inline-block bg-white p-4 rounded-xl" x-show="modal_map">
+            <iframe src="{{ route('search.byCoordinates') }}" frameborder="0" width="400px" height="450px"></iframe>
+        </div>
+        <div class="modal-map inline-block bg-white p-4 rounded-xl" x-show="modal_dates">
+            <iframe src="{{ route('search.byDates') }}" frameborder="0" width="400px" height="150px"></iframe>
+        </div>
+    </div>
+    
+    <div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
         x-show="modal_map || modal_dates">
         <div class="modal-map inline-block bg-white p-4 rounded-xl" x-show="modal_map">
             <iframe src="{{ route('search.byCoordinates') }}" frameborder="0" width="400px" height="450px"></iframe>
