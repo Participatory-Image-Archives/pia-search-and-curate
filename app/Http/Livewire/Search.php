@@ -2,19 +2,24 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Collection;
 use App\Models\Comment;
 use App\Models\Date;
 use App\Models\Image;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Search extends Component
 {
+    use WithPagination;
+
     public $query = '';
     public $from = '';
     public $to = '';
+    public $cid = '';
 
-    public $images;
+    public $collection;
     public $selection;
     public $image_ids = '';
 
@@ -22,154 +27,97 @@ class Search extends Component
         'query' => ['except' => ''],
         'from' => ['except' => ''],
         'to' => ['except' => ''],
+        'cid' => ['except' => ''],
     ];
 
     public function mount()
     {
-        $this->images = collect([]);
-        $this->selection = collect([]);
+        if($this->cid != ''){
+            $this->collection = Collection::find($this->cid);
+            $this->selection = $this->collection->images;
+        } else {
+            $this->selection = collect([]);
+        }
     }
 
     public function render()
     {
-        $this->update();
-        return view('livewire.search');
+        return view('livewire.search', [
+            'images' => $this->search()
+        ]);
     }
 
     public function update()
     {
-        if($this->query != '') {
-            $this->images = collect([]);
-
-            $_images = $this->search();
-
-            /**
-             * filter by dates
-             */
-            if($this->from != '' || $this->to != ''){
-                if($this->from != '') {
-                    $_from = strtotime($this->from);
-                } else {
-                    $_from = strtotime($this->to);
-                }
-                if($this->to != '') {
-                    $_to = strtotime($this->to);
-                } else {
-                    $_to = strtotime($this->from);
-                }
-
-                $_images = $_images->filter(function($value, $key) use($_from, $_to){
-                    if(!$value->dates->count()) return;
-
-                    if($value->dates->first()->date != '') {
-                        $_image_from = strtotime($value->dates->first()->date);
-                    } else {
-                        $_image_from = strtotime($value->dates->first()->end_date);
-                    }
-                    if($value->dates->first()->end_date != '') {
-                        $_image_to = strtotime($value->dates->first()->end_date);
-                    } else {
-                        $_image_to = strtotime($value->dates->first()->date);
-                    }
-
-                    return ($_image_from >= $_from) && ($_image_to <= $_to);
-                });
+        if($this->from != '' || $this->to != ''){
+            if($this->from == '') {
+                $this->from = $this->to;
             }
-
-            $this->images = $_images;
-        } else {
-            if($this->from != '' || $this->to != ''){
-                $_images = collect([]);
-
-                if($this->from != '') {
-                    $_from = $this->from;
-                } else {
-                    $_from = $this->to;
-                }
-                if($this->to != '') {
-                    $_to = $this->to;
-                } else {
-                    $_to = $this->from;
-                }
-    
-                $dates = [$_from, $_to];
-                
-                $date_query = Date::with([]);
-
-                $date_query->whereBetween('dates.date', $dates);
-                $date_query->orWhereNotNull('dates.end_date')->whereBetween('end_date', $dates);
-
-                $dates = $date_query->get();
-                
-                foreach ($dates as $key => $date) {
-                    $_images = $_images->merge($date->images);
-                }
-
-                $this->images = $_images;
+            if($this->to == '') {
+                $this->to = $this->from;
             }
         }
+
+        $this->resetPage();
     }
 
     protected function search()
     {
-        $terms = explode(' ', $this->query);
-
-        /**
-         * querying the images direct attributes:
-         * - title
-         * - signature
-         * - old number (oldnr)
-         */
         $image_query = Image::with([]);
 
-        foreach($terms as $k => $term) {
-            $image_query->where(DB::raw('lower(title)'), 'like', '%' . strtolower($term) . '%');
+        if($this->query != ''){
+            $terms = explode(' ', $this->query);
+
+            $image_query->where(function($q) use ($terms) {
+                /**
+                 * querying the images direct attributes:
+                 * - title
+                 * - signature
+                 * - old number (oldnr)
+                 */
+                foreach($terms as $k => $term) {
+                    $q->where(DB::raw('lower(title)'), 'like', '%' . strtolower($term) . '%');
+                }
+    
+                $q->orWhere(DB::raw('lower(oldnr)'), 'like', '%' . strtolower($this->query) . '%');
+                $q->orWhere(DB::raw('lower(signature)'), 'like', '%' . strtolower($this->query) . '%');
+
+                /**
+                 * querying relationships:
+                 * - comments
+                 */
+                $q->orWhereHas('comments', function($q) use ($terms) {
+                    foreach($terms as $k => $term) {
+                        $q->where(DB::raw('lower(comment)'), 'like', '%' . strtolower($term) . '%');
+                    }
+                });
+            });
         }
-
-        $image_query->orWhere(DB::raw('lower(signature)'), 'like', '%' . strtolower($this->query) . '%');
-        $image_query->orWhere(DB::raw('lower(oldnr)'), 'like', '%' . strtolower($this->query) . '%');
-
-        $image_query->select('id', 'base_path', 'signature', 'title');
-
-        $images = $image_query->get();
 
         /**
-         * querying comments
+         * querying relationships:
+         * - dates
          */
-        $comment_query = Comment::with([]);
+        if($this->from != '' || $this->to != '') {
 
-        foreach($terms as $k => $term) {
-            $comment_query->where(DB::raw('lower(comments.comment)'), 'like', '%' . strtolower($term) . '%');
-        }
-
-        $comments = $comment_query->get();
-
-        foreach ($comments as $key => $comment) {
-            $images = $images->merge($comment->images);
-        }
-
-        /**
-         * 
-         */
-        /*if($this->from != '' || $this->to != ''){
-            if($this->from != '') {
-                $_from = $this->from;
-            } else {
-                $_from = $this->to;
-            }
-            if($this->to != '') {
-                $_to = $this->to;
-            } else {
-                $_to = $this->from;
-            }
-
-            $dates = [$_from, $_to];
+            $dates = [$this->from, $this->to];
 
             $image_query->whereHas('dates', function($q) use ($dates) {
-                $q->whereBetween('dates.date', $dates);
-                $q->orWhereNotNull('dates.end_date')->whereBetween('end_date', $dates);
+                $q->whereBetween('date', $dates);
+                $q->orWhereNotNull('end_date')->whereBetween('end_date', $dates);
             });
-        }*/
+        }
+
+        $image_query->select('id', 'base_path', 'signature', 'title');
+        $image_query->orderBy('id');
+
+        if($this->query != '' || $this->from != '' || $this->to != '') {
+        $images = $image_query->paginate(48);
+        } else {
+            $images = DB::connection('pia')->table('images')
+                ->inRandomOrder()
+                ->paginate(48);
+        }
 
         return $images;
     }
