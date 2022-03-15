@@ -86,11 +86,11 @@ class Search extends Component
                  * querying relationships:
                  * - comments
                  */
-                $q->orWhereHas('comments', function($q) use ($terms) {
+                /*$q->orWhereHas('comments', function($q) use ($terms) {
                     foreach($terms as $k => $term) {
                         $q->where(DB::raw('lower(comment)'), 'like', '%' . strtolower($term) . '%');
                     }
-                });
+                });*/
             });
         }
 
@@ -102,14 +102,17 @@ class Search extends Component
 
             $dates = [$this->from, $this->to];
 
-            $image_query->whereHas('dates', function($q) use ($dates) {
-                $q->whereBetween('date', $dates);
-                $q->orWhereNotNull('end_date')->whereBetween('end_date', $dates);
-            });
+            $image_query
+                ->join('image_date', 'images.id', '=', 'image_date.image_id')
+                ->join('dates', 'dates.id', '=', 'image_date.date_id')
+                ->where(function($q) use ($dates){
+                    $q->whereBetween('dates.date', $dates)
+                    ->orWhereNotNull('dates.end_date')->whereBetween('dates.end_date', $dates);
+                });
         }
 
-        $image_query->select('id', 'base_path', 'signature', 'title');
-        $image_query->orderBy('id');
+        $image_query->select('images.id', 'images.base_path', 'images.signature', 'images.title');
+        $image_query->orderBy('images.id');
 
         if($this->query != '' || $this->from != '' || $this->to != '') {
         $images = $image_query->paginate(48);

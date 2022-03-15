@@ -86,6 +86,7 @@
         x-data="{translate: '80px', expand_collections: false}"
         @mouseover="translate = '100%'" @mouseleave="translate = '80px'; expand_collections = false;"
         class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50"
+        style="transform: translateX(100%)"
         :style="`transform: translateX(calc(100% - ${translate}))`">
 
         <livewire:collections-aside />
