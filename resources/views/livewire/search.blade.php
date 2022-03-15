@@ -19,6 +19,7 @@
                 <input type="date" name="from" wire:model.defer="from" autocomplete="new-password" value="{{ $from }}" class="p-1 m-1">
                 <label for="to" class="py-2 px-1">to</label>
                 <input type="date" name="to" wire:model.defer="to" autocomplete="new-password" value="{{ $to }}" class="p-1 m-1">
+                <button type="button" class="text-xs underline ml-2" wire:click.defer="clear_dates()">clear</button>
             </div>
         </form>
         {{--<div class="flex justify-center mt-2">
@@ -120,6 +121,16 @@
                         
                     </form>
                 </div>
+                <div class="my-2">
+                    @if($images->count() < 100)
+                    <button type="button" wire:click.defer="add_all_results()"
+                    class="py-1 px-4 rounded-full border border-white text-white hover:bg-green-500 hover:text-white text-xs">Add all search results to selection</button>
+                    @endif
+                    @if(count($selection))
+                    <button wire:click="delete_selection()" type="button"
+                        class="py-1 px-4 mt-2 rounded-full border border-white text-white hover:bg-red-500 hover:text-white text-xs">Delete Selection</button>
+                    @endif
+                </div>
                 <div>
                     @foreach ($selection as $image)
                         <div class="mt-4 cursor-not-allowed" wire:key="selected_{{ $image['id'] }}"
@@ -131,12 +142,6 @@
                         </div>
                     @endforeach
                 </div>
-                @if(count($selection))
-                <div class="my-4">
-                    <button wire:click="delete_selection()" type="button"
-                    class="py-2 px-4 rounded-full border border-white text-white hover:bg-red-500 hover:text-white text-sm">Delete Selection</button>
-                </div>
-                @endif
             </div>
         </div>
     </aside>

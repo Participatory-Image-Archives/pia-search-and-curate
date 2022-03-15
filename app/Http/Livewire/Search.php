@@ -42,8 +42,18 @@ class Search extends Component
 
     public function render()
     {
+        $image_query = $this->search();
+
+        if($this->query != '' || $this->from != '' || $this->to != '') {
+            $images = $image_query->paginate(48);
+        } else {
+            $images = DB::connection('pia')->table('images')
+                ->inRandomOrder()
+                ->paginate(48);
+        }
+
         return view('livewire.search', [
-            'images' => $this->search()
+            'images' => $images
         ]);
     }
 
@@ -114,15 +124,19 @@ class Search extends Component
         $image_query->select('images.id', 'images.base_path', 'images.signature', 'images.title');
         $image_query->orderBy('images.id');
 
-        if($this->query != '' || $this->from != '' || $this->to != '') {
-        $images = $image_query->paginate(48);
-        } else {
-            $images = DB::connection('pia')->table('images')
-                ->inRandomOrder()
-                ->paginate(48);
-        }
+        // print(vsprintf(str_replace(array('?'), array('\'%s\''), $image_query->toSql()), $image_query->getBindings()));
 
-        return $images;
+        return $image_query;
+    }
+
+    public function add_all_results(){
+        $this->selection = $this->selection->merge($this->search()->get());
+        $this->set_image_ids();
+    }
+
+    public function clear_dates() {
+        $this->from = '';
+        $this->to = '';
     }
 
     public function select($id) {
