@@ -92,16 +92,28 @@ class Search extends Component
                 $q->orWhere(DB::raw('lower(oldnr)'), 'like', '%' . strtolower($this->query) . '%');
                 $q->orWhere(DB::raw('lower(signature)'), 'like', '%' . strtolower($this->query) . '%');
 
-                /**
-                 * querying relationships:
-                 * - comments
-                 */
-                /*$q->orWhereHas('comments', function($q) use ($terms) {
+                // TODO: Optimize via joins
+                $q->orWhereHas('comments', function($q) use ($terms) {
                     foreach($terms as $k => $term) {
                         $q->where(DB::raw('lower(comment)'), 'like', '%' . strtolower($term) . '%');
                     }
-                });*/
+                });
             });
+
+
+            /**
+             * TODO: make this work
+             * querying relationships:
+             * - comments
+             */
+            /*$image_query
+                ->join('image_comment', 'images.id', '=', 'image_comment.image_id')
+                ->join('comments', 'comments.id', '=', 'image_comment.comment_id')
+                ->orWhere(function($q) use ($terms){
+                    foreach($terms as $k => $term) {
+                        $q->orWhere(DB::raw('lower(comment)'), 'like', '%' . strtolower($term) . '%');
+                    }
+                });*/
         }
 
         /**
