@@ -80,7 +80,7 @@ class Search extends Component
         }
 
         if(!isset($images)){
-            srand(time()/86400);
+            //srand(time()/86400);
             
             return view('livewire.search', [
                 'images' => Image::all()->random(6),
