@@ -56,7 +56,10 @@ class Search extends Component
 
     public function render()
     {
-        $images = $this->search();
+        if($this->query != '' || $this->from != '' || $this->to != '' ||
+            $this->keyword != '' || $this->person != '' || $this->location != ''){
+            $images = $this->search();
+        }
 
         if($this->keyword != '') {
             $keyword_id = $this->keyword; 
@@ -77,11 +80,17 @@ class Search extends Component
         }
 
         if(!isset($images)){
-            $images = DB::connection('pia')->table('images')->inRandomOrder();
+            srand(time()/86400);
+            
+            return view('livewire.search', [
+                'images' => Image::all()->random(6),
+                'iotd' => true
+            ]);
         }
 
         return view('livewire.search', [
-            'images' => $images->paginate($this->page_size)
+            'images' => $images->paginate($this->page_size),
+            'pagination' => true
         ]);
     }
 

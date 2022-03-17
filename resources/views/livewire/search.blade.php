@@ -48,12 +48,17 @@
     <div>
         <div class="p-10 pr-20 pb-20 space-y-4" x-data>
             <main>
-                @if($images->total() > 50)
+                @if($pagination ?? false && $images->total() > 50)
                 <div class="py-4">
                     {{ $images->links() }}
                 </div>
                 @endif
+                @if($iotd ?? false)
+                <h2 class="text-2xl mb-4 font-bold">Images of the day</h2>
+                <div class="grid gap-4 grid-flow-row grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+                @else
                 <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+                @endif
                     @foreach ($images as $image)
                         <div wire:key="image_{{ $image->id }}" class="bg-gray-100 relative"
                             x-data="{loaded: false, show_meta: false}"
@@ -63,7 +68,7 @@
                             <img class="w-full"
                                 style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
                                 src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/50,/0/default.jpg"
-                                data-src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/320,/0/default.jpg"
+                                data-src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/{{ ($iotd ?? false) ? '560' : '320' }},/0/default.jpg"
                                 alt="{{ $image->title }}" title="{{ $image->title }}"
                                 @load="loaded = true; observer.observe($el);">
                             <div x-show="show_meta"
