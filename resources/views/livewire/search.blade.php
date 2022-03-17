@@ -62,12 +62,12 @@
                     @foreach ($images as $image)
                         <div wire:key="image_{{ $image->id }}" class="bg-gray-100 relative"
                             x-data="{loaded: false, show_meta: false}"
-                            style="height: 200px;"
+                            style="height: {{ ($iotd ?? false) ? 'auto' : '200px' }};"
                             :style="loaded ? '' : 'height: 200px;'"
                             @mouseover="show_meta = true" @mouseout="show_meta = false">
                             <img class="w-full"
                                 style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
-                                src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/50,/0/default.jpg"
+                                src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/{{ ($iotd ?? false) ? '560' : '50' }},/0/default.jpg"
                                 data-src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/{{ ($iotd ?? false) ? '560' : '320' }},/0/default.jpg"
                                 alt="{{ $image->title }}" title="{{ $image->title }}"
                                 @load="loaded = true; observer.observe($el);">
