@@ -14,19 +14,33 @@ class Search extends Component
 {
     use WithPagination;
 
+    // get params for direct attributes
     public $query = '';
     public $from = '';
     public $to = '';
     public $cid = '';
 
+    // get params for relationships
+    public $keyword = '';
+    public $person = '';
+    public $location = '';
+
+    // state management
     public $collection;
     public $selection;
     public $image_ids = '';
+
+    protected $page_size = 48;
 
     protected $queryString = [
         'query' => ['except' => ''],
         'from' => ['except' => ''],
         'to' => ['except' => ''],
+        
+        'keyword' => ['except' => ''],
+        'person' => ['except' => ''],
+        'location' => ['except' => ''],
+        
         'cid' => ['except' => ''],
     ];
 
@@ -42,18 +56,32 @@ class Search extends Component
 
     public function render()
     {
-        $image_query = $this->search();
+        $images = $this->search();
 
-        if($this->query != '' || $this->from != '' || $this->to != '') {
-            $images = $image_query->paginate(48);
-        } else {
-            $images = DB::connection('pia')->table('images')
-                ->inRandomOrder()
-                ->paginate(48);
+        if($this->keyword != '') {
+            $keyword_id = $this->keyword; 
+            $images = $images->whereHas('keywords', function($q) use($keyword_id) {
+                $q->where('id', $keyword_id);
+            })->orderBy('id');
+        }
+
+        if($this->person != '') {
+            $person_id = $this->person; 
+            $images = $images->whereHas('people', function($q) use($person_id) {
+                $q->where('id', $person_id);
+            })->orderBy('id');
+        }
+
+        if($this->location != '') {
+            $images = $images->where('location_id', $this->location)->orderBy('id');
+        }
+
+        if(!isset($images)){
+            $images = DB::connection('pia')->table('images')->inRandomOrder();
         }
 
         return view('livewire.search', [
-            'images' => $images
+            'images' => $images->paginate($this->page_size)
         ]);
     }
 
