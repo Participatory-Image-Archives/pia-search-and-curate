@@ -54,7 +54,7 @@
                 </div>
                 @endif
                 @if($iotd ?? false)
-                <h2 class="text-2xl mb-4 font-bold">Images of the day</h2>
+                <h2 class="text-2xl mb-4 font-bold">Images of the moment</h2>
                 <div class="grid gap-4 grid-flow-row grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
                 @else
                 <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">

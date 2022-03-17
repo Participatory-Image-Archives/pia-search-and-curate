@@ -83,15 +83,15 @@ class Search extends Component
             srand(time()/86400);
             
             return view('livewire.search', [
-                'images' => Image::all()->random(6),
+                'images' => Image::inRandomOrder()->limit(6)->get(),
                 'iotd' => true
             ]);
+        } else {
+            return view('livewire.search', [
+                'images' => $images->paginate($this->page_size),
+                'pagination' => true
+            ]);
         }
-
-        return view('livewire.search', [
-            'images' => $images->paginate($this->page_size),
-            'pagination' => true
-        ]);
     }
 
     public function update()
