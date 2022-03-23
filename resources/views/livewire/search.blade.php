@@ -1,7 +1,14 @@
-<div>
+<div x-data="{ modal_map: false }">
     <div wire:loading>
         <div class="fixed top-0 left-0 h-full w-full bg-gray-100 bg-opacity-75 flex justify-around items-center z-50">
             <span class="text-4xl">Loading…</span>
+        </div>
+    </div>
+
+    <div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
+        x-show="modal_map">
+        <div class="modal-map inline-block bg-white p-4 rounded-xl" x-show="modal_map">
+            <iframe src="{{ route('search.byCoordinates') }}" frameborder="0" width="400px" height="450px"></iframe>
         </div>
     </div>
 
@@ -15,11 +22,17 @@
             </div>
 
             <div class="flex justify-center mt-4">
-                <label for="from" class="py-2 pr-1">Search or filter by date from</label>
-                <input type="date" name="from" wire:model.defer="from" autocomplete="new-password" value="{{ $from }}" class="p-1 m-1">
-                <label for="to" class="py-2 px-1">to</label>
-                <input type="date" name="to" wire:model.defer="to" autocomplete="new-password" value="{{ $to }}" class="p-1 m-1">
-                <button type="button" class="text-xs underline ml-2" wire:click.defer="clear_dates()">clear</button>
+                <div class="flex border border-gray-700 rounded-full px-4 text-xs">
+                    <label for="from" class="py-2 pr-1">Search by date from</label>
+                    <input type="date" name="from" wire:model.defer="from" autocomplete="new-password" value="{{ $from }}" class="p-1 m-1">
+                    <label for="to" class="py-2 px-1">to</label>
+                    <input type="date" name="to" wire:model.defer="to" autocomplete="new-password" value="{{ $to }}" class="p-1 m-1">
+                    <button type="button" class="text-xs underline ml-2" wire:click.defer="clear_dates()">clear</button>
+                </div>
+                <div class="flex border border-gray-700 rounded-full px-4 ml-2 text-xs">
+                    <button type="button" @click="modal_map = true">Search by Map</button>
+                    <button type="button" class="text-xs underline ml-2" wire:click.defer="clear_coordinates()">clear</button>
+                </div>
             </div>
         </form>
         {{--<div class="flex justify-center mt-2">

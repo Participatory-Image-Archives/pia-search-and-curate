@@ -18,7 +18,7 @@ class Search extends Component
     public $query = '';
     public $from = '';
     public $to = '';
-    public $cid = '';
+    public $coordinates = '';
 
     // get params for relationships
     public $keyword = '';
@@ -30,12 +30,15 @@ class Search extends Component
     public $selection;
     public $image_ids = '';
 
+    public $cid = '';
+
     protected $page_size = 48;
 
     protected $queryString = [
         'query' => ['except' => ''],
         'from' => ['except' => ''],
         'to' => ['except' => ''],
+        'coordinates' => ['except' => ''],
         
         'keyword' => ['except' => ''],
         'person' => ['except' => ''],
@@ -56,7 +59,7 @@ class Search extends Component
 
     public function render()
     {
-        if($this->query != '' || $this->from != '' || $this->to != '' ||
+        if($this->query != '' || $this->from != '' || $this->to != '' || $this->coordinates != '' ||
             $this->keyword != '' || $this->person != '' || $this->location != ''){
             $images = $this->search();
         }
@@ -167,7 +170,22 @@ class Search extends Component
                 ->where(function($q) use ($dates){
                     $q->whereBetween('dates.date', $dates)
                     ->orWhereNotNull('dates.end_date')->whereBetween('dates.end_date', $dates);
-                });
+                }); 
+        }
+
+        /**
+         * querying relationships:
+         * - coordinates
+         */
+        if($this->coordinates != '') {
+            $_coordinates  = explode(',', $this->coordinates);
+
+            $image_query
+                ->join('locations', 'locations.id', '=', 'images.location_id')
+                ->where('latitude', '<=', $_coordinates[0])
+                ->where('longitude', '>=', $_coordinates[1])
+                ->where('latitude', '>=', $_coordinates[2])
+                ->where('longitude', '<=', $_coordinates[3]);
         }
 
         $image_query->select('images.id', 'images.base_path', 'images.signature', 'images.title');
@@ -186,6 +204,10 @@ class Search extends Component
     public function clear_dates() {
         $this->from = '';
         $this->to = '';
+    }
+
+    public function clear_coordinates() {
+        $this->coordinates = '';
     }
 
     public function select($id) {
