@@ -159,11 +159,11 @@ class ImageController extends Controller
             }
         ]
         */
-
+        
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://10.34.58.72:4567/api/v1/find/segments/similar',
+            CURLOPT_URL => 'http://131.152.217.186:4567/api/v1/find/segments/similar',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
