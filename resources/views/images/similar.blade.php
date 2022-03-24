@@ -15,10 +15,6 @@
                 <a class="text-xs mr-1 underline" href="{{ route('images.similar', [$image]) }}?category=localfeatures">localfeatures</a>
             </div>
         </div>
-        <div class="md:w-1/2 md:text-right">
-            @include('partials.lists-dropdown')
-            <x-links.default label="Home" href="/"/>
-        </div>
     </div>
 
     <div class="flex">
