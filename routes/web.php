@@ -80,6 +80,7 @@ Route::get('/by-dates', function (Request $request) {
     return view('frontend/partials/search-by-dates');
 })->name('search.byDates');
 
+/* statistics */
 Route::get('/stats', function(Request $request) {
     $images_total = Image::count();
 
@@ -193,6 +194,45 @@ Route::get('/stats', function(Request $request) {
     echo('<td>'.number_format(100 / $images_total * $images_w_acc_3, 0, '.', '\'').'%</td>');
     echo('</tr>');
     echo('</table>');
+});
+
+Route::get('/empty-title/{id}', function(Request $request, $id) {
+    $collection = Collection::find($id);
+
+    $headers = array(
+        "Content-type" => "text/csv",
+        "Content-Disposition" => "attachment; filename=file.csv",
+        "Pragma" => "no-cache",
+        "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+        "Expires" => "0"
+    );
+
+    $columns = array(
+        'salsah_id', 'oldnr', 'signature', 'title'
+    );
+
+    $callback = function() use ($collection, $columns)
+    {
+        $images = $collection->images->where('title', '');
+        $file = fopen('php://output', 'w');
+
+        fputcsv($file, $columns);
+
+        foreach($images as $image) {
+
+            $data = [
+                $image->salsah_id,
+                $image->oldnr,
+                $image->signature,
+                ''
+            ];
+
+            fputcsv($file, $data);
+        }
+        fclose($file);
+    };
+
+    return response()->streamDownload($callback, $collection->label.'-empty_title.csv');
 });
 
 Route::get('/fill-base-path', function () {
