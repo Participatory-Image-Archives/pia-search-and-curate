@@ -27,7 +27,7 @@
         </div>
 
         <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
-            @include('images.partials.details')
+            @include('images.partials.details', ['header' => $image])
         </div>
     </div>
 
