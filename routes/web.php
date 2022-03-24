@@ -55,6 +55,8 @@ Route::resource('docs', PiaDocsController::Class);
 Route::resource('maps', MapsController::Class);
 Route::resource('dates', DateController::Class);
 
+Route::get('/images/{id}/similar', [ImageController::class, 'findSimilar'])->name('images.similar');
+
 Route::get('/maps/{id}/images', [MapsController::class, 'images'])->name('maps.images');
 Route::patch('/maps/{id}/imagesUpdate', [MapsController::class, 'imagesUpdate'])->name('maps.imagesUpdate');
 
