@@ -14,7 +14,7 @@
             
                 <main>
                     <div id="images" class="pb-20">
-                        @include('collections.partials.display-grid', ['images' => $collection->images])
+                        @include('collections.partials.display-grid', ['images' => $images])
                     </div>
                 </main>
             </div>
