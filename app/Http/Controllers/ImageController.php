@@ -253,7 +253,8 @@ class ImageController extends Controller
         return view('images/similar', [
             'image' => $image,
             'images' => Image::whereIn('signature', $similar)->get(),
-            'results' => $passed_threshold
+            'results' => $passed_threshold,
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
         ]);
     }
 }
