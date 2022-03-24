@@ -12,6 +12,7 @@ use App\Models\Location;
 use App\Models\ModelType;
 use App\Models\ObjectType;
 use App\Models\Format;
+use App\Models\Comment;
 
 class ImageController extends Controller
 {
@@ -49,14 +50,40 @@ class ImageController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return view('images/show', [
-            'image' => Image::find($id)
-        ]);
+        $data = [
+            'image' => Image::find($id),
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
+        ];
+
+        if($request->cid && $request->iid){
+            $collection = Collection::find($request->cid);
+            $index = 0;
+            
+            foreach ($collection->images as $key => $image) {
+                if($image->id == $request->iid) {
+                    break;
+                }
+                $index++;
+            }
+
+            if($index > 0){
+                $data['prev'] = $collection->images->get($index-1);
+                $data['cid'] = $collection->id;
+            }
+
+            if($index < $collection->images()->count() - 1){
+                $data['next'] = $collection->images->get($index+1);
+                $data['cid'] = $collection->id;
+            }
+        }
+
+        return view('images/show', $data);
     }
 
     /**
@@ -72,7 +99,7 @@ class ImageController extends Controller
             'collections' => Collection::all(),
             'keywords' => Keyword::all(),
             'people' => Person::all(),
-            'locations' => Location::all(),
+            'locations' => Location::whereIn('origin', ['salsah', 'pia'])->get(),
             'model_types' => ModelType::all(),
             'object_types' => ObjectType::all(),
             'formats' => Format::all(),
@@ -92,8 +119,7 @@ class ImageController extends Controller
 
         $image->salsah_id = $request->salsah_id;
         $image->oldnr = $request->oldnr;
-        $image->signature = $request->signature;
-        $image->original_title = $request->original_title;
+        $image->title = $request->title;
         $image->sequence_number = $request->sequence_number;
 
         $image->object_type_id = $request->object_type_id;
@@ -102,9 +128,32 @@ class ImageController extends Controller
 
         $image->keywords()->sync($request->keywords);
         $image->collections()->sync($request->collections);
+
         $image->people()->sync($request->people);
 
+        if($request->append_person != '') {
+            $person = Person::create([
+                'name' => $request->append_person
+            ]);
+            $image->people()->attach($person);
+        }
+
         $image->location_id = $request->location_id;
+
+        if($request->append_location != '') {
+            $location = Location::create([
+                'label' => $request->append_location,
+                'origin' => 'pia'
+            ]);
+            $image->location_id = $location->id;
+        }
+
+        if($request->append_comment != '') {
+            $comment = Comment::create([
+                'comment' => $request->append_comment
+            ]);
+            $image->comments()->attach($comment);
+        }
 
         $image->save();
 

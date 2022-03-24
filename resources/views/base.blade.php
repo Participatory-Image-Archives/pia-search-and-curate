@@ -10,18 +10,24 @@
     <link rel="stylesheet" href="/node_modules/slim-select/dist/slimselect.min.css">
     <link rel="stylesheet" href="/css/app.css">
     
+    @livewireStyles
     @yield('styles')
 
 </head>
-<body>
+<body class="min-h-screen">
 
     @yield('content')
     
+    <div class="fixed bottom-4 left-4">
+        @include('partials.nav')
+    </div>
+
     <!--<script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>-->
-    <!--<script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>-->
+    <script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="/node_modules/slim-select/dist/slimselect.min.js"></script>
 
+    @livewireScripts
     @yield('scripts')
 
 </body>

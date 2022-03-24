@@ -18,7 +18,7 @@ class CollectionController extends Controller
     public function index()
     {
         return view('collections/index', [
-            'collections' => Collection::where('origin', '!=', 'salsah')->orderBy('label')->get()
+            'collections' => Collection::where('origin', 'pia')->orderBy('label')->get()
         ]);
     }
 
@@ -52,7 +52,9 @@ class CollectionController extends Controller
             ]);
         }
 
-        $collection->images()->sync(explode(',', $request->input('image_ids')));
+        if($request->input('image_ids') != '') {
+            $collection->images()->sync(explode(',', $request->input('image_ids')));
+        }
 
         return redirect()->route('collections.show', [$collection]);
     }
@@ -60,12 +62,29 @@ class CollectionController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         return view('collections/show', [
+            'collection' => Collection::find($id),
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
+            'display' => $request->input('display')
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function timeline(Request $request, $id)
+    {
+        return view('collections/partials/display-timeline', [
             'collection' => Collection::find($id)
         ]);
     }
@@ -78,7 +97,10 @@ class CollectionController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('collections/edit', [
+            'collection' => Collection::find($id),
+            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
+        ]);
     }
 
     /**
@@ -90,7 +112,12 @@ class CollectionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $collection = Collection::find($id);
+        $collection->label = $request->label;
+        $collection->description = $request->description;
+        $collection->save();
+
+        return redirect()->route('collections.show', [$collection]);
     }
 
     /**
@@ -132,9 +159,12 @@ class CollectionController extends Controller
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_POSTFIELDS => array(
                         'Datei'=> new \CURLFile(
-                            $file->getPathName()
+                            $file->getPathName(),
+                            mime_content_type($file->getPathName()),
+                            pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
                         ),
-                        'Cuse_sop' => 'yes'
+                        'Cuse_sop' => 'yes',
+                        'origname' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
                     ),
                 ));
 
@@ -143,6 +173,7 @@ class CollectionController extends Controller
                 $data = json_decode($response);
 
                 $image = Image::create([
+                    'title' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
                     'label' => $data->signature,
                     'signature' => $data->signature,
                     'base_path' => 'upload',
@@ -204,5 +235,51 @@ class CollectionController extends Controller
         return view('collections/map', [
             'collection' => Collection::find($id)
         ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function copy(Request $request, $id)
+    {
+        return view('collections/copy', [
+            'collection' => Collection::find($id),
+            'collections' => Collection::where('origin', 'pia')->orderBy('label')->get()
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function doCopy(Request $request, $id)
+    {
+        if($request->collection_id != '') {
+            $collection = Collection::find($request->collection_id);
+        } else {
+            $collection = Collection::create([
+                'label' => $request->collection_label,
+                'origin' => 'pia'
+            ]);
+        }
+
+        $images = [];
+
+        foreach ($request->all() as $key => $input) {
+            if(strpos($key, 'image_') !== false){
+                $images[] = explode('_', $key)[1];
+            }
+        }
+
+        $collection->images()->syncWithoutDetaching($images);
+
+        return redirect()->route('collections.show', [$collection]);
     }
 }

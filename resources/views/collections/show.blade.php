@@ -1,14 +1,61 @@
 @extends('base')
 
 @section('content')
-<div class="p-4">
-    <div class="md:flex mb-4">
-        <div class="md:w-1/2">
-            <h2 class="text-2xl mb-2">
-                {{ $collection->label }}
-            </h2>
-            <div class="print-hidden">
-                <x-links.cta label="Edit" href="/?collection={{ $collection->id }}"/>
+<div class="bg-gray-100 min-h-screen" x-data="{cols: 3}">
+    <div class="flex" id="searchable-list" >
+        <div class="fixed bg-black h-screen w-1/2 {{ !in_array($display, ['map', 'timeline']) ? 'p-4 overflow-y-auto' : 'overflow-hidden' }}">
+            <div>
+                @if(!in_array($display, ['map', 'timeline']))
+                <section class="my-10 print-hidden">
+                    <div class="flex gap-6 items-center">
+            
+                        <input type="text" name="query" placeholder="Search collection"
+                            class="search py-2 px-6 w-2/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10">
+                        
+                        @if($display != 'list')
+                        <input type="range" min="1" max="6" x-model="cols">
+                        @endif
+
+                        @include('collections.partials.image-actions')
+                </section>
+                @endif
+            
+                <main>
+                    <div id="images" class="{{ !in_array($display, ['map', 'timeline']) ? 'pb-20' : 'min-h-screen' }}">
+                        @if($display == 'list')
+                            @include('collections.partials.display-list')
+                        @elseif($display == 'map')
+                            @include('collections.partials.display-map')
+                        @elseif($display == 'timeline')
+                            @include('collections.partials.display-timeline')
+                        @else
+                            @include('collections.partials.display-grid', ['images' => $collection->images])
+                        @endif
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
+            @include('collections.partials.collection-info')
+
+            <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
+                <a href="/?cid={{ $collection->id }}" class="hover:underline">Edit selection</a>
+
+                <a href="{{ route('collections.edit', [$collection]) }}" class="hover:underline">Edit info</a>
+
+                <form class="hidden" x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
+                    @csrf
+                    <input x-ref="images" @change="$refs.imageupload.submit()" class="hidden" type="file" name="images[]" accept="image/*" required multiple>
+                </form>
+
+                <button type="button" @click="$refs.images.click()" title="Add images to collection" class="hover:underline">
+                    Add images
+                </button>
+
+                <a href="{{ route('collections.copy', [$collection]) }}" title="Copy images to new collection" class="hover:underline">
+                    Copy images
+                </a>
 
                 @if($collection->origin != 'salsah')
                 <form action="{{ route('collections.destroy', [$collection]) }}" method="post" class="inline-block">
@@ -18,97 +65,29 @@
                     <x-buttons.delete/>
                 </form>
                 @endif
-
-                <form class="inline-block" x-data x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
-                    @csrf
-                    <input x-ref="images" @change="$refs.imageupload.submit()" class="hidden" type="file" name="images[]" accept="image/*" required multiple>
-                    <x-buttons.default @click="$refs.images.click()" label="Add images to collection"/>
-                </form>
-
-                <form class="inline-block" x-data x-ref="documentsupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadDocuments', [$collection]) }}">
-                    @csrf
-                    <input x-ref="documents" @change="$refs.documentsupload.submit()" class="hidden" type="file" name="documents[]" required multiple>
-                    <x-buttons.default @click="$refs.documents.click()" label="Add documents to collection"/>
-                </form>
-
-                <x-links.cta label="View on Map" :href="route('collections.map', ['id' => $collection->id])"/>
-
-                <x-links.bare label="JSON" href="{{ env('API_URL') }}collections/{{ $collection->id }}" target="_blank"/>
-                <x-links.bare label="CSV" :href="route('collections.export', ['id' => $collection->id])"/>
-            </div>
-        </div>
-        <div class="md:w-1/2 md:text-right print-hidden">
-            @include('partials.lists-dropdown')
-            <x-links.default label="Home" href="/"/>
-        </div>
-    </div>
-    <div class="w-full mb-10">
-        {!! $collection->description !!}
-    </div>
-    <div class="flex">
-        <div class="w-1/5 mr-8 print-hidden">
-            @if($collection->documents->count())
-            <div class="mb-10">
-                <h2 class="text-xs mb-2">Documents</h2>
-                <div>
-                    <ul>
-                    @foreach ($collection->documents as $document)
-                        <li class="mb-2"><x-links.default :label="$document->label" href="/{{ 'storage/' . $document->base_path . '/' . $document->file_name }}"/></li>
-                    @endforeach
-                    </ul>
-                </div>
-            </div>
-            @endif
-            <div class="mb-10">
-                <h2 class="text-xs mb-2">Notes</h2>
-                <div>
-                    <ul>
-                    @foreach ($collection->docs as $doc)
-                        <li class="mb-2"><x-links.default :label="$doc->label" href="{{ env('DOCS_URL') }}/{{ $doc->id }}/edit"/></li>
-                    @endforeach
-                    </ul>
-    
-                    <form action="{{ env('DOCS_URL') }}/create" method="get" class="inline-block">
-                        @csrf
-                        <input type="hidden" name="collections" value="{{ $collection->id }}">
-                        <input type="hidden" name="label" value="{{ $collection->label }}">
-                        
-                        <x-buttons.default label="New Note" type="submit"/>
-                    </form>
-                </div>
-            </div>
-            <div class="">
-                <h2 class="text-xs mb-2">Maps</h2>
-                <div>
-                    <ul>
-                    @foreach ($collection->maps as $map)
-                        <li class="mb-2"><x-links.default :label="$map->label" href="{{ env('MAPS_URL') }}/{{ $map->id }}"/></li>
-                    @endforeach
-                    </ul>
-    
-                    <form action="{{ env('MAPS_URL') }}/create" method="get" class="inline-block">
-                        @csrf
-                        <input type="hidden" name="collections" value="{{ $collection->id }}">
-                        <input type="hidden" name="label" value="{{ $collection->label }}">
-                        
-                        <x-buttons.default label="New Map" type="submit"/>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div>
-            <h2 class="text-xs mb-2 print-hidden">Images</h2>
-            <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 print-grid print-w-full">
-                @foreach ($collection->images as $image)
-                    <a href="{{ route('images.show', [$image]) }}" class="print-image">
-                        <img class="inline-block mr-2 w-full" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
-                        <div class="print-image-meta p-2">
-                            <span class="text-xs">{{ $image->title }}</span>
-                        </div>
-                    </a>
-                @endforeach
             </div>
         </div>
     </div>
+
+    <aside id="sidebar"
+        x-data="{expand_collections: false}"
+        @mouseleave="expand_collections = false;"
+        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
+        
+        @include('frontend.partials.aside-collections')
+    </aside>
 </div>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('node_modules/list.js/dist/list.min.js') }}"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            var searchable_list = new List('searchable-list', {
+                valueNames: ['title', 'signature', 'oldnr', 'tags']
+            });
+        });
+
+    </script>
 @endsection
