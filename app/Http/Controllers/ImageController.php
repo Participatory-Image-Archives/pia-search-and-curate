@@ -252,7 +252,7 @@ class ImageController extends Controller
 
         return view('images/similar', [
             'image' => $image,
-            'similar' => Image::whereIn('signature', $similar)->get(),
+            'images' => Image::whereIn('signature', $similar)->get(),
             'results' => $passed_threshold
         ]);
     }
