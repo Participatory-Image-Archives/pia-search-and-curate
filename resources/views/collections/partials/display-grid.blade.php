@@ -1,6 +1,10 @@
 <div class="grid gap-4 grid-flow-row print-grid print-w-full" :class="`grid-cols-`+cols">
     @foreach ($images as $image)
+    @if($collection ?? false)
     <a href="{{ route('images.show', [$image]) }}?cid={{ $collection->id }}&iid={{ $image->id }}" class="print-image">
+    @else
+        <a href="{{ route('images.show', [$image]) }}" class="print-image">
+    @endif
         <img class="inline-block mr-2 w-full"
             src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
             alt="{{$image->title}}" title="{{$image->title}}">
