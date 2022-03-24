@@ -17,7 +17,7 @@
 
     @if(isset($header))
     <div class="h-96 bg-center bg-contain bg-no-repeat mb-10"
-        style="background-image: url('https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/960,/0/default.jpg')">
+        style="background-image: url('https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/560,/0/default.jpg')">
     </div>
     @endif
 
