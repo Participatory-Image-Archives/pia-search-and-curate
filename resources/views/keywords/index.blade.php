@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('content')
-<div class="p-4">
+<div class="p-4 pb-20">
     <div class="md:flex mb-4">
         <h2 class="text-2xl mb-2 md:w-1/2">
             Keywords

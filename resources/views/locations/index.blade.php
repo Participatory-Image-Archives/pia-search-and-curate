@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('content')
-<div class="p-4">
+<div class="p-4 pb-20">
     <div class="mb-10">
         <h2 class="text-2xl md:w-1/2">
             Locations
@@ -12,7 +12,7 @@
     @php
         $current = '';
     @endphp
-    <div id="searchable-list" class="pb-20">
+    <div id="searchable-list">
         <input class="search border-b border-black mb-8 focus:outline-none" placeholder="Search…"/>
 
         <div id="filter" class="mt-2 mb-6">
