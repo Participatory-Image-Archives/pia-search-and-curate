@@ -47,8 +47,8 @@
         }).addTo(map);
 
         @foreach ($collection->images as $image)
-            @if ($image->location)
-                let image_{{ $image->id }} = new L.Marker([{{$image->location->latitude}}, {{$image->location->longitude}}]);
+            @if ($image->place)
+                let image_{{ $image->id }} = new L.Marker([{{$image->place->latitude}}, {{$image->place->longitude}}]);
 
                 image_{{ $image->id }}
                     .bindTooltip('{{ $image->title }}')

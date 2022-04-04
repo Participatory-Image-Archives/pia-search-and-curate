@@ -20,7 +20,7 @@
         <div class="w-1/4 pr-4">
             <p class="text-xs mb-2">These images do not have a location attached.</p>
             @foreach ($collection->images as $image)
-                @if (!$image->location)
+                @if (!$image->place)
                 <a href="{{ route('images.show', [$image]) }}">
                     <img class="inline-block mb-2 w-full" src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/320,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
                 </a>
