@@ -62,8 +62,6 @@ class Search extends Component
 
     public function render()
     {
-        $images = DB::table('images');
-
         if($this->query != '' || $this->from != '' || $this->to != '' || $this->coordinates != '' ||
             $this->keyword != '' || $this->agent != '' || $this->place != ''){
             $images = $this->search();
