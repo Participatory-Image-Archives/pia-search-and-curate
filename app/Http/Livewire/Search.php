@@ -2,13 +2,16 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+use App\Models\Agent;
 use App\Models\Collection;
 use App\Models\Comment;
 use App\Models\Date;
 use App\Models\Image;
-use Illuminate\Support\Facades\DB;
-use Livewire\Component;
-use Livewire\WithPagination;
+use App\Models\Keyword;
 
 class Search extends Component
 {
@@ -59,23 +62,29 @@ class Search extends Component
 
     public function render()
     {
+        $images = DB::table('images');
+
         if($this->query != '' || $this->from != '' || $this->to != '' || $this->coordinates != '' ||
             $this->keyword != '' || $this->agent != '' || $this->place != ''){
             $images = $this->search();
         }
 
         if($this->keyword != '') {
-            $keyword_id = $this->keyword; 
+            /*$keyword_id = $this->keyword; 
             $images = $images->whereHas('keywords', function($q) use($keyword_id) {
                 $q->where('id', $keyword_id);
-            })->orderBy('id');
+            });*/
+
+            $images = Keyword::find($this->keyword)->images();
         }
 
         if($this->agent != '') {
-            $agent_id = $this->agent; 
-            $images = $images->whereHas('agents', function($q) use($agent_id) {
-                $q->where('id', $agent_id);
-            })->orderBy('id');
+            /*$agent_id = $this->agent; 
+            $images = Image::whereHas('agents', function($q) use($agent_id) {
+                $q->where('id', '=', $agent_id);
+            });*/
+
+            $images = Agent::find($this->agent)->images();
         }
 
         if($this->place != '') {
@@ -83,8 +92,6 @@ class Search extends Component
         }
 
         if(!isset($images)){
-            srand(time()/86400);
-            
             return view('livewire.search', [
                 'images' => Image::inRandomOrder()->limit(6)->get(),
                 'iotd' => true
