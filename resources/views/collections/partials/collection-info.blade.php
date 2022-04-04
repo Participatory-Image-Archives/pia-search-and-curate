@@ -7,7 +7,7 @@
             {{ $collection->label }}
         </h2>
         <span class="inline-block w-10 h-10 leading-10 border border-gray-500 text-center text-xs">
-            {{ ($collection->maps()->count() ?? 0) + ($collection->docs()->count() ?? 0) + ($collection->documents()->count() ?? 0) }}
+            {{ ($collection->maps()->count() ?? 0) + ($collection->notes()->count() ?? 0) + ($collection->documents()->count() ?? 0) }}
         </span>
     </div>
 
@@ -42,10 +42,10 @@
             <h2 class="text-xs mb-2">Documents</h2>
             <div>
                 <ul>
-                    @foreach ($collection->documents as $document)
+                    @foreach ($collection->documents as $noteument)
                     <li class="mb-2">
-                        <x-links.default :label="$document->label"
-                            href="/{{ 'storage/' . $document->base_path . '/' . $document->file_name }}" />
+                        <x-links.default :label="$noteument->label"
+                            href="/{{ 'storage/' . $noteument->base_path . '/' . $noteument->file_name }}" />
                     </li>
                     @endforeach
                 </ul>
@@ -62,14 +62,14 @@
             <h2 class="text-xs mb-2">Notes</h2>
             <div>
                 <ul>
-                    @foreach ($collection->docs as $doc)
+                    @foreach ($collection->notes as $note)
                     <li class="mb-2">
-                        <x-links.default :label="$doc->label" href="{{ route('docs.edit', [$doc]) }}" />
+                        <x-links.default :label="$note->label" href="{{ route('notes.edit', [$note]) }}" />
                     </li>
                     @endforeach
                 </ul>
 
-                <form action="{{ route('docs.store') }}" method="post" class="inline-block">
+                <form action="{{ route('notes.store') }}" method="post" class="inline-block">
                     @csrf
 
                     <input type="hidden" name="collections" value="{{ $collection->id }}">

@@ -22,8 +22,8 @@ class Search extends Component
 
     // get params for relationships
     public $keyword = '';
-    public $person = '';
-    public $location = '';
+    public $agent = '';
+    public $place = '';
 
     // state management
     public $collection;
@@ -41,8 +41,8 @@ class Search extends Component
         'coordinates' => ['except' => ''],
         
         'keyword' => ['except' => ''],
-        'person' => ['except' => ''],
-        'location' => ['except' => ''],
+        'agent' => ['except' => ''],
+        'place' => ['except' => ''],
         
         'cid' => ['except' => ''],
     ];
@@ -60,7 +60,7 @@ class Search extends Component
     public function render()
     {
         if($this->query != '' || $this->from != '' || $this->to != '' || $this->coordinates != '' ||
-            $this->keyword != '' || $this->person != '' || $this->location != ''){
+            $this->keyword != '' || $this->agent != '' || $this->place != ''){
             $images = $this->search();
         }
 
@@ -71,15 +71,15 @@ class Search extends Component
             })->orderBy('id');
         }
 
-        if($this->person != '') {
-            $person_id = $this->person; 
-            $images = $images->whereHas('people', function($q) use($person_id) {
-                $q->where('id', $person_id);
+        if($this->agent != '') {
+            $agent_id = $this->agent; 
+            $images = $images->whereHas('agents', function($q) use($agent_id) {
+                $q->where('id', $agent_id);
             })->orderBy('id');
         }
 
-        if($this->location != '') {
-            $images = $images->where('location_id', $this->location)->orderBy('id');
+        if($this->place != '') {
+            $images = $images->where('place_id', $this->place)->orderBy('id');
         }
 
         if(!isset($images)){
@@ -154,8 +154,7 @@ class Search extends Component
             $dates = [$this->from, $this->to];
 
             $image_query
-                ->join('image_date', 'images.id', '=', 'image_date.image_id')
-                ->join('dates', 'dates.id', '=', 'image_date.date_id')
+                ->join('dates', 'dates.id', '=', 'images.date_id')
                 ->where(function($q) use ($dates){
                     $q->whereBetween('dates.date', $dates)
                     ->orWhereNotNull('dates.end_date')->whereBetween('dates.end_date', $dates);
@@ -170,7 +169,7 @@ class Search extends Component
             $_coordinates  = explode(',', $this->coordinates);
 
             $image_query
-                ->join('locations', 'locations.id', '=', 'images.location_id')
+                ->join('places', 'places.id', '=', 'images.place_id')
                 ->where('latitude', '<=', $_coordinates[0])
                 ->where('longitude', '>=', $_coordinates[1])
                 ->where('latitude', '>=', $_coordinates[2])

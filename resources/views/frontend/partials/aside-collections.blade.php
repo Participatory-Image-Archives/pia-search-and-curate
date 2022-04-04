@@ -25,7 +25,7 @@
                     @click="expand_collections = ! expand_collections">{{ $collection->images()->count() }}</span>
                 <a class="leading-10 hover:underline" href="{{ route('collections.show', [$collection]) }}" x-show="expand_collections">{{ $collection->label }}</a>
                 <span class="inline-block w-10 h-10 leading-10 border border-gray-500 text-center text-xs" x-show="expand_collections">
-                    {{ $collection->maps()->count() + $collection->docs()->count() + $collection->documents()->count() }}
+                    {{ $collection->maps()->count() + $collection->notes()->count() + $collection->documents()->count() }}
                 </span>
             </li>
         @endforeach

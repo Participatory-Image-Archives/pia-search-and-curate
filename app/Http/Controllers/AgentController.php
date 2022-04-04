@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PiaDoc;
-use App\Models\Image;
 
-class PiaDocsController extends Controller
+use App\Models\Agent;
+
+class AgentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,18 +15,17 @@ class PiaDocsController extends Controller
      */
     public function index()
     {
-        return view('docs/index', [
-            'docs' => PiaDoc::all()
+        return view('agents/index', [
+            'agents' => Agent::orderBy('name')->get()
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
         //
     }
@@ -39,12 +38,7 @@ class PiaDocsController extends Controller
      */
     public function store(Request $request)
     {
-        $doc = PiaDoc::create([
-            'label' => $request->label
-        ]);
-        $doc->collections()->sync($request->collections);
-
-        return redirect()->route('docs.edit', [$doc]);
+        //
     }
 
     /**
@@ -66,10 +60,7 @@ class PiaDocsController extends Controller
      */
     public function edit($id)
     {
-        return view('docs/edit', [
-            'doc' => PiaDoc::find($id),
-            'collection' => PiaDoc::find($id)->collections->get(0)
-        ]);
+        //
     }
 
     /**
@@ -81,12 +72,7 @@ class PiaDocsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $doc = PiaDoc::find($id);
-        $doc->label = $request->label;
-        $doc->content = $request->content;
-        $doc->save();
-
-        return redirect()->route('docs.edit', [$doc]);
+        //
     }
 
     /**
@@ -97,8 +83,6 @@ class PiaDocsController extends Controller
      */
     public function destroy($id)
     {
-        $collection = PiaDoc::find($id)->collections->get(0);
-        PiaDoc::destroy($id);
-        return redirect()->route('collections.show', [$collection]);
+        //
     }
 }

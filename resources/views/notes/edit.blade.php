@@ -104,14 +104,14 @@
     </div>
 
     <div class="h-screen overflow-hidden transition-all pb-16" :class="minimize_collection ? 'w-2/3' : 'w-1/4'">
-        <form action="{{ route('docs.update', [$doc]) }}" method="post" x-ref="noteform" class="h-full">
+        <form action="{{ route('notes.update', [$note]) }}" method="post" x-ref="noteform" class="h-full">
             @csrf
             @method('patch')
 
-            <input type="text" name="label" value="{{ $doc->label }}" class="text-4xl p-4 w-full border-b border-gray-300">
+            <input type="text" name="label" value="{{ $note->label }}" class="text-4xl p-4 w-full border-b border-gray-300">
 
             <textarea name="content" id="document-markdown" class="outline-none w-full pb-20" @drop="drop"
-                @dragover="dragover">{{ $doc->content }}</textarea>
+                @dragover="dragover">{{ $note->content }}</textarea>
             
         </form>
 
@@ -119,7 +119,7 @@
             :class="minimize_collection ? 'w-2/3' : 'w-1/4'">
             <button type="button" class="hover:underline" @click="$refs.noteform.submit()">Save</button>
 
-            <form action="{{ route('docs.destroy', [$doc]) }}" method="post" class="inline-block">
+            <form action="{{ route('notes.destroy', [$note]) }}" method="post" class="inline-block">
                 @csrf
                 @method('delete')
 

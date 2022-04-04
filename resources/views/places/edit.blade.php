@@ -2,6 +2,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />  
 @endsection
 
 @section('content')
@@ -13,16 +14,15 @@
 
         <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
             <div class="pt-14 pb-20 pl-14 pr-4">
+
+                <form action="{{ route('places.update', [$place]) }}" method="post">
+                    @csrf
+                    @method('patch')
+
                 <div class="relative flex items-center justify-between mb-12 ">
                     <h2 class="text-4xl text-center">
-                        {{ $location->label }}
+                        <input type="text" name="label" value="{{ $place->label ?? '' }}" class="w-full border border-gray-300 p-1 px-2">
                     </h2>
-                </div>
-
-                <div class="mb-10">
-                    <span class="text-xs">View </span>
-                    <x-links.bare label="API JSON" href="{{ env('API_URL') }}locations/{{ $location->id }}" target="_blank"/>, 
-                    <x-links.bare label="All related images ({{ $image_count }})" href="/?location={{ $location->id }}"/>
                 </div>
 
                 <table class="w-full">
@@ -34,63 +34,54 @@
                     </thead>
                     <tr>
                         <td>Latitude</td>
-                        <td>{{ $location->latitude ?? '–' }}</td>
+                        <td>
+                            <input type="text" name="latitude" value="{{ $place->latitude ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        </td>
                     </tr>
                     <tr>
                         <td>Longitude</td>
-                        <td>{{ $location->longitude ?? '–' }}</td>
+                        <td>
+                            <input type="text" name="longitude" value="{{ $place->longitude ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        </td>
                     </tr>
                     <tr>
                         <td>Geonames ID</td>
-                        <td>{{ $location->geonames_id ?? '–' }}</td>
-                    </tr>
-                    <tr>
-                        <td>Geonames URL</td>
                         <td>
-                            @if ($location->geonames_uri != '')
-                                <a href="{{ $location->geonames_uri }}" class="underline" target="_blank">{{ $location->geonames_uri }}</a>
-                            @else
-                                -
-                            @endif
+                            <input type="text" name="geonames_id" value="{{ $place->geonames_id ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
                         </td>
                     </tr>
                     <tr>
                         <td>Geonames Code</td>
-                        <td>{{ $location->geonames_code ?? '–' }}</td>
+                        <td>
+                            <input type="text" name="geonames_code" value="{{ $place->geonames_code ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        </td>
                     </tr>
                     <tr>
                         <td>Geonames Code Name</td>
-                        <td>{{ $location->geonames_code_name ?? '–' }}</td>
+                        <td>
+                            <input type="text" name="geonames_code_name" value="{{ $place->geonames_code_name ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        </td>
                     </tr>
                     <tr>
                         <td>Geonames Division Level</td>
-                        <td>{{ $location->geonames_division_level ?? '–' }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><p class="text-xs my-2">The division level shows how deep this entry is in the administrative division. The exactitude of this information can change from country to country, is crowdsourced, and is not formative or set by any standards.</p></td>
+                        <td>
+                            <input type="text" name="geonames_division_level" value="{{ $place->geonames_division_level ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        </td>
                     </tr>
                     <tr>
                         <td>Wikipedia</td>
                         <td>
-                            @if ($location->wiki_url != '')
-                                <a href="{{ $location->wiki_url }}" class="underline" target="_blank">{{ $location->wiki_url }}</a>
-                            @else
-                                –
-                            @endif
+                            <input type="text" name="wiki_url" value="{{ $place->wiki_url ?? '' }}" class="w-full mt-1 border border-gray-300 p-1 px-2">
                         </td>
                     </tr>
                 </table>
 
-                <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
-                    <a class="hover:underline" href="{{ route('locations.edit', [$location]) }}">Edit info</a>
-                    <form action="{{ route('locations.destroy', [$location]) }}" method="post" class="inline-block">
-                        @csrf
-                        @method('delete')
-    
-                        <x-buttons.delete/>
-                    </form>
+                <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-300 bg-white">
+                    <button type="submit" class="hover:underline">Save info</button>
+                    <span>Search on <a href="https://www.geonames.org/" class="underline" target="_blank">Geonames</a></span>
                 </div>
+
+                </form>
             </div>
         </div>
     </div>
@@ -107,17 +98,22 @@
 
 @section('scripts')
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>  
 
     <script>
 
         document.addEventListener('DOMContentLoaded', () => {
             
-            let map, marker, center = [{{ $location->latitude ?? '46.818188' }}, {{ $location->longitude ?? '8.227512' }}];
+            let map, marker, center = [{{ $place->latitude ?? '46.818188' }}, {{ $place->longitude ?? '8.227512' }}];
 
             map = L.map('map', {
                 center: center,
                 zoom: 12,
                 doubleClickZoom: false
+            })
+            .on('pm:globaldragmodetoggled', e => {
+                document.querySelector('input[name="latitude"]').value = marker.getLatLng().lat;
+                document.querySelector('input[name="longitude"]').value = marker.getLatLng().lng;
             })
 
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -129,16 +125,21 @@
                 accessToken: 'pk.eyJ1IjoidGhnaWV4IiwiYSI6ImNrcjF5Z2ZxZDI2bWYydnFhMWw0eDV2YjIifQ.CZJtOXLy-IZeI6a5ia8Lzw'
             }).addTo(map);
 
+            map.pm.addControls({
+                position: 'topleft',
+                drawMarker: false,
+                drawCircleMarker: false,
+                drawPolyline: false,
+                drawRectangle: false,
+                drawPolygon: false,
+                drawCircle: false,
+                editMode: false,
+                cutPolygon: false,
+                rotateMode: false,
+                removalMode: false
+            });
+
             marker = new L.Marker(center).addTo(map);
-
-            @if ($location->geometry)
-                let outline = L.geoJSON({
-                    "type": "Feature",
-                    "geometry": {!! $location->geometry !!}
-                }).addTo(map);
-
-                map.fitBounds(outline.getBounds());
-            @endif
 
         });
 

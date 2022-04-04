@@ -8,7 +8,7 @@
                 $total_count = 0;
                 foreach ($image->collections as $c) {
                     $total_count += $c->maps()->count();
-                    $total_count += $c->docs()->count();
+                    $total_count += $c->notes()->count();
                 }
             @endphp
             {{ $total_count }}
@@ -131,81 +131,91 @@
                 <p class="mb-2 text-sm">– {{ $comment->comment }}</p>
             @endif
         @empty
-        -
+        &mdash;
         @endforelse
     </div>
     
     <hr class="my-4">
 
     <div>
-        <h3 class="mb-1 text-xs">People</h3>
+        <h3 class="mb-1 text-xs">Copyright</h3>
         <div class="mb-2">
-            @forelse ($image->people as $person)
-                @if ($person->name)
-                    <x-links.default href="/?person={{ $person->id }}" :label="$person->name" class="mb-2"/>
+            @if ($image->copyright)
+                <x-links.default href="/?agent={{ $image->copyright->id }}" :label="$image->copyright->name" class="mb-2"/>
+            @else
+                &mdash;
+            @endif
+        </div>
+        <h3 class="mb-1 text-xs">Agents - people and institutions</h3>
+        <div class="mb-2">
+            @forelse ($image->agents as $agent)
+                @if ($agent->name)
+                    <x-links.default href="/?agent={{ $agent->id }}" :label="$agent->name" class="mb-2"/>
                 @endif
             @empty
-            –
+            &mdash;
             @endforelse
         </div>
-        <h3 class="mb-1 text-xs">Dates</h3>
+        <h3 class="mb-1 text-xs">Date</h3>
         <div class="flex mb-2">
-            @forelse ($image->dates as $date)
+            @if ($image->date)
                 <div>
-                    @if ($date->date)
+                    @if ($image->date->date)
                         @php
                             // preparing string for display
                             $display_format = 'd. M Y';
 
-                            if($date->accuracy == 2) {
+                            if($image->date->accuracy == 2) {
                                 $display_format = 'M Y';
-                            } else if ($date->accuracy == 3) {
+                            } else if ($image->date->accuracy == 3) {
                                 $display_format = 'Y';
                             }
 
-                            $start_date = date($display_format, strtotime($date->date));
-                            $end_date = date($display_format, strtotime($date->date));
+                            $start_date = date($display_format, strtotime($image->date->date));
 
-                            if($date->end_date) {
-                                $end_date = date($display_format, strtotime($date->end_date));
+                            if($image->date->end_date) {
+                                $end_date = date($display_format, strtotime($image->date->end_date));
                                 $date_string = $start_date . ' - ' . $end_date;
                             } else {
                                 $date_string = $start_date;
                             }
 
                             // preparing string for search
-                            $search_start_date = date('Y-m-d', strtotime($date->date));
+                            $search_start_date = date('Y-m-d', strtotime($image->date->date));
+                            $search_end_date = $search_start_date;
 
-                            if($date->end_date) {
-                                $search_end_date = date('Y-m-d', strtotime($date->end_date));
+                            if($image->date->end_date) {
+                                $search_end_date = date('Y-m-d', strtotime($image->date->end_date));
                             } else {
                                 $search_end_date = $search_start_date;
                             }
-
-                            if($date->accuracy == 2) {
-                                $search_end_date = date('Y-m-t', strtotime($end_date));
-                            } else if ($date->accuracy == 3) {
-                                $search_end_date = $end_date . '-12-31';
+                         
+                            if($image->date->end_date) {
+                                if($image->date->accuracy == 2) {
+                                    $search_end_date = date('Y-m-t', strtotime($end_date));
+                                } else if ($image->date->accuracy == 3) {
+                                    $search_end_date = $end_date . '-12-31';
+                                }
                             }
                             
-                            $search_string = $search_start_date.','.$search_end_date;
+                            $search_string = 'from='.$search_start_date.'&to='.$search_end_date;
 
                         @endphp
-                        <x-links.default label="{{ $date_string }}" href="/?dates={{ $search_string }}" class="mb-2 name"/>
+                        <x-links.default label="{{ $date_string }}" href="/?{{ $search_string }}" class="mb-2 name"/>
                     @endif
                 </div>
-            @empty
-            –
-            @endforelse
+            @else
+            &mdash;
+            @endif
         </div>
-        <h3 class="mb-1 text-xs">Locations</h3>
+        <h3 class="mb-1 text-xs">Place</h3>
         <div class="flex mb-2">
-            @if ($image->location)
-                @if ($image->location->label)
-                    <x-links.default :label="$image->location->label" href="{{ route('locations.show', [$image->location]) }}" class="mb-2 name"/>
+            @if ($image->place)
+                @if ($image->place->label)
+                    <x-links.default :label="$image->place->label" href="{{ route('places.show', [$image->place]) }}" class="mb-2 name"/>
                 @endif
             @else
-            -
+            &mdash;
             @endforelse
         </div>
     </div>
@@ -216,9 +226,9 @@
             <div>
                 <ul>
                     @foreach ($image->collections as $c)
-                        @foreach ($c->docs as $doc)
+                        @foreach ($c->notes as $note)
                         <li class="mb-2">
-                            <x-links.default :label="$doc->label" href="{{ route('docs.edit', [$doc]) }}" />
+                            <x-links.default :label="$note->label" href="{{ route('notes.edit', [$note]) }}" />
                         </li>
                         @endforeach
                     @endforeach

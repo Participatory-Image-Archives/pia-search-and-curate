@@ -6,7 +6,7 @@
         <h2 class="text-2xl md:w-1/2">
             Locations
         </h2>
-        <span class="text-xs">Images without location: {{ $location_count }}</span>
+        <span class="text-xs">Images without location: {{ $place_count }}</span>
     </div>
 
     @php
@@ -34,18 +34,18 @@
         </div>
 
         <ul class="list">
-        @foreach ($locations as $location)
-            @if ($location->label)
-                @if ($current != $location->label[0])
+        @foreach ($places as $place)
+            @if ($place->label)
+                @if ($current != $place->label[0])
                     @php
-                        $current = $location->label[0];
+                        $current = $place->label[0];
                     @endphp
                     <h2 class="text-2xl mt-2 mb-2">{{ $current }}</h2>
                 @endif
                 <li class="inline">
-                    <x-links.default :label="$location->label" :href="route('locations.show', [$location])" class="mb-2 name"/>
-                    <span class="code hidden">{{ $location->geonames_code }}</span>
-                    <span class="level hidden">level-{{ $location->geonames_division_level }}</span>
+                    <x-links.default :label="$place->label" :href="route('places.show', [$place])" class="mb-2 name"/>
+                    <span class="code hidden">{{ $place->geonames_code }}</span>
+                    <span class="level hidden">level-{{ $place->geonames_division_level }}</span>
                 </li>
             @endif
         @endforeach

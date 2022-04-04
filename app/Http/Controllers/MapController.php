@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Map;
 use App\Models\Location;
 
-class MapsController extends Controller
+class MapController extends Controller
 {
     /**
      * Display a listing of the resource.

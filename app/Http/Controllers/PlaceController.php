@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Location;
+use App\Models\Place;
 use App\Models\Collection;
 use App\Models\Image;
 
-class LocationController extends Controller
+class PlaceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,30 +17,30 @@ class LocationController extends Controller
      */
     public function index()
     {
-        $locations = Location::orderBy('label')->whereIn('origin', ['salsah', 'pia'])->get();
+        $places = Place::orderBy('label')->whereIn('origin', ['salsah', 'pia'])->get();
         $codes = [];
         $levels = [];
 
-        foreach ($locations as $key => $location) {
-            if(isset($codes[$location->geonames_code]) && $location->geonames_code != '') {
-                $codes[$location->geonames_code] += 1;
+        foreach ($places as $key => $place) {
+            if(isset($codes[$place->geonames_code]) && $place->geonames_code != '') {
+                $codes[$place->geonames_code] += 1;
             } else {
-                $codes[$location->geonames_code] = 1;
+                $codes[$place->geonames_code] = 1;
             }
 
-            if(isset($levels[$location->geonames_division_level]) && $location->geonames_division_level != '') {
-                $levels[$location->geonames_division_level] += 1;
+            if(isset($levels[$place->geonames_division_level]) && $place->geonames_division_level != '') {
+                $levels[$place->geonames_division_level] += 1;
             } else {
-                $levels[$location->geonames_division_level] = 1;
+                $levels[$place->geonames_division_level] = 1;
             }
         }
 
         ksort($codes);
         ksort($levels);
 
-        return view('locations/index', [
-            'locations' => $locations,
-            'location_count' => Image::where('location_id', null)->count(),
+        return view('places/index', [
+            'places' => $places,
+            'place_count' => Image::where('place_id', null)->count(),
             'codes' => $codes,
             'levels' => $levels
         ]);
@@ -75,10 +75,10 @@ class LocationController extends Controller
      */
     public function show($id)
     {
-        return view('locations/show', [
-            'location' => Location::find($id),
+        return view('places/show', [
+            'place' => Place::find($id),
             'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
-            'image_count' => Location::find($id)->images()->count()
+            'image_count' => Place::find($id)->images()->count()
         ]);
     }
 
@@ -90,8 +90,8 @@ class LocationController extends Controller
      */
     public function edit($id)
     {
-        return view('locations/edit', [
-            'location' => Location::find($id),
+        return view('places/edit', [
+            'place' => Place::find($id),
             'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
         ]);
     }
@@ -105,17 +105,17 @@ class LocationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $location = Location::find($id);
+        $place = Place::find($id);
 
-        $location->label = $request->label;
-        $location->latitude = $request->latitude;
-        $location->longitude = $request->longitude;
-        $location->geonames_id = $request->geonames_id;
-        $location->geonames_url = 'https://sws.geonames.org/'.$request->geonames_id;
+        $place->label = $request->label;
+        $place->latitude = $request->latitude;
+        $place->longitude = $request->longitude;
+        $place->geonames_id = $request->geonames_id;
+        $place->geonames_url = 'https://sws.geonames.org/'.$request->geonames_id;
 
-        $location->save();
+        $place->save();
 
-        return redirect()->route('locations.show', [$id]);
+        return redirect()->route('places.show', [$id]);
     }
 
     /**
@@ -126,16 +126,16 @@ class LocationController extends Controller
      */
     public function destroy($id)
     {
-        $location = Location::find($id);
+        $place = Place::find($id);
 
-        if($location->images->count()) {
-            foreach ($location->images as $key => $image) {
-                $image->location_id = null;
+        if($place->images->count()) {
+            foreach ($place->images as $key => $image) {
+                $image->place_id = null;
                 $image->save();
             }
         }
 
-        Location::destroy($id);
+        Place::destroy($id);
         return redirect('/');
     }
 }

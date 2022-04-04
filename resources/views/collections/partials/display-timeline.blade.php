@@ -12,7 +12,7 @@
     }
 
     @foreach ($collection->images as $image)
-        @if ($image->dates->count())
+        @if ($image->date)
             let event_{{ $image->id }} = {
                 'title': '{{ $image->title }}',
                 'media': {
@@ -33,22 +33,20 @@
                     `
                 }
             }
-            @foreach ($image->dates as $date)
-                @if ($date->date)
-                    event_{{ $image->id }}.start_date = {
-                        'day': '{{ $date->accuracy <= 1 ? date('d', strtotime($date->date)) : '' }}',
-                        'month': '{{ $date->accuracy <= 2 ? date('m', strtotime($date->date)) : '' }}',
-                        'year': '{{ $date->accuracy <= 3 ? date('Y', strtotime($date->date)) : '' }}'
-                    }
-                @endif
-                @if ($date->end_date)
-                    event_{{ $image->id }}.end_date = {
-                        'day': '{{ $date->accuracy <= 1 ? date('d', strtotime($date->end_date)) : '' }}',
-                        'month': '{{ $date->accuracy <= 2 ? date('m', strtotime($date->end_date)) : '' }}',
-                        'year': '{{ $date->accuracy <= 3 ? date('Y', strtotime($date->end_date)) : '' }}'
-                    }
-                @endif
-            @endforeach
+            @if ($image->date->date)
+                event_{{ $image->id }}.start_date = {
+                    'day': '{{ $image->date->accuracy <= 1 ? date('d', strtotime($image->date->date)) : '' }}',
+                    'month': '{{ $image->date->accuracy <= 2 ? date('m', strtotime($image->date->date)) : '' }}',
+                    'year': '{{ $image->date->accuracy <= 3 ? date('Y', strtotime($image->date->date)) : '' }}'
+                }
+            @endif
+            @if ($image->date->end_date)
+                event_{{ $image->id }}.end_date = {
+                    'day': '{{ $image->date->accuracy <= 1 ? date('d', strtotime($image->date->end_date)) : '' }}',
+                    'month': '{{ $image->date->accuracy <= 2 ? date('m', strtotime($image->date->end_date)) : '' }}',
+                    'year': '{{ $image->date->accuracy <= 3 ? date('Y', strtotime($image->date->end_date)) : '' }}'
+                }
+            @endif
             timeline_data.events.push(event_{{ $image->id }});
         @endif
     @endforeach

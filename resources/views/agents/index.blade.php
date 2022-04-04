@@ -4,7 +4,7 @@
 <div class="p-4 pb-20">
     <div class="md:flex mb-4">
         <h2 class="text-2xl mb-2 md:w-1/2">
-            Notes
+            agents
         </h2>
         
     </div>
@@ -15,16 +15,16 @@
     <div id="searchable-list">
         <input class="search border-b border-black mb-8 focus:outline-none" placeholder="Search…"/>
         <ul class="list">
-        @foreach ($docs as $doc)
-            @if ($doc->label)
-                @if ($current != $doc->label[0])
+        @foreach ($agents as $agent)
+            @if ($agent->name)
+                @if ($current != $agent->name[0])
                     @php
-                        $current = $doc->label[0];
+                        $current = $agent->name[0];
                     @endphp
                     <h2 class="text-2xl mt-2 mb-2">{{ $current }}</h2>
                 @endif
                 <li class="inline">
-                    <x-links.default :label="$doc->label" href="{{ route('docs.edit', [$doc]) }}" class="mb-2 label"/>
+                    <x-links.default :label="$agent->name" href="/?agent={{ $agent->id }}" class="mb-2 name"/>
                 </li>
             @endif
         @endforeach
@@ -39,7 +39,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             var searchable_list = new List('searchable-list', {
-                valueNames: ['label']
+                valueNames: ['name']
             });
         });
 

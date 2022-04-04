@@ -79,18 +79,11 @@ return [
         ],
 
         'pia' => [
-            'driver' => 'pgsql',
+            'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST_2', '127.0.0.1'),
-            'port' => env('DB_PORT_2', '5432'),
-            'database' => env('DB_DATABASE_2', 'forge'),
-            'username' => env('DB_USERNAME_2', 'forge'),
-            'password' => env('DB_PASSWORD_2', ''),
-            'charset' => 'utf8',
+            'database' => env('DB_DATABASE_2', database_path('database.sqlite')),
             'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
         'sqlsrv' => [

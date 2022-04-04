@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Note;
+use App\Models\Image;
 
-use App\Models\Person;
-
-class PersonController extends Controller
+class NoteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,17 +15,18 @@ class PersonController extends Controller
      */
     public function index()
     {
-        return view('people/index', [
-            'people' => Person::orderBy('name')->get()
+        return view('notes/index', [
+            'notes' => Note::all()
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
     }
@@ -38,7 +39,12 @@ class PersonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $doc = Note::create([
+            'label' => $request->label
+        ]);
+        $doc->collections()->sync($request->collections);
+
+        return redirect()->route('notes.edit', [$doc]);
     }
 
     /**
@@ -60,7 +66,10 @@ class PersonController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('notes/edit', [
+            'note' => Note::find($id),
+            'collection' => Note::find($id)->collections->get(0)
+        ]);
     }
 
     /**
@@ -72,7 +81,12 @@ class PersonController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $doc = Note::find($id);
+        $doc->label = $request->label;
+        $doc->content = $request->content;
+        $doc->save();
+
+        return redirect()->route('notes.edit', [$doc]);
     }
 
     /**
@@ -83,6 +97,8 @@ class PersonController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $collection = Note::find($id)->collections->get(0);
+        Note::destroy($id);
+        return redirect()->route('collections.show', [$collection]);
     }
 }

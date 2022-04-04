@@ -138,12 +138,12 @@
                 </div>
                 
                 <div class="mb-6">
-                    <h3 class="mb-2 text-xs">People</h3>
+                    <h3 class="mb-2 text-xs">agents</h3>
                     <div>
-                        <select name="people[]" class="w-full slim" multiple>
+                        <select name="agents[]" class="w-full slim" multiple>
                             <option value="">-</option>
-                            @foreach ($people as $person)
-                                <option value="{{ $person->id }}" {{ $image->people->contains($person->id) ? 'selected' : '' }}>{{ $person->name }}</option>
+                            @foreach ($agents as $person)
+                                <option value="{{ $person->id }}" {{ $image->agents->contains($person->id) ? 'selected' : '' }}>{{ $person->name }}</option>
                             @endforeach
                         </select>
                         <input type="text" name="append_person" placeholder="Name of new person" class="w-full mt-1 border border-gray-300 p-1 px-2">
@@ -174,8 +174,8 @@
                     <div>
                         <select name="location_id" class="w-full slim">
                             <option value="">-</option>
-                            @foreach ($locations as $location)
-                                <option value="{{ $location->id }}" {{ ($image->location && $image->location->id == $location->id) ? 'selected' : '' }}>{{ $location->label }}</option>
+                            @foreach ($places as $place)
+                                <option value="{{ $place->id }}" {{ ($image->location && $image->location->id == $place->id) ? 'selected' : '' }}>{{ $place->label }}</option>
                             @endforeach
                         </select>
                         <input type="text" name="append_location" placeholder="Name of new location" class="w-full mt-1 border border-gray-300 p-1 px-2">

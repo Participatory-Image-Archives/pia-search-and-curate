@@ -2,21 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\DateController;
+use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KeywordController;
-use App\Http\Controllers\PersonController;
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\PiaDocsController;
-use App\Http\Controllers\MapsController;
-use App\Http\Controllers\DateController;
+use App\Http\Controllers\MapController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\PlaceController;
 
-use App\Models\Image;
 use App\Models\Collection;
-use App\Models\Location;
 use App\Models\Date;
+use App\Models\Image;
 use App\Models\Keyword;
+use App\Models\Place;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,16 +49,16 @@ Route::get('/', function (Request $request) {
 Route::resource('collections', CollectionController::class);
 Route::resource('images', ImageController::class);
 Route::resource('keywords', KeywordController::class);
-Route::resource('people', PersonController::class);
-Route::resource('locations', LocationController::class);
-Route::resource('docs', PiaDocsController::Class);
-Route::resource('maps', MapsController::Class);
+Route::resource('agents', AgentController::class);
+Route::resource('places', PlaceController::class);
+Route::resource('notes', NoteController::Class);
+Route::resource('maps', MapController::Class);
 Route::resource('dates', DateController::Class);
 
 Route::get('/images/{id}/similar', [ImageController::class, 'findSimilar'])->name('images.similar');
 
-Route::get('/maps/{id}/images', [MapsController::class, 'images'])->name('maps.images');
-Route::patch('/maps/{id}/imagesUpdate', [MapsController::class, 'imagesUpdate'])->name('maps.imagesUpdate');
+Route::get('/maps/{id}/images', [MapController::class, 'images'])->name('maps.images');
+Route::patch('/maps/{id}/imagesUpdate', [MapController::class, 'imagesUpdate'])->name('maps.imagesUpdate');
 
 Route::get('/collections/{id}/export',
     [FrontendController::class, 'exportCollection'])->name('collections.export');
