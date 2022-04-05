@@ -115,6 +115,7 @@ class CollectionController extends Controller
         $collection = Collection::find($id);
         $collection->label = $request->label;
         $collection->description = $request->description;
+        $collection->creator = $request->creator;
         $collection->save();
 
         return redirect()->route('collections.show', [$collection]);

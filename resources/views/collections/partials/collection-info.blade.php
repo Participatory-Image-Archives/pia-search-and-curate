@@ -23,8 +23,14 @@
     @endif
 
     @if($collection->description)
-    <div class="w-full">
+    <div class="w-full mb-2">
         {!! nl2br($collection->description) !!}
+    </div>
+    @endif
+
+    @if($collection->creator)
+    <div class="w-full mb-2 text-xs">
+        <em>Created by {{ $collection->creator }}, {{ date('d. M Y', strtotime($collection->created_at)) }}.<br>Last update {{ date('d. M Y', strtotime($collection->updated_at)) }}</em>
     </div>
     @endif
 

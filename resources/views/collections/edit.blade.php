@@ -32,9 +32,13 @@
                         <label for="label" class="block">Label</label>
                         <input name="label" class="text-4xl border border-gray-500 p-2 w-full" value="{{ $collection->label ?? '' }}" placeholder="Label"/>
                     </div>
+                    <div class="w-full mb-4">
+                        <label for="creator" class="block">Creator</label>
+                        <input name="creator" class="border border-gray-500 p-2 w-full" value="{{ $collection->creator ?? '' }}" placeholder="Who created this collection?"/>
+                    </div>
                     <div class="w-full">
                         <label for="description" class="block">Description</label>
-                        <textarea name="description" id="description" class="border border-gray-500 p-2 w-full" oninput="auto_grow(this)">{{ $collection->description ?? '' }}</textarea>
+                        <textarea name="description" id="description" class="border border-gray-500 p-2 w-full" oninput="auto_grow(this)" placeholder="What can you say about this collection?">{{ $collection->description ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -60,6 +64,21 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             auto_grow(document.querySelector('#description'));
+
+            document.querySelectorAll('textarea').forEach(el => {
+                el.style.height = "5px";
+                el.style.height = (el.scrollHeight)+"px";
+            })
+        
+            let creator = document.querySelector('[name="creator"]');
+
+            if(creator.value == '' && localStorage.getItem('collection_creator') != '') {
+                creator.value = localStorage.getItem('collection_creator');
+            }
+
+            creator.addEventListener('change', () => {
+                localStorage.setItem('collection_creator', origin.value);
+            })
         });
 
         function auto_grow(element) {
