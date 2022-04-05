@@ -77,7 +77,7 @@
             }
 
             creator.addEventListener('change', () => {
-                localStorage.setItem('collection_creator', origin.value);
+                localStorage.setItem('collection_creator', creator.value);
             })
         });
 
