@@ -36,10 +36,9 @@
             @else
             Created on
             @endif
-            {{ date('d. M Y', strtotime($collection->created_at)) }}.<br>Last update {{ date('d. M Y', strtotime($collection->updated_at)) }}
+            {{ date('d. M Y', strtotime($collection->created_at)) }}<br>Updated on {{ date('d. M Y', strtotime($collection->updated_at)) }}
         </em>
     </div>
-    @endif
 
     <hr class="my-10">
 
