@@ -28,9 +28,16 @@
     </div>
     @endif
 
-    @if($collection->creator)
+    
     <div class="w-full mb-2 text-xs">
-        <em>Created by {{ $collection->creator }}, {{ date('d. M Y', strtotime($collection->created_at)) }}.<br>Last update {{ date('d. M Y', strtotime($collection->updated_at)) }}</em>
+        <em>
+            @if($collection->creator)
+            Created by {{ $collection->creator }},
+            @else
+            Created on
+            @endif
+            {{ date('d. M Y', strtotime($collection->created_at)) }}.<br>Last update {{ date('d. M Y', strtotime($collection->updated_at)) }}
+        </em>
     </div>
     @endif
 
