@@ -138,15 +138,28 @@
                 </div>
                 
                 <div class="mb-6">
-                    <h3 class="mb-2 text-xs">agents</h3>
+                    <h3 class="mb-2 text-xs">Copyright</h3>
+                    <div>
+                        <select name="copyright_id" class="w-full slim">
+                            <option value="">-</option>
+                            @foreach ($agents as $agent)
+                                <option value="{{ $agent->id }}" {{ $image->copyright_id == $agent->id ? 'selected' : '' }}>{{ $agent->name }}</option>
+                            @endforeach
+                        </select>
+                        <input type="text" name="append_copyright" placeholder="Name of new copyright holder" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="mb-2 text-xs">Agents</h3>
                     <div>
                         <select name="agents[]" class="w-full slim" multiple>
                             <option value="">-</option>
-                            @foreach ($agents as $person)
-                                <option value="{{ $person->id }}" {{ $image->agents->contains($person->id) ? 'selected' : '' }}>{{ $person->name }}</option>
+                            @foreach ($agents as $agent)
+                                <option value="{{ $agent->id }}" {{ $image->agents->contains($agent->id) ? 'selected' : '' }}>{{ $agent->name }}</option>
                             @endforeach
                         </select>
-                        <input type="text" name="append_person" placeholder="Name of new person" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        <input type="text" name="append_agent" placeholder="Name of new person" class="w-full mt-1 border border-gray-300 p-1 px-2">
                     </div>
                 </div>
 
@@ -154,31 +167,34 @@
                     <h3 class="mb-2 text-xs">Date</h3>
                     <div>
                         <div class="flex">
-                            @forelse ($image->dates as $date)
-                                @if ($date->date)
-                                    <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">{{ date('d. M Y', strtotime($date->date)); }}</span>
+                            @if($image->date)
+                                @if ($image->date->date)
+                                    <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">{{ date('d. M Y', strtotime($image->date->date)); }}</span>
                                 @endif
-                                @if ($date->date_string)
-                                    <span class="inline-block py-1 px-3 text-xs underline mr-2 mb-2">{{ $date->date_string }}</span>
+                                @if ($image->date->end_date)
+                                    <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">{{ date('d. M Y', strtotime($image->date->end_date)); }}</span>
                                 @endif
-                            @empty
-                            –
-                            @endforelse
+                                @if ($image->date->date_string)
+                                    <span class="inline-block py-1 px-3 text-xs underline mr-2 mb-2">{{ $image->date->date_string }}</span>
+                                @endif
+                            @else
+                            &mdash;
+                            @endif
                         </div>
                         <input type="date" name="append_date" placeholder="Add new date" class="w-full border border-gray-300 p-1 px-2">
                     </div>
                 </div>
 
                 <div class="mb-6">
-                    <h3 class="mb-2 text-xs">Location</h3>
+                    <h3 class="mb-2 text-xs">Place</h3>
                     <div>
-                        <select name="location_id" class="w-full slim">
+                        <select name="place_id" class="w-full slim">
                             <option value="">-</option>
                             @foreach ($places as $place)
-                                <option value="{{ $place->id }}" {{ ($image->location && $image->location->id == $place->id) ? 'selected' : '' }}>{{ $place->label }}</option>
+                                <option value="{{ $place->id }}" {{ ($image->place && $image->place->id == $place->id) ? 'selected' : '' }}>{{ $place->label }}</option>
                             @endforeach
                         </select>
-                        <input type="text" name="append_location" placeholder="Name of new location" class="w-full mt-1 border border-gray-300 p-1 px-2">
+                        <input type="text" name="append_place" placeholder="Name of new place" class="w-full mt-1 border border-gray-300 p-1 px-2">
                     </div>
                 </div>
 
@@ -198,7 +214,7 @@
         @mouseleave="expand_collections = false;"
         class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
         
-        @include('frontend.partials.aside-collections')
+        <livewire:collections-aside />
     </aside>
 </div>
 @endsection

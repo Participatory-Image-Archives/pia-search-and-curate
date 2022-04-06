@@ -28,7 +28,7 @@
         @mouseleave="expand_collections = false;"
         class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
         
-        @include('frontend.partials.aside-collections')
+        <livewire:collections-aside />
     </aside>
 </div>
 @endsection

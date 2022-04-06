@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Image;
+use App\Models\Agent;
 use App\Models\Collection;
-use App\Models\Keyword;
-use App\Models\Person;
-use App\Models\Location;
-use App\Models\ModelType;
-use App\Models\ObjectType;
-use App\Models\Format;
 use App\Models\Comment;
+use App\Models\Format;
+use App\Models\Image;
+use App\Models\ModelType;
+use App\Models\Keyword;
+use App\Models\ObjectType;
+use App\Models\Place;
 
 class ImageController extends Controller
 {
@@ -57,8 +57,7 @@ class ImageController extends Controller
     public function show(Request $request, $id)
     {
         $data = [
-            'image' => Image::find($id),
-            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
+            'image' => Image::find($id)
         ];
 
         if($request->cid && $request->iid){
@@ -98,8 +97,8 @@ class ImageController extends Controller
             'image' => Image::find($id),
             'collections' => Collection::all(),
             'keywords' => Keyword::all(),
-            'people' => Person::all(),
-            'locations' => Location::whereIn('origin', ['salsah', 'pia'])->get(),
+            'agents' => Agent::all(),
+            'places' => Place::whereIn('origin', ['salsah', 'pia'])->get(),
             'model_types' => ModelType::all(),
             'object_types' => ObjectType::all(),
             'formats' => Format::all(),
@@ -126,26 +125,35 @@ class ImageController extends Controller
         $image->model_type_id = $request->model_type_id;
         $image->format_id = $request->format_id;
 
+        $image->copyright_id = $request->copyright_id;
+
+        if($request->append_copyright != '') {
+            $copyright = Agent::create([
+                'name' => $request->append_copyright
+            ]);
+            $image->copyright_id = $copyright->id;
+        }
+
         $image->keywords()->sync($request->keywords);
         $image->collections()->sync($request->collections);
 
-        $image->people()->sync($request->people);
+        $image->agents()->sync($request->people);
 
-        if($request->append_person != '') {
-            $person = Person::create([
-                'name' => $request->append_person
+        if($request->append_agent != '') {
+            $agent = Agent::create([
+                'name' => $request->append_agent
             ]);
-            $image->people()->attach($person);
+            $image->people()->attach($agent);
         }
 
-        $image->location_id = $request->location_id;
+        $image->place_id = $request->place_id;
 
-        if($request->append_location != '') {
-            $location = Location::create([
-                'label' => $request->append_location,
+        if($request->append_place != '') {
+            $place = Place::create([
+                'label' => $request->append_place,
                 'origin' => 'pia'
             ]);
-            $image->location_id = $location->id;
+            $image->place_id = $place->id;
         }
 
         if($request->append_comment != '') {
