@@ -4,7 +4,7 @@
 <div class="p-4 pb-20">
     <div class="md:flex mb-4">
         <h2 class="text-2xl mb-2 md:w-1/2">
-            agents
+            Agents
         </h2>
         
     </div>
@@ -24,7 +24,7 @@
                     <h2 class="text-2xl mt-2 mb-2">{{ $current }}</h2>
                 @endif
                 <li class="inline">
-                    <x-links.default :label="$agent->name" href="/?agent={{ $agent->id }}" class="mb-2 name"/>
+                    <x-links.default :label="$agent->name" :href="route('agents.show', [$agent])" class="mb-2 name"/>
                 </li>
             @endif
         @endforeach

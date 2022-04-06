@@ -49,7 +49,10 @@ class AgentController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('agents/show', [
+            'agent' => Agent::find($id),
+            'image_count' => Agent::find($id)->images()->count()
+        ]);
     }
 
     /**

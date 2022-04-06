@@ -77,7 +77,6 @@ class PlaceController extends Controller
     {
         return view('places/show', [
             'place' => Place::find($id),
-            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get(),
             'image_count' => Place::find($id)->images()->count()
         ]);
     }
