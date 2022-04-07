@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Agent;
+use App\Models\Date;
+use App\Models\Place;
 
 class AgentController extends Controller
 {
@@ -63,7 +65,10 @@ class AgentController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('agents/edit', [
+            'agent' => Agent::find($id),
+            'places' => Place::whereIn('origin', ['salsah', 'pia'])->get()
+        ]);
     }
 
     /**
@@ -75,7 +80,56 @@ class AgentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $agent = Agent::find($id);
+
+        $agent->title = $request->title;
+        $agent->name = $request->name;
+        $agent->family = $request->family;
+        $agent->description = $request->description;
+        $agent->birthplace_id = $request->birthplace_id;
+        $agent->deathplace_id = $request->deathplace_id;
+        $agent->gnd_uri = $request->gnd_uri;
+
+        if($request->append_birthplace != '') {
+            $place = Place::create([
+                'label' => $request->append_birthplace,
+                'origin' => 'pia'
+            ]);
+            $agent->birthplace_id = $place->id;
+        }
+
+        if($request->append_deathplace != '') {
+            $place = Place::create([
+                'label' => $request->append_deathplace,
+                'origin' => 'pia'
+            ]);
+            $agent->deathplace_id = $place->id;
+        }
+
+        if($request->append_birthdate != '') {
+            $date = Date::create([
+                'date' => $request->append_birthdate
+            ]);
+            $agent->birthdate_id = $date->id;
+        }
+
+        if($request->append_deathdate != '') {
+            $date = Date::create([
+                'date' => $request->append_deathdate
+            ]);
+            $agent->deathdate_id = $date->id;
+        }
+
+        if($request->remove_birthdate != '') {
+            $agent->birthdate->delete();
+        }
+        if($request->remove_deathdate != '') {
+            $agent->deathdate->delete();
+        }
+
+        $agent->save();
+
+        return redirect()->route('agents.show', [$id]);
     }
 
     /**

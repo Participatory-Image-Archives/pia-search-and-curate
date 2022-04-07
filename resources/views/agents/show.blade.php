@@ -39,8 +39,18 @@
                     <tr>
                         <td class="pt-2">Birthhdate</td>
                         <td>
-                            @if($agent->birthhdate)
-                                {{ date('d. M Y', strtotime($agent->birthhdate->date)) }}
+                            @if ($agent->birthdate)
+                                <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">
+                                @if ($agent->birthdate->date)
+                                    {{ date('d. M Y', strtotime($agent->birthdate->date)); }}
+                                @endif
+                                @if ($agent->birthdate->end_date)
+                                    {{ date('d. M Y', strtotime($agent->birthdate->end_date)); }}
+                                @endif
+                                </span>
+                                @if ($agent->birthdate->date_string)
+                                    <span class="inline-block py-1 px-3 text-xs underline mr-2 mb-2">{{ $agent->birthdate->date_string }}</span>
+                                @endif
                             @else
                                 &mdash;
                             @endif
@@ -59,31 +69,51 @@
                     <tr>
                         <td class="pt-2">Deathhdate</td>
                         <td>
-                            @if($agent->deathhdate)
-                                {{ date('d. M Y', strtotime($agent->deathhdate->date)) }}
+                            @if ($agent->deathdate)
+                                <span class="inline-block py-1 px-3 text-xs rounded-full bg-black text-white mr-2 mb-2">
+                                @if ($agent->deathdate->date)
+                                    {{ date('d. M Y', strtotime($agent->deathdate->date)); }}
+                                @endif
+                                @if ($agent->deathdate->end_date)
+                                    {{ date('d. M Y', strtotime($agent->deathdate->end_date)); }}
+                                @endif
+                                </span>
+                                @if ($agent->deathdate->date_string)
+                                    <span class="inline-block py-1 px-3 text-xs underline mr-2 mb-2">{{ $agent->deathdate->date_string }}</span>
+                                @endif
                             @else
                                 &mdash;
                             @endif
                         </td>
                     </tr>
                     <tr>
-                        <td class="pt-2">Deathhplace</td>
+                        <td class="pt-2">Deathplace</td>
                         <td>
-                            @if ($agent->deathhplace)
-                                <x-links.default :label="$agent->deathhplace->label" href="{{ route('places.show', [$agent->deathhplace]) }}" class="mb-2 name"/>
+                            @if ($agent->deathplace)
+                                <x-links.default :label="$agent->deathplace->label" href="{{ route('places.show', [$agent->deathplace]) }}" class="mb-2 name"/>
                             @else
                                 &mdash;
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pt-2">GND URI</td>
+                        <td>
+                            @if($agent->gnd_uri)
+                                <a href="{{ $agent->gnd_uri }}" target="_blank" class="underline">{{ $agent->gnd_uri }}</a>
+                            @else
+                            &mdash;
                             @endif
                         </td>
                     </tr>
                     <tr>
                         <td class="pt-2 align-top">Description</td>
-                        <td class="pt-2">{!! $agent->description ?? '–' !!}</td>
+                        <td class="pt-2">{!! $agent->description ?? '&mdash;' !!}</td>
                     </tr>
                 </table>
 
                 <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
-                    {{--<a class="hover:underline" href="{{ route('agents.edit', [$agent]) }}">Edit info</a>--}}
+                    <a class="hover:underline" href="{{ route('agents.edit', [$agent]) }}">Edit info</a>
                     <form action="{{ route('agents.destroy', [$agent]) }}" method="post" class="inline-block">
                         @csrf
                         @method('delete')
