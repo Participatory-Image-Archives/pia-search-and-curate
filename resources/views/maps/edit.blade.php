@@ -114,8 +114,8 @@
         });
 
         @foreach ($map->mapEntries as $entry)
-            @if ($entry->location)
-                let entry_{{ $entry->id }} = new custom_entry([{{$entry->location->latitude}}, {{$entry->location->longitude}}]).addTo(map);
+            @if ($entry->place)
+                let entry_{{ $entry->id }} = new custom_entry([{{$entry->place->latitude}}, {{$entry->place->longitude}}]).addTo(map);
 
                 entry_{{ $entry->id }}
                     .on('click', function (e) {

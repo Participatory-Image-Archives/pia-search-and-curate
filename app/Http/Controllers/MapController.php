@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Map;
-use App\Models\Location;
+use App\Models\Place;
 
 class MapController extends Controller
 {
@@ -132,14 +132,14 @@ class MapController extends Controller
                 'image_id' => $marker->id
             ]);
 
-            $location = Location::create([
+            $place = Place::create([
                 'label' => $marker->alt,
                 'latitude' => $marker->coordinates->latitude,
                 'longitude' => $marker->coordinates->longitude,
                 'origin' => 'manual-localization'
             ]);
 
-            $entry->location_id = $location->id;
+            $entry->place_id = $place->id;
 
             $entry->push();
         }
