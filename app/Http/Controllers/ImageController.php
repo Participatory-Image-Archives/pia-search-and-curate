@@ -126,6 +126,7 @@ class ImageController extends Controller
         $image->format_id = $request->format_id;
 
         $image->copyright_id = $request->copyright_id;
+        $image->license = $request->license;
 
         if($request->append_copyright != '') {
             $copyright = Agent::create([

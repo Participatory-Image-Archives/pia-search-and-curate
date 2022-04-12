@@ -146,6 +146,14 @@
                 &mdash;
             @endif
         </div>
+        <h3 class="mb-1 text-xs">License</h3>
+        <div class="mb-2">
+            @if ($image->license)
+                <x-links.default :href="$image->license" :label="$image->license" class="mb-2" target="_blank"/>
+            @else
+                &mdash;
+            @endif
+        </div>
         <h3 class="mb-1 text-xs">Agents - people and institutions</h3>
         <div class="mb-2">
             @forelse ($image->agents as $agent)

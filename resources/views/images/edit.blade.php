@@ -149,6 +149,13 @@
                         <input type="text" name="append_copyright" placeholder="Name of new copyright holder" class="w-full mt-1 border border-gray-300 p-1 px-2">
                     </div>
                 </div>
+                <div class="mb-6">
+                    <h3 class="mb-2 text-xs">License</h3>
+                    <td>
+                        <input type="text" name="license" value="{{ $image->license ?? '' }}" class="w-full border border-gray-300 p-1 px-2" placeholder="URL to license">
+                    </td>
+                </div>
+
                 
                 <div class="mb-6">
                     <h3 class="mb-2 text-xs">Agents</h3>
