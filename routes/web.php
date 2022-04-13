@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\CallController;
+use App\Http\Controllers\CallEntryController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DateController;
 use App\Http\Controllers\FrontendController;
@@ -53,7 +55,11 @@ Route::resource('agents', AgentController::class);
 Route::resource('places', PlaceController::class);
 Route::resource('notes', NoteController::Class);
 Route::resource('maps', MapController::Class);
+Route::resource('calls', CallController::Class);
+Route::resource('callentries', CallEntryController::Class);
 Route::resource('dates', DateController::Class);
+
+Route::get('/calls/{id}/entry', [CallController::class, 'entry'])->name('maps.images');
 
 Route::get('/images/{id}/similar', [ImageController::class, 'findSimilar'])->name('images.similar');
 

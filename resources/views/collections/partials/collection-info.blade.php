@@ -50,7 +50,7 @@
     </div>
 
     <div class="flex mb-10">
-        <div class="w-1/3">
+        <div class="w-1/2">
             <h2 class="text-xs mb-2">Documents</h2>
             <div>
                 <ul>
@@ -61,16 +61,34 @@
                     </li>
                     @endforeach
                 </ul>
+                <form class="inline-block" x-data x-ref="documentsupload" method="POST" enctype="multipart/form-data"
+                    action="{{ route('collections.uploadDocuments', [$collection]) }}">
+                    @csrf
+                    <input x-ref="documents" @change="$refs.documentsupload.submit()" class="hidden" type="file"
+                        name="documents[]" required multiple>
+                    <x-buttons.default @click="$refs.documents.click()" label="Upload documents" />
+                </form>
             </div>
-            <form class="inline-block" x-data x-ref="documentsupload" method="POST" enctype="multipart/form-data"
-                action="{{ route('collections.uploadDocuments', [$collection]) }}">
-                @csrf
-                <input x-ref="documents" @change="$refs.documentsupload.submit()" class="hidden" type="file"
-                    name="documents[]" required multiple>
-                <x-buttons.default @click="$refs.documents.click()" label="Upload documents" />
-            </form>
+            <h2 class="text-xs mb-2 mt-4">Calls</h2>
+            <div>
+                <ul>
+                    @foreach ($collection->calls as $call)
+                    <li class="mb-2">
+                        <x-links.default :label="$call->label" href="{{ route('calls.show', [$call]) }}" />
+                    </li>
+                    @endforeach
+                </ul>
+
+                <form action="{{ route('calls.store') }}" method="post" class="inline-block">
+                    @csrf
+
+                    <input type="hidden" name="collection_id" value="{{ $collection->id }}">
+
+                    <x-buttons.default label="New Call" type="submit" />
+                </form>
+            </div>
         </div>
-        <div class="w-1/3">
+        <div class="w-1/2">
             <h2 class="text-xs mb-2">Notes</h2>
             <div>
                 <ul>
@@ -90,9 +108,7 @@
                     <x-buttons.default label="New Note" type="submit" />
                 </form>
             </div>
-        </div>
-        <div class="w-1/3">
-            <h2 class="text-xs mb-2">Maps</h2>
+            <h2 class="text-xs mb-2 mt-4">Maps</h2>
             <div>
                 <ul>
                     @foreach ($collection->maps as $map)
@@ -112,5 +128,8 @@
                 </form>
             </div>
         </div>
+        <div class="w-1/3">
+                    </div>
+
     </div>
 </div>
