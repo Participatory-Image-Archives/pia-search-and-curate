@@ -54,10 +54,10 @@
             <h2 class="text-xs mb-2">Documents</h2>
             <div>
                 <ul>
-                    @foreach ($collection->documents as $noteument)
+                    @foreach ($collection->documents as $document)
                     <li class="mb-2">
-                        <x-links.default :label="$noteument->label"
-                            href="/{{ 'storage/' . $noteument->base_path . '/' . $noteument->file_name }}" />
+                        <x-links.default :label="$document->label"
+                            href="/{{ 'storage/' . $document->base_path . '/' . $document->file_name }}" />
                     </li>
                     @endforeach
                 </ul>
@@ -128,8 +128,6 @@
                 </form>
             </div>
         </div>
-        <div class="w-1/3">
-                    </div>
 
     </div>
 </div>
