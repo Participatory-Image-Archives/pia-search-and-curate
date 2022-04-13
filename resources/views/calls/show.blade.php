@@ -72,8 +72,8 @@
                                 </ul>
                             </div>
                             <div class="mt-4 text-xs">
-                                @foreach ($call_entry->keywords as $keyword)
-                                    <a href="/?keyword={{ $keyword->id }}" class="mr-2 italic hover:underline">{{ $keyword->label }}</a>
+                                @foreach ($call_entry->keywords as $entry_keyword)
+                                    <a href="/?keyword={{ $entry_keyword->id }}" class="mr-2 italic hover:underline">{{ $entry_keyword->label }}</a>
                                 @endforeach
                             </div>
                        </div>
