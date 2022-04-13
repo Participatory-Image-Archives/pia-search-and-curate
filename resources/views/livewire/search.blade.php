@@ -59,7 +59,7 @@
     </section>
     
     <div>
-        <div class="p-10 pr-20 pb-20 space-y-4" x-data>
+        <div class="p-10 pr-32 pb-20 space-y-4" x-data>
             <main>
                 @if($pagination ?? false && $images->total() > 50)
                 <div class="py-4">
@@ -101,14 +101,12 @@
         </div>
     </div>
 
-    <aside id="sidebar"
-        x-data="{translate: '80px', expand_collections: false}"
-        @mouseover="translate = '100%'" @mouseleave="translate = '80px'; expand_collections = false;"
-        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50"
+    <div
+        x-data="{translate: '120px', expand_collections: false}"
+        @mouseover="translate = 'calc(100% + 80px)'" @mouseleave="translate = '120px'; expand_collections = false;"
+        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-20"
         style="transform: translateX(100%)"
         :style="`transform: translateX(calc(100% - ${translate}))`">
-
-        <livewire:collections-aside />
         
         <div id="selection"
             class="min-h-screen max-h-screen w-80 bg-black p-4 overflow-y-auto overflow-x-hidden"
@@ -162,6 +160,15 @@
                 </div>
             </div>
         </div>
+
+    </div>
+
+    <aside id="sidebar"
+        x-data="{expand_collections: false}"
+        @mouseleave="expand_collections = false;"
+        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
+        
+        <livewire:collections-aside />
     </aside>
 
     <script>

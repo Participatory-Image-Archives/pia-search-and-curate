@@ -6,7 +6,7 @@
         <div class="fixed h-screen w-1/2 overflow-hidden">
         </div>
 
-        <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
+        <div class="fixed left-1/2 h-screen w-1/2 pr-16 bg-white overflow-y-auto">
             <div class="pt-14 pb-20 pl-14 pr-4">
                 <div class="relative flex items-center justify-between mb-12 ">
                     <h2 class="text-4xl text-center">

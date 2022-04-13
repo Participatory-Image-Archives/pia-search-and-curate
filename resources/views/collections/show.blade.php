@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
+        <div class="fixed left-1/2 h-screen w-1/2 pr-16 bg-white overflow-y-auto">
             @include('collections.partials.collection-info')
 
             <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">

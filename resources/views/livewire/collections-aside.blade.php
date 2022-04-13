@@ -1,5 +1,5 @@
 <div id="collections"
-    class="min-h-screen max-h-screen w-20 bg-white border-left border-gray-500 transition-all overflow-y-auto overflow-x-hidden"
+    class="min-h-screen max-h-screen w-20 bg-white border-left border-gray-500 transition-all overflow-y-auto overflow-x-hidden z-index-50"
     :style="expand_collections ? 'width: 640px;' : ''">
 
     <div>
