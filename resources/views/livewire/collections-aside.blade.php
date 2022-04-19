@@ -1,6 +1,6 @@
 <div id="collections"
-    class="min-h-screen max-h-screen w-20 bg-white border-left border-gray-500 transition-all overflow-y-auto overflow-x-hidden z-index-50"
-    :style="expand_collections ? 'width: 640px;' : ''">
+    class="hidden md:block min-h-screen max-h-screen bg-white border-left border-gray-500 transition-all overflow-y-auto overflow-x-hidden z-index-50"
+    :style="expand_collections ? 'width: 100vw; max-width: 640px' : 'width: 65px; max-width: 640px'">
 
     <div>
         <div class="flex px-3 py-2 justify-between">

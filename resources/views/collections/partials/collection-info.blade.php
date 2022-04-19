@@ -1,4 +1,4 @@
-<div class="p-14">
+<div class="p-4 md:p-14">
     <div class="relative flex items-center justify-between mb-12 ">
         <span class="block w-10 h-10 leading-10 rounded-full border border-gray-500 text-center text-xs">
             {{ $collection->images()->count() }}
@@ -49,8 +49,8 @@
         <x-links.bare label="CSV" :href="route('collections.export', ['id' => $collection->id])" />
     </div>
 
-    <div class="flex mb-10">
-        <div class="w-1/2">
+    <div class="flex flex-col md:flex-row mb-10">
+        <div class="w-full md:w-1/2">
             <h2 class="text-xs mb-2">Documents</h2>
             <div>
                 <ul>
@@ -88,8 +88,8 @@
                 </form>
             </div>
         </div>
-        <div class="w-1/2">
-            <h2 class="text-xs mb-2">Notes</h2>
+        <div class="w-full md:w-1/2">
+            <h2 class="text-xs mt-4 md:mt-0 mb-2">Notes</h2>
             <div>
                 <ul>
                     @foreach ($collection->notes as $note)

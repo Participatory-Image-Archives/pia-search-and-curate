@@ -1,4 +1,4 @@
-<div class="pt-14 pb-20 pl-14 pr-4">
+<div class="p-4 md:p-14">
     <div class="relative flex items-center justify-between mb-12 ">
         <h2 class="text-4xl text-center">
             {{ $image->title }}
@@ -259,7 +259,7 @@
         </div>
     </div>
 
-    <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
+    <div class="flex flex-col md:flex-row justify-between md:fixed bottom-0 md:left-1/2 md:w-1/2 md:p-4 pb-20 md:pr-20 md:pb-4 border-t leading-10 border-gray-700 bg-white">
         <div>
             @if($prev ?? false)
             <a class="p-1 px-4 rounded-full bg-black text-white" href="{{ route('images.show', [$prev]) }}?cid={{ $cid }}&iid={{ $prev->id }}" title="Show previous image from collection"><</a>

@@ -1,13 +1,13 @@
 @extends('base')
 
 @section('content')
-<div class="bg-gray-100 min-h-screen" x-data="{cols: 3}">
+<div class="bg-gray-100 min-h-screen">
     <div class="flex" id="searchable-list" >
-        <div class="fixed h-screen w-1/2 overflow-hidden">
+        <div class="hidden md:block fixed md:h-screen md:w-1/2 overflow-hidden">
         </div>
 
-        <div class="fixed left-1/2 h-screen w-1/2 pr-16 bg-white overflow-y-auto">
-            <div class="pt-14 pb-20 pl-14 pr-4">
+        <div class="md:fixed md:left-1/2 md:h-screen w-full md:w-1/2 md:pr-16 bg-white overflow-y-auto">
+            <div class="p-4 md:p-14">
                 <div class="relative flex items-center justify-between mb-12 ">
                     <h2 class="text-4xl text-center">
                         {{ $call->label }}
@@ -57,7 +57,7 @@
 
                 <div class="my-4">
                     @foreach ($call->call_entries as $call_entry)
-                        <div class="{{ $loop->even ? 'ml-auto' : '' }} w-3/4 border border-grey-500 rounded-xl p-4 mb-8 shadow-xl">
+                        <div class="{{ $loop->even ? 'ml-auto' : '' }} w-5/6 md:w-3/4 border border-grey-500 rounded-xl p-4 mb-8 shadow-xl">
                             <h3 class="text-xl">{{ $call_entry->label }}</h3>
                             <span class="block text-xs italic mb-2">By {{ $call_entry->creator }}, {{ date('d. M. Y', strtotime($call_entry->created_at)) }}</span>
                             <p>{{ $call_entry->comment ?? '-' }}</p>
@@ -81,7 +81,7 @@
                 </div>
 
 
-                <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
+                <div class="flex flex-col md:flex-row justify-between md:fixed bottom-0 md:left-1/2 md:w-1/2 md:p-4 pb-20 md:pr-20 md:pb-4 border-t leading-10 border-gray-700 bg-white">
                     <a class="hover:underline" href="{{ route('calls.edit', [$call]) }}">Edit call</a>
                     <a class="hover:underline" href="{{ route('callentries.create') }}?call_id={{ $call->id }}">Add entry</a>
                     <a class="hover:underline" href="{{ route('collections.show', [$call->collection_id]) }}">View collection</a>

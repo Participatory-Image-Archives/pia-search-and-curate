@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="bg-gray-100 min-h-screen">
-    <div class="flex" id="searchable-list" >
-        <div class="fixed h-screen w-1/2 overflow-hidden">
+    <div class="flex flex-col md:flex-row" id="searchable-list" >
+        <div class="hidden md:block fixed h-screen w-1/2 overflow-hidden">
         </div>
 
-        <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
-            <div class="pt-14 pb-20 pl-14 pr-4">
+        <div class="md:fixed md:left-1/2 md:h-screen md:full md:w-1/2 md:pr-36 bg-white overflow-y-auto">
+            <div class="p-4 md:p-14">
 
                 <form action="{{ route('callentries.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
@@ -54,8 +54,8 @@
                         </div>
                     </div>
         
-                    <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-300 bg-white">
-                        <button type="submit" class="hover:underline">Save entry</button>
+                    <div class="flex flex-col md:flex-row justify-between md:fixed bottom-0 md:left-1/2 md:w-1/2 md:p-4 pb-20 md:pr-20 md:pb-4 border-t leading-10 border-gray-700 bg-white">
+                        <button type="submit" class="hover:underline text-left">Save entry</button>
                     </div>
 
                 </form>

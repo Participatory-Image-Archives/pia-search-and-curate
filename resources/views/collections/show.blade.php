@@ -1,16 +1,16 @@
 @extends('base')
 
 @section('content')
-<div class="bg-gray-100 min-h-screen" x-data="{cols: 3}">
-    <div class="flex" id="searchable-list" >
-        <div class="fixed bg-black h-screen w-1/2 {{ !in_array($display, ['map', 'timeline']) ? 'p-4 overflow-y-auto' : 'overflow-hidden' }}">
+<div class="bg-gray-100 md:min-h-screen" x-data="{cols: 3}">
+    <div class="flex flex-col md:flex-row" id="searchable-list" >
+        <div class="md:fixed bg-black md:h-screen md:w-1/2 {{ !in_array($display, ['map', 'timeline']) ? 'p-4 md:overflow-y-auto' : 'overflow-hidden' }}">
             <div>
                 @if(!in_array($display, ['map', 'timeline']))
                 <section class="my-10 print-hidden">
                     <div class="flex gap-6 items-center">
             
                         <input type="text" name="query" placeholder="Search collection"
-                            class="search py-2 px-6 w-2/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10">
+                            class="search hidden md:inline-block py-2 px-6 w-2/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10">
                         
                         @if($display != 'list')
                         <input type="range" min="1" max="6" x-model="cols">
@@ -36,10 +36,10 @@
             </div>
         </div>
 
-        <div class="fixed left-1/2 h-screen w-1/2 pr-16 bg-white overflow-y-auto">
+        <div class="md:fixed md:left-1/2 h-screen md:w-1/2 md:pr-16 bg-white md:overflow-y-auto">
             @include('collections.partials.collection-info')
 
-            <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
+            <div class="flex flex-col md:flex-row justify-between md:fixed bottom-0 md:left-1/2 md:w-1/2 p-4 pb-20 md:pr-20 md:pb-4 border-t leading-10 border-gray-700 bg-white">
                 <a href="/?cid={{ $collection->id }}" class="hover:underline">Edit selection</a>
 
                 <a href="{{ route('collections.edit', [$collection]) }}" class="hover:underline">Edit info</a>
@@ -49,7 +49,7 @@
                     <input x-ref="images" @change="$refs.imageupload.submit()" class="hidden" type="file" name="images[]" accept="image/*" required multiple>
                 </form>
 
-                <button type="button" @click="$refs.images.click()" title="Add images to collection" class="hover:underline">
+                <button type="button" @click="$refs.images.click()" title="Add images to collection" class="hover:underline text-left">
                     Add images
                 </button>
 

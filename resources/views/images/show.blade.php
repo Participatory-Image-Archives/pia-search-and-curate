@@ -13,12 +13,12 @@
 
 @section('content')
 <div class="bg-gray-100 min-h-screen" x-data="{cols: 3}">
-    <div class="flex" id="searchable-list" >
-        <div class="fixed h-screen w-1/2 overflow-hidden">
+    <div class="flex flex-col md:flex-row" id="searchable-list" >
+        <div class="md:fixed h-80 md:h-screen md:w-1/2 overflow-hidden">
             <div id="iiif-image" class="w-full min-h-full"></div>
         </div>
 
-        <div class="fixed left-1/2 h-screen w-1/2 pr-36 bg-white overflow-y-auto">
+        <div class="md:fixed md:left-1/2 md:h-screen md:w-1/2 md:pr-14 bg-white overflow-y-auto">
             @include('images.partials.details')
         </div>
     </div>
