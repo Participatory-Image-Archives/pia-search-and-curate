@@ -28,8 +28,11 @@
             <li>
                 <span class="text-xs">IIIF Image API: </span>
                 <x-links.bare label="full image" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>, 
-                <x-links.bare label="manifest.json" href="https://iiif.participatory-archives.ch/{{$image->signature}}/manifest.json" target="_blank"/>,
                 <x-links.bare label="info.json" href="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
+            </li>
+            <li>
+                <span class="text-xs">IIIF Presentation API: </span>
+                <x-links.bare label="manifest.json" href="https://iiif.participatory-archives.ch/{{$image->signature}}/manifest.json" target="_blank"/>,
             </li>
             <li><x-links.bare label="Json API" href="{{ env('API_URL') }}images/{{ $image->id }}" target="_blank"/></li>
             <li><x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/></li>
