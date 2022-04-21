@@ -85,7 +85,7 @@
                                 @csrf
                                 @method('delete')
 
-                                <x-buttons.delete/>
+                                <x-buttons.delete label="x"/>
                             </form>
                        </div>
                     @endforeach
