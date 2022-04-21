@@ -57,7 +57,7 @@
 
                 <div class="my-4">
                     @foreach ($call->call_entries as $call_entry)
-                        <div class="{{ $loop->even ? 'ml-auto' : '' }} w-5/6 md:w-3/4 border border-grey-500 rounded-xl p-4 mb-8 shadow-xl">
+                        <div class="{{ $loop->even ? 'ml-auto' : '' }} w-5/6 md:w-3/4 border border-grey-500 rounded-xl p-4 mb-8 shadow-xl relative">
                             <h3 class="text-xl">{{ $call_entry->label }}</h3>
                             <span class="block text-xs italic mb-2">By {{ $call_entry->creator }}, {{ date('d. M. Y', strtotime($call_entry->created_at)) }}</span>
                             <p>{{ $call_entry->comment ?? '-' }}</p>
@@ -76,6 +76,12 @@
                                     <a href="/?keyword={{ $entry_keyword->id }}" class="mr-2 italic hover:underline">{{ $entry_keyword->label }}</a>
                                 @endforeach
                             </div>
+                            <form action="{{ route('callentries.destroy', [$call_entry]) }}" method="post" class="inline-block absolute top-2 right-2">
+                                @csrf
+                                @method('delete')
+
+                                <x-buttons.delete/>
+                            </form>
                        </div>
                     @endforeach
                 </div>

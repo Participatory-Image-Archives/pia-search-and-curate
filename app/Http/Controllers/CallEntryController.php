@@ -120,6 +120,9 @@ class CallEntryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $call = CallEntry::find($id)->call;
+        CallEntry::destroy($id);
+
+        return redirect()->route('calls.show', [$call]);
     }
 }
