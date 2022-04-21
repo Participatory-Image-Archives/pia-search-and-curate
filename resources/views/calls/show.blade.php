@@ -66,7 +66,7 @@
                                     @foreach ($call_entry->documents as $document)
                                     <li class="mb-2">
                                         <x-smart-download src="{{ storage_path('app/public/'. $document->base_path . '/' . $document->file_name) }}" target="_blank">
-                                            @if(preg_match('(\.jpg|\.png)', $document->file_name) === 1)
+                                            @if(preg_match('(\.jpg|\.png|\.jpeg)', strtolower($document->file_name)) === 1)
                                             <x-smart-image src="{{ storage_path('app/public/'. $document->base_path . '/' . $document->file_name) }}" alt="{{ $document->file_name  }}" width="400px"/>
                                             @else
                                                 <span class="inline-block py-1 px-3 text-xs rounded-full border border-black hover:bg-black hover:text-white">{{ $document->file_name  }}</span>    
