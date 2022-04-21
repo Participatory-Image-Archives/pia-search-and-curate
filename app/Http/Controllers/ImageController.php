@@ -193,7 +193,7 @@ class ImageController extends Controller
         $image = Image::find($id);
         $category = $request->input('category', 'localcolor');
 
-        $url = 'http://pia-iiif.dhlab.unibas.ch/'.$image->base_path.'/'.$image->signature.'.jp2/full/max/0/default.png';
+        $url = 'http://pia-iiif.dhlab.unibas.ch/'.$image->base_path.'/'.$image->signature.'.jp2/full/1200,/0/default.png';
         $img = file_get_contents($url);
         if ($img !== false){
             $base64 = 'data:image/png;base64,'.base64_encode($img);
