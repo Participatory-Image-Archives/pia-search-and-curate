@@ -96,26 +96,26 @@ Route::get('/stats', function(Request $request) {
     $images_wo_location = Image::doesnthave('place')->count();
     $images_wo_keywords = Image::doesnthave('keywords')->count();
 
-    $images_wo_date_location = Image::doesnthave('dates')->where('location_id', null)->count();
-    $images_wo_keywords_location = Image::doesnthave('keywords')->where('location_id', null)->count();
+    $images_wo_date_location = Image::doesnthave('date')->where('place_id', null)->count();
+    $images_wo_keywords_location = Image::doesnthave('keywords')->where('place_id', null)->count();
     $images_wo_date_keywords = Image::doesnthave('keywords')->doesnthave('dates')->count();
-    $images_wo_date_keywords_location = Image::doesnthave('keywords')->doesnthave('dates')->where('location_id', null)->count();
+    $images_wo_date_keywords_location = Image::doesnthave('keywords')->doesnthave('date')->where('place_id', null)->count();
 
-    $images_w_date_location = Image::has('dates')->where('location_id', '!=', null)->count();
-    $images_w_date_keywords = Image::has('dates')->has('keywords')->count();
-    $images_w_keywords_location = Image::has('keywords')->where('location_id', '!=', null)->count();
-    $images_w_date_keywords_location = Image::has('keywords')->has('dates')->where('location_id', '!=', null)->count();
+    $images_w_date_location = Image::has('date')->where('place_id', '!=', null)->count();
+    $images_w_date_keywords = Image::has('date')->has('keywords')->count();
+    $images_w_keywords_location = Image::has('keywords')->where('place_id', '!=', null)->count();
+    $images_w_date_keywords_location = Image::has('keywords')->has('date')->where('place_id', '!=', null)->count();
 
-    $images_w_acc_1 = Image::whereHas('dates', function($q){
+    $images_w_acc_1 = Image::whereHas('date', function($q){
         $q->where('accuracy', '1');
     })->count();
-    $images_w_acc_2 = Image::whereHas('dates', function($q){
+    $images_w_acc_2 = Image::whereHas('date', function($q){
         $q->where('accuracy', '2');
     })->count();
-    $images_w_acc_3 = Image::whereHas('dates', function($q){
+    $images_w_acc_3 = Image::whereHas('date', function($q){
         $q->where('accuracy', '3');
     })->count();
-    $images_w_date_range = Image::whereHas('dates', function($q){
+    $images_w_date_range = Image::whereHas('date', function($q){
         $q->whereNotNull('end_date');
     })->count();
 
