@@ -92,8 +92,8 @@ Route::get('/by-dates', function (Request $request) {
 Route::get('/stats', function(Request $request) {
     $images_total = Image::count();
 
-    $images_wo_date = Image::doesnthave('dates')->count();
-    $images_wo_location = Image::doesnthave('location')->count();
+    $images_wo_date = Image::doesnthave('date')->count();
+    $images_wo_location = Image::doesnthave('place')->count();
     $images_wo_keywords = Image::doesnthave('keywords')->count();
 
     $images_wo_date_location = Image::doesnthave('dates')->where('location_id', null)->count();
