@@ -23,11 +23,7 @@
         </div>
     </div>
 
-    <aside id="sidebar"
-        x-data="{expand_collections: false}"
-        @mouseleave="expand_collections = false;"
-        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
-        
+    <aside id="sidebar">
         <livewire:collections-aside />
     </aside>
 </div>

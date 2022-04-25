@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('content')
-<div class="bg-gray-100 md:min-h-screen" x-data="{cols: 3}">
+<div class="bg-gray-100 md:min-h-screen">
     <div class="flex flex-col md:flex-row" id="searchable-list" >
         <div class="md:fixed bg-black md:h-screen md:w-1/2 {{ !in_array($display, ['map', 'timeline']) ? 'p-4 md:overflow-y-auto' : 'overflow-hidden' }}">
             <div>
@@ -12,10 +12,6 @@
                         <input type="text" name="query" placeholder="Search collection"
                             class="search hidden md:inline-block py-2 px-6 w-2/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10">
                         
-                        @if($display != 'list')
-                        <input type="range" min="1" max="6" x-model="cols">
-                        @endif
-
                         @include('collections.partials.image-actions')
                 </section>
                 @endif

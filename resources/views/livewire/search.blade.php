@@ -1,13 +1,13 @@
-<div x-data="{ modal_map: false }">
+<div>
     <div wire:loading>
         <div class="fixed top-0 left-0 h-full w-full bg-gray-100 bg-opacity-75 flex justify-around items-center z-50">
             <span class="text-4xl">Loading…</span>
         </div>
     </div>
 
-    <div class="modal-wrap fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50"
-        x-show="modal_map">
-        <div class="modal-map inline-block bg-white p-4 rounded-xl" x-show="modal_map">
+    <div
+        class="modal-wrap hidden fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+        <div class="modal-map inline-block bg-white p-4 rounded-xl">
             <iframe src="{{ route('search.byCoordinates') }}" frameborder="0" width="400px" height="450px"></iframe>
         </div>
     </div>
@@ -30,7 +30,7 @@
                     <button type="button" class="text-xs underline ml-2" wire:click.defer="clear_dates()">clear</button>
                 </div>
                 <div class="flex border border-gray-700 rounded-full px-4 ml-2 text-xs">
-                    <button type="button" @click="modal_map = true">Search by Map</button>
+                    <a href="{{ route('search.byCoordinates') }}" onclick="event.preventDefault(); document.querySelector('.modal-wrap').classList.remove('hidden')" class="block leading-8">Search by Map</a>
                     <button type="button" class="text-xs underline ml-2" wire:click.defer="clear_coordinates()">clear</button>
                 </div>
             </div>
@@ -52,19 +52,13 @@
                 <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
                 @endif
                     @foreach ($images as $image)
-                        <div wire:key="image_{{ $image->id }}" class="bg-gray-100 relative"
-                            x-data="{loaded: false, show_meta: false}"
-                            style="height: {{ ($iotd ?? false) ? 'auto' : '200px' }};"
-                            :style="loaded ? '' : 'height: 200px;'"
-                            @mouseover="show_meta = true" @mouseout="show_meta = false">
-                            <img class="w-full"
-                                style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
-                                src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/{{ ($iotd ?? false) ? '560' : '50' }},/0/default.jpg"
-                                data-src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/{{ ($iotd ?? false) ? '560' : '320' }},/0/default.jpg"
-                                alt="{{ $image->title }}" title="{{ $image->title }}"
-                                @load="loaded = true; observer.observe($el);">
-                            <div x-show="show_meta"
-                                class="meta absolute top-0 left-0 p-2 w-full text-right">
+                        <div wire:key="image_{{ $image->id }}" class="image bg-gray-100 relative"
+                            style="height: auto; min-height: {{ ($iotd ?? false) ? 'auto' : '200px' }};">
+                            <img class="w-full" loading="lazy"
+                                src="https://pia-iiif.dhlab.unibas.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/{{ ($iotd ?? false) ? '560' : '320' }},/0/default.jpg"
+                                alt="{{ $image->title }}" title="{{ $image->title }}"/>
+                            <div
+                                class="meta hidden absolute top-0 left-0 p-2 w-full text-right">
                                 <a
                                     href="{{ route('images.show', $image->id) }}"
                                     target="_blank"
@@ -80,16 +74,11 @@
         </div>
     </div>
 
-    <div
-        x-data="{translate: '120px', expand_collections: false}"
-        @mouseover="translate = 'calc(100% + 80px)'" @mouseleave="translate = '120px'; expand_collections = false;"
-        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-20"
-        style="transform: translateX(100%)"
-        :style="`transform: translateX(calc(100% - ${translate}))`">
+    <div id="selection-wrapper"
+        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-20">
         
         <div id="selection"
-            class="hidden md:block min-h-screen max-h-screen w-80 bg-black p-4 overflow-y-auto overflow-x-hidden"
-            x-data="{resolution: 280}">
+            class="hidden md:block min-h-screen max-h-screen w-80 bg-black p-4 overflow-y-auto overflow-x-hidden">
             <div>
                 <div id="collection">
                     <form action="{{ route('collections.store') }}" method="post" x-ref="collection_form">
@@ -131,7 +120,6 @@
                         <div class="mt-4 cursor-not-allowed" wire:key="selected_{{ $image['id'] }}"
                             wire:click.defer="forget({{ $image['id'] }})">
                             <img class="w-full"
-                                style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; min-height: 200px;"
                                 src="https://pia-iiif.dhlab.unibas.ch/{{ $image['base_path'] }}/{{ $image['signature'] }}.jp2/full/280,/0/default.jpg"
                                 alt="{{ $image['title'] }}" title="{{ $image['title'] }}">
                         </div>
@@ -142,30 +130,8 @@
 
     </div>
 
-    <aside id="sidebar"
-        x-data="{expand_collections: false}"
-        @mouseleave="expand_collections = false;"
-        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
-        
+    <aside id="sidebar">
         <livewire:collections-aside />
     </aside>
-
-    <script>
-
-        const config = {
-            rootMargin: '0px 0px 0px 0px',
-            threshold: 0
-        };
-    
-        let observer = new IntersectionObserver(function(entries, self) {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.src = entry.target.dataset.src;
-                    self.unobserve(entry.target);
-                }
-            });
-        }, config);
-
-    </script>
     
 </div>

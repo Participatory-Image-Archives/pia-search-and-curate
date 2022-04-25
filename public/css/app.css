@@ -1,4 +1,34 @@
+/**
+ * layout styles
+ */
 
+#collections {
+    width: 100vw;
+    max-width: 640px;
+    transform: translateX(calc(100% - 65px));
+    transition: 0.25s;
+}
+
+#collections:hover {
+    transform: translateX(0);
+}
+#collections:hover .hidden {
+    display: block;
+}
+#collections:hover button > *:first-child {
+    display: none;
+}
+
+#selection-wrapper {
+    transform: translateX(calc(100% - 120px));
+}
+#selection-wrapper:hover {
+    transform: translateX(-65px);
+}
+
+.image:hover .meta {
+    display: block;
+}
 
 /* print styles */
 @page {

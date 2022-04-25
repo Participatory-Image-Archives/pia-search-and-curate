@@ -22,9 +22,6 @@
         @include('partials.nav')
     </div>
 
-    <!--<script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>-->
-    <script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="/node_modules/slim-select/dist/slimselect.min.js"></script>
 
     @livewireScripts
