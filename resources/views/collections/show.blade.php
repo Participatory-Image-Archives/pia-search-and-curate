@@ -40,12 +40,12 @@
 
                 <a href="{{ route('collections.edit', [$collection]) }}" class="hover:underline">Edit info</a>
 
-                <form class="hidden" x-ref="imageupload" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
+                <form id="images-form" class="hidden" method="POST" enctype="multipart/form-data" action="{{ route('collections.uploadImage', [$collection]) }}">
                     @csrf
-                    <input x-ref="images" @change="$refs.imageupload.submit()" class="hidden" type="file" name="images[]" accept="image/*" required multiple>
+                    <input id="images-upload" onchange="document.querySelector('#images-form').submit()" class="hidden" type="file" name="images[]" accept="image/*" required multiple>
                 </form>
 
-                <button type="button" @click="$refs.images.click()" title="Add images to collection" class="hover:underline text-left">
+                <button type="button" onclick="document.querySelector('#images-upload').click()" title="Add images to collection" class="hover:underline text-left">
                     Add images
                 </button>
 
