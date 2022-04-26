@@ -203,21 +203,3 @@ Route::get('/stats', function(Request $request) {
     echo('</tr>');
     echo('</table>');
 });
-
-Route::get('/fix-licenses', function(){
-    $images = Image::whereNull('license')->where('base_path', '!=', 'uploads')->get();
-
-    foreach ($images as $key => $image) {
-        $image->license = "https://creativecommons.org/licenses/by-nc-nd/4.0/";
-        $image->save();
-    }
-
-    $images = Image::whereNull('license')->where('base_path', '==', 'uploads')->get();
-
-    foreach ($images as $key => $image) {
-        $image->license = "https://creativecommons.org/licenses/by/4.0/";
-        $image->save();
-    }
-
-});
-
