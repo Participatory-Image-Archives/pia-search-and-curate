@@ -204,58 +204,20 @@ Route::get('/stats', function(Request $request) {
     echo('</table>');
 });
 
-Route::get('/empty-title/{id}', function(Request $request, $id) {
-    $collection = Collection::find($id);
+Route::get('/fix-licenses', function(){
+    $images = Image::whereNull('license')->where('base_path', '!=', 'uploads')->get();
 
-    $headers = array(
-        "Content-type" => "text/csv",
-        "Content-Disposition" => "attachment; filename=file.csv",
-        "Pragma" => "no-cache",
-        "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-        "Expires" => "0"
-    );
-
-    $columns = array(
-        'salsah_id', 'oldnr', 'signature', 'title'
-    );
-
-    $callback = function() use ($collection, $columns)
-    {
-        $images = $collection->images->where('title', '');
-        $file = fopen('php://output', 'w');
-
-        fputcsv($file, $columns);
-
-        foreach($images as $image) {
-
-            $data = [
-                $image->salsah_id,
-                $image->oldnr,
-                $image->signature,
-                ''
-            ];
-
-            fputcsv($file, $data);
-        }
-        fclose($file);
-    };
-
-    return response()->streamDownload($callback, $collection->label.'-empty_title.csv');
-});
-
-Route::get('/fill-base-path', function () {
-
-    $images = Image::whereNull('base_path')->get();
-
-    print($images->count());
-
-    foreach ($images as $i_key => $image) {
-        foreach ($image->collections as $c_key => $collection) {
-            if ($image->base_path == '' && $collection->origin == 'salsah') {
-                $image->base_path = $collection->signature;
-                $image->save();
-            }
-        }
+    foreach ($images as $key => $image) {
+        $image->license = "https://creativecommons.org/licenses/by-nc-nd/4.0/";
+        $image->save();
     }
+
+    $images = Image::whereNull('license')->where('base_path', '==', 'uploads')->get();
+
+    foreach ($images as $key => $image) {
+        $image->license = "https://creativecommons.org/licenses/by/4.0/";
+        $image->save();
+    }
+
 });
 
