@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Agent;
 use App\Models\Collection;
 use App\Models\Comment;
+use App\Models\Date;
 use App\Models\Format;
 use App\Models\Image;
 use App\Models\ModelType;
@@ -145,6 +146,13 @@ class ImageController extends Controller
                 'name' => $request->append_agent
             ]);
             $image->people()->attach($agent);
+        }
+
+        if($request->append_date != '') {
+            $date = Date::create([
+                'date' => $request->append_date
+            ]);
+            $image->date_id = $date->id;
         }
 
         $image->place_id = $request->place_id;
