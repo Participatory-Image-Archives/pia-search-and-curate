@@ -239,7 +239,7 @@
                 zoom: 0,
             });
 
-            L.tileLayer.iiif('https://pia-iiif.dhlab.unibas.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json').addTo(image);
+            L.tileLayer.iiif('https://sipi.participatory-archives.chh/{{$image->base_path}}/{{$image->signature}}.jp2/info.json').addTo(image);
 
             document.querySelectorAll('select.slim').forEach(el => {
                 console.log(el)

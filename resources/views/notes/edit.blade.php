@@ -81,7 +81,7 @@
         <div class="grid grid-cols-1 gap-4" id="images">
             @foreach ($collection->images as $image)
             <img class="inline-block mr-2 w-full"
-                src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
+                src="https://sipi.participatory-archives.chh/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
                 alt="{{$image->title}}" title="{{$image->title}}" @dragstart="dragstart">
             @endforeach
         </div>

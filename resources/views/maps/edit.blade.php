@@ -13,7 +13,7 @@
             @foreach ($collection->images as $image)
             <img class="inline-block mr-2 w-full"
                 id="{{ $image->id }}"
-                src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
+                src="https://sipi.participatory-archives.chh/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
                 alt="{{$image->title}}" title="{{$image->title}}" @dragstart="dragstart">
             @endforeach
         </div>
@@ -127,7 +127,7 @@
                 entry_{{ $entry->id }}.alt = '{{ $entry->image->title }}';
 
                 entry_{{ $entry->id }}.bindPopup(
-                    `<img src="https://pia-iiif.dhlab.unibas.ch/{{$entry->image->base_path}}/{{$entry->image->signature}}.jp2/full/320,/0/default.jpg"/>`,
+                    `<img src="https://sipi.participatory-archives.chh/{{$entry->image->base_path}}/{{$entry->image->signature}}.jp2/full/320,/0/default.jpg"/>`,
                         {
                             minWidth: 320,
                             closeButton: false

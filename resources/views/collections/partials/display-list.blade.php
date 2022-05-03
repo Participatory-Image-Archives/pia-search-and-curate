@@ -4,7 +4,7 @@
         <li class="flex mb-2 p-4 bg-white">
             <a href="{{ route('images.show', [$image]) }}?cid={{ $collection->id }}&iid={{ $image->id }}" class="pr-2 w-1/4 print-image">
                 <img class="inline-block"
-                    src="https://pia-iiif.dhlab.unibas.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
+                    src="https://sipi.participatory-archives.chh/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
                     alt="{{$image->title}}" title="{{$image->title}}">
             </a>
             <div class="image-meta w-3/4 pl-2">
