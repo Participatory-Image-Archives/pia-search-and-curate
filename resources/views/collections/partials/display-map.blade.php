@@ -56,7 +56,7 @@
                         window.location = '{{ route('images.show', [$image]) }}';
                     })
                     .bindPopup(
-                        `<img src="https://sipi.participatory-archives.chh/{{$image->base_path}}/{{$image->signature}}.jp2/full/320,/0/default.jpg"/>`,
+                        `<img src="https://sipi.participatory-archives.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/320,/0/default.jpg"/>`,
                         {
                             minWidth: 320,
                             closeButton: false

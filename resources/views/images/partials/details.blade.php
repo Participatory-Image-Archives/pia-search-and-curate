@@ -17,7 +17,7 @@
 
     @if(isset($header))
     <div class="h-96 bg-center bg-contain bg-no-repeat mb-10"
-        style="background-image: url('https://sipi.participatory-archives.chh/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/560,/0/default.jpg')">
+        style="background-image: url('https://sipi.participatory-archives.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/560,/0/default.jpg')">
     </div>
     @endif
 
@@ -27,8 +27,8 @@
             <li><x-links.bare label="Similar" href="{{ route('images.similar', $image) }}"/></li>
             <li>
                 <span class="text-xs">IIIF Image API: </span>
-                <x-links.bare label="full image" href="https://sipi.participatory-archives.chh/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>, 
-                <x-links.bare label="info.json" href="https://sipi.participatory-archives.chh/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
+                <x-links.bare label="full image" href="https://sipi.participatory-archives.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/max/0/default.jpg" target="_blank"/>, 
+                <x-links.bare label="info.json" href="https://sipi.participatory-archives.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json" target="_blank"/>
             </li>
             <li>
                 <span class="text-xs">IIIF Presentation API: </span>

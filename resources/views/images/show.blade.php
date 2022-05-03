@@ -42,7 +42,7 @@
                 zoom: 0,
             });
 
-            L.tileLayer.iiif('https://sipi.participatory-archives.chh/{{$image->base_path}}/{{$image->signature}}.jp2/info.json').addTo(image);
+            L.tileLayer.iiif('https://sipi.participatory-archives.ch/{{$image->base_path}}/{{$image->signature}}.jp2/info.json').addTo(image);
         })
 
     </script>

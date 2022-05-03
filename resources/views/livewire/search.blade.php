@@ -55,7 +55,7 @@
                         <div wire:key="image_{{ $image->id }}" class="image bg-gray-100 relative"
                             style="height: auto; min-height: {{ ($iotd ?? false) ? 'auto' : '200px' }};">
                             <img class="w-full" loading="lazy"
-                                src="https://sipi.participatory-archives.chh/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/{{ ($iotd ?? false) ? '560' : '320' }},/0/default.jpg"
+                                src="https://sipi.participatory-archives.ch/{{ $image->base_path }}/{{ $image->signature }}.jp2/full/{{ ($iotd ?? false) ? '560' : '320' }},/0/default.jpg"
                                 alt="{{ $image->title }}" title="{{ $image->title }}"/>
                             <div
                                 class="meta hidden absolute top-0 left-0 p-2 w-full text-right">
@@ -120,7 +120,7 @@
                         <div class="mt-4 cursor-not-allowed" wire:key="selected_{{ $image['id'] }}"
                             wire:click.defer="forget({{ $image['id'] }})">
                             <img class="w-full"
-                                src="https://sipi.participatory-archives.chh/{{ $image['base_path'] }}/{{ $image['signature'] }}.jp2/full/280,/0/default.jpg"
+                                src="https://sipi.participatory-archives.ch/{{ $image['base_path'] }}/{{ $image['signature'] }}.jp2/full/280,/0/default.jpg"
                                 alt="{{ $image['title'] }}" title="{{ $image['title'] }}">
                         </div>
                     @endforeach

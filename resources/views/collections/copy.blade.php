@@ -39,7 +39,7 @@
             <div class="grid gap-4 grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
                 @foreach ($collection->images as $image)
                     <div class="relative">
-                        <img class="inline-block mb-2 w-full" src="https://sipi.participatory-archives.chh/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/320,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
+                        <img class="inline-block mb-2 w-full" src="https://sipi.participatory-archives.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/320,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
                         <input type="checkbox" name="image_{{ $image->id }}" class="absolute top-2 right-2 cursor-pointer" style="width: 30px; height: 30px">
                     </div>
                 @endforeach

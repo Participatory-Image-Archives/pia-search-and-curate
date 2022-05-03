@@ -8,7 +8,7 @@
                 <a href="{{ route('images.show', [$image]) }}" class="print-image">
             @endif
                 <img class="inline-block mr-2 w-full"
-                    src="https://sipi.participatory-archives.chh/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
+                    src="https://sipi.participatory-archives.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
                     alt="{{$image->title}}" title="{{$image->title}}">
                 <div class="print-image-meta p-2">
                     <span class="title text-xs">{{ $image->title }}</span>

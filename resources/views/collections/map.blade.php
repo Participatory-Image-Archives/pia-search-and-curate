@@ -22,7 +22,7 @@
             @foreach ($collection->images as $image)
                 @if (!$image->place)
                 <a href="{{ route('images.show', [$image]) }}">
-                    <img class="inline-block mb-2 w-full" src="https://sipi.participatory-archives.chh/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/320,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
+                    <img class="inline-block mb-2 w-full" src="https://sipi.participatory-archives.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/320,/0/default.jpg" alt="{{$image->title}}" title="{{$image->title}}">
                 </a>
                 @endif
             @endforeach

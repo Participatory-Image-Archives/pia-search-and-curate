@@ -17,8 +17,8 @@
                 'title': '{{ $image->title }}',
                 'media': {
                     'title': '{{ $image->title }}',
-                    'url': 'https://sipi.participatory-archives.chh/{{$image->base_path}}/{{$image->signature}}.jp2/full/480,/0/default.jpg',
-                    'thumbnail': 'https://sipi.participatory-archives.chh/{{$image->base_path}}/{{$image->signature}}.jp2/full/80,/0/default.jpg',
+                    'url': 'https://sipi.participatory-archives.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/480,/0/default.jpg',
+                    'thumbnail': 'https://sipi.participatory-archives.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/80,/0/default.jpg',
                     'link': '{{ route('images.show', [$image]) }}',
                     'link_target': '_blank'
                 },
