@@ -12,9 +12,6 @@
 #collections:hover {
     transform: translateX(0);
 }
-#collections:hover .hidden {
-    display: block;
-}
 #collections:hover button > *:first-child {
     display: none;
 }

@@ -34,7 +34,7 @@
                 <span class="text-xs">IIIF Presentation API: </span>
                 <x-links.bare label="manifest.json" href="https://iiif.participatory-archives.ch/{{$image->id}}/manifest.json" target="_blank"/>
             </li>
-            <li><x-links.bare label="Json API" href="https://json.participatory-archives.ch/api/v1/images/{{ $image->id }}" target="_blank"/></li>
+            <li><x-links.bare label="JSON API" href="https://data.participatory-archives.ch/api/v1/images/{{ $image->id }}" target="_blank"/></li>
             <li><x-links.bare label="SALSAH" href="https://data.dasch.swiss/resources/{{ $image->salsah_id }}" target="_blank"/></li>
         </ul>
     </div>
