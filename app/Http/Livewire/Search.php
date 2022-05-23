@@ -118,7 +118,7 @@ class Search extends Component
 
     protected function search()
     {
-        $image_query = Image::with([]);
+        $image_query = Image::with(['comments']);
 
         if($this->query != ''){
             $terms = explode(' ', $this->query);
@@ -136,18 +136,24 @@ class Search extends Component
     
                 $q->orWhere(DB::raw('lower(oldnr)'), 'like', '%' . strtolower($this->query) . '%');
                 $q->orWhere(DB::raw('lower(signature)'), 'like', '%' . strtolower($this->query) . '%');
-
-                /**
-                 * TODO: make this work
-                 * querying relationships:
-                 * - comments
-                 */
-                /*$q->orWhereHas('comments', function($q) use ($terms) {
-                    foreach($terms as $k => $term) {
-                        $q->where(DB::raw('lower(comment)'), 'like', '%' . strtolower($term) . '%');
-                    }
-                });*/
+                
             });
+
+            $comment_query = Comment::with([]);
+            $comment_query->where(function($q) use ($terms) {
+                foreach($terms as $k => $term) {
+                    $q->where(DB::raw('lower(comment)'), 'like', '%' . strtolower($term) . '%');
+                }
+            });
+            $ids_via_comments = [];
+            $comments = $comment_query->select('image_id')->get();
+            
+            foreach($comments as $key => $comment) {
+                $ids_via_comments[] = $comment->image_id;
+            }
+
+            $image_query->orWhereIn('id', $ids_via_comments);
+
         }
 
         /**
@@ -183,8 +189,7 @@ class Search extends Component
 
         $image_query->select('images.id', 'images.base_path', 'images.signature', 'images.title');
         $image_query->orderBy('images.id');
-
-        // print(vsprintf(str_replace(array('?'), array('\'%s\''), $image_query->toSql()), $image_query->getBindings()));
+        $image_query->distinct('images.id');
 
         return $image_query;
     }

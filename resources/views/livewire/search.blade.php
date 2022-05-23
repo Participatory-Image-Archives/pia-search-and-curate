@@ -40,6 +40,7 @@
     <div>
         <div class="p-0 md:p-10 md:pr-32 pb-20 space-y-4" x-data>
             <main>
+
                 @if($pagination ?? false && $images->total() > 50)
                 <div class="py-4">
                     {{ $images->links() }}
