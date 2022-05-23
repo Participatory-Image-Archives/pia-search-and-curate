@@ -150,7 +150,8 @@ class ImageController extends Controller
 
         if($request->append_date != '') {
             $date = Date::create([
-                'date' => $request->append_date
+                'date' => $request->append_date,
+                'origin' => 'pia'
             ]);
             $image->date_id = $date->id;
         }
@@ -165,12 +166,12 @@ class ImageController extends Controller
             $image->place_id = $place->id;
         }
 
-        if($request->append_comment != '') {
+        /*if($request->append_comment != '') {
             $comment = Comment::create([
                 'comment' => $request->append_comment
             ]);
             $image->comments()->attach($comment);
-        }
+        }*/
 
         $image->save();
 
