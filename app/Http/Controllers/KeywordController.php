@@ -49,7 +49,9 @@ class KeywordController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('keywords/show', [
+            'keyword' => Keyword::find($id)
+        ]);
     }
 
     /**

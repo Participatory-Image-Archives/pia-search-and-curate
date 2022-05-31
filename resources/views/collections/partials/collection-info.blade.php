@@ -32,7 +32,7 @@
     <div class="w-full mb-2">
         @foreach ($collection->keywords as $keyword)
             @if ($keyword->label)
-                <x-links.default href="/?keyword={{ $keyword->id }}" :label="$keyword->label" class="mb-2"/>
+                <x-links.default :href="route('keywords.show', [$keyword])" :label="$keyword->label" class="mb-2"/>
             @endif
         @endforeach
     </div>

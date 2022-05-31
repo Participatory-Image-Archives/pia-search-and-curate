@@ -24,7 +24,7 @@
                     <h2 class="text-2xl mt-2 mb-2">{{ $current }}</h2>
                 @endif
                 <li class="inline">
-                    <x-links.default :label="$keyword->label" href="/?keyword={{ $keyword->id }}" class="mb-2 name"/>
+                    <x-links.default :label="$keyword->label" :href="route('keywords.show', [$keyword])" class="mb-2 name"/>
                 </li>
             @endif
         @endforeach
