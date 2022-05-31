@@ -3,7 +3,22 @@
 @section('content')
 <div class="bg-gray-100 min-h-screen">
     <div class="flex" id="searchable-list" >
-        <div class="hidden md:block fixed md:h-screen md:w-1/2 overflow-hidden">
+        <div class="md:fixed bg-black md:h-screen md:w-1/2 p-4 md:overflow-y-auto">
+            <div>
+                <section class="my-10 print-hidden">
+                    <div class="flex gap-6 items-center">
+            
+                        <input type="text" name="query" placeholder="Search collection"
+                            class="search hidden md:inline-block py-2 px-6 w-2/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10">
+                        
+                </section>
+            
+                <main>
+                    <div id="images" class="pb-20">
+                        @include('collections.partials.display-grid', ['images' => $call->collection->images])
+                    </div>
+                </main>
+            </div>
         </div>
 
         <div class="md:fixed md:left-1/2 md:h-screen w-full md:w-1/2 md:pr-16 bg-white overflow-y-auto">
@@ -115,4 +130,17 @@
         <livewire:collections-aside />
     </aside>
 </div>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('node_modules/list.js/dist/list.min.js') }}"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            var searchable_list = new List('searchable-list', {
+                valueNames: ['title', 'signature', 'oldnr', 'tags']
+            });
+        });
+
+    </script>
 @endsection
