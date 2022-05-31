@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Collection;
-use App\Models\Image;
 use App\Models\Document;
+use App\Models\Image;
+use App\Models\Keyword;
 
 class CollectionController extends Controller
 {
@@ -99,7 +100,7 @@ class CollectionController extends Controller
     {
         return view('collections/edit', [
             'collection' => Collection::find($id),
-            'collections' => Collection::where('origin', 'pia')->latest()->take(20)->get()
+            'keywords' => Keyword::all()->sortBy('label')
         ]);
     }
 
@@ -116,6 +117,7 @@ class CollectionController extends Controller
         $collection->label = $request->label;
         $collection->description = $request->description;
         $collection->creator = $request->creator;
+        $collection->keywords()->sync($request->keywords);
         $collection->save();
 
         return redirect()->route('collections.show', [$collection]);

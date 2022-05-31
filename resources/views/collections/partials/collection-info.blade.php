@@ -28,6 +28,16 @@
     </div>
     @endif
 
+    @if($collection->keywords->count())
+    <div class="w-full mb-2">
+        @foreach ($collection->keywords as $keyword)
+            @if ($keyword->label)
+                <x-links.default href="/?keyword={{ $keyword->id }}" :label="$keyword->label" class="mb-2"/>
+            @endif
+        @endforeach
+    </div>
+    @endif
+
     
     <div class="w-full mb-2 text-xs">
         <em>

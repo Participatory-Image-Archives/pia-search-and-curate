@@ -36,10 +36,20 @@
                         <label for="creator" class="block">Creator</label>
                         <input name="creator" class="border border-gray-500 p-2 w-full" value="{{ $collection->creator ?? '' }}" placeholder="Who created this collection?"/>
                     </div>
-                    <div class="w-full">
+                    <div class="w-full mb-4">
                         <label for="description" class="block">Description</label>
                         <textarea name="description" id="description" class="border border-gray-500 p-2 w-full" oninput="auto_grow(this)" placeholder="What can you say about this collection?">{{ $collection->description ?? '' }}</textarea>
                     </div>
+                    <div class="w-full">
+                        <label for="keywords[]" class="block">Description</label>
+                        <select name="keywords[]" class="w-full slim" multiple>
+                            <option value="">-</option>
+                            @foreach ($keywords as $keyword)
+                                <option value="{{ $keyword->id }}" {{ $collection->keywords->contains($keyword->id) ? 'selected' : '' }}>{{ $keyword->label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                 </div>
 
                 <div class="flex justify-between fixed bottom-0 left-1/2 w-1/2 pl-8 py-2 pr-28 border-t leading-10 border-gray-700 bg-white">
@@ -79,6 +89,14 @@
             creator.addEventListener('change', () => {
                 localStorage.setItem('collection_creator', creator.value);
             })
+
+            document.querySelectorAll('select.slim').forEach(el => {
+                console.log(el)
+                new SlimSelect({
+                    select: el,
+                });
+            });
+
         });
 
         function auto_grow(element) {

@@ -29,6 +29,7 @@ class Search extends Component
     public $place = '';
 
     // state management
+    public $collections;
     public $collection;
     public $selection;
     public $image_ids = '';
@@ -58,6 +59,7 @@ class Search extends Component
         } else {
             $this->selection = collect([]);
         }
+        $this->collections = Collection::all()->sortBy('label');
     }
 
     public function render()
