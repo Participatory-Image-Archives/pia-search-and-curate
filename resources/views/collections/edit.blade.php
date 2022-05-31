@@ -41,7 +41,7 @@
                         <textarea name="description" id="description" class="border border-gray-500 p-2 w-full" oninput="auto_grow(this)" placeholder="What can you say about this collection?">{{ $collection->description ?? '' }}</textarea>
                     </div>
                     <div class="w-full">
-                        <label for="keywords[]" class="block">Description</label>
+                        <label for="keywords[]" class="block">Keywords</label>
                         <select name="keywords[]" class="w-full slim" multiple>
                             <option value="">-</option>
                             @foreach ($keywords as $keyword)
