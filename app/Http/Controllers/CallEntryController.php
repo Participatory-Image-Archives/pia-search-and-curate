@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Call;
 use App\Models\CallEntry;
 use App\Models\Collection;
+use App\Models\Image;
 use App\Models\Keyword;
 
 class CallEntryController extends Controller
@@ -29,17 +30,20 @@ class CallEntryController extends Controller
      */
     public function create(Request $request)
     {
-        $image_id = '';
-
         if($request->image_id) {
-            $image_id = $request->image_id;
+            return view('callentries/create', [
+                'call_id' => $request->call_id,
+                'image' => Image::find($request->image_id),
+                'keywords' => Keyword::all()->sortBy('label')
+            ]);
+
+        } else {
+            return view('callentries/create', [
+                'call_id' => $request->call_id,
+                'keywords' => Keyword::all()->sortBy('label')
+            ]);
         }
 
-        return view('callentries/create', [
-            'call_id' => $request->call_id,
-            'image_id' => $image_id,
-            'keywords' => Keyword::all()->sortBy('label')
-        ]);
     }
 
     /**

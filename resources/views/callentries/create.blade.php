@@ -9,11 +9,21 @@
         <div class="md:fixed md:left-1/2 md:h-screen md:full md:w-1/2 md:pr-36 bg-white overflow-y-auto">
             <div class="p-4 md:p-14">
 
+                @if(isset($image))
+                    <h2 class="text-2xl mb-2">{{ $image->title }}</h2>
+                    <img class="inline-block mb-4" 
+                        src="https://sipi.participatory-archives.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
+                        alt="{{$image->title}}" title="{{$image->title}}">
+                @endif
+
                 <form action="{{ route('callentries.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <input type="hidden" name="call_id" value="{{ $call_id }}"/>
-                    <input type="hidden" name="image_id" value="{{ $image_id ?? '' }}"/>
+
+                    @if(isset($image))
+                        <input type="hidden" name="image_id" value="{{ $image->id }}"/>
+                    @endif
 
                     <div class="">
                         <label for="label" class="mb-1 text-xs">Title</label>

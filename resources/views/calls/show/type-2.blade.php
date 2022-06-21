@@ -3,7 +3,7 @@
 @section('content')
 <div class="bg-gray-100 min-h-screen">
     <div class="flex" id="searchable-list" >
-        <div class="md:fixed bg-black md:h-screen md:w-1/4 p-4 md:overflow-y-auto">
+        <div class="hidden sm:block md:fixed bg-black md:h-screen md:w-1/4 p-4 md:overflow-y-auto">
             <h2 class="text-4xl text-white mb-4">{{ $call->collection->label }}</h2>
             <div id="images" class="pb-20">
                 @include('collections.partials.display-grid', ['images' => $call->collection->images, 'gridcols' => ''])
@@ -138,7 +138,7 @@
     <aside id="sidebar"
         x-data="{expand_collections: false}"
         @mouseleave="expand_collections = false;"
-        class="flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
+        class="hidden sm:flex fixed top-0 right-0 transform transition min-h-screen shadow-2xl z-50 print-hidden">
         
         <livewire:collections-aside />
     </aside>

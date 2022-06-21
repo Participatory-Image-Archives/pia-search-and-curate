@@ -62,7 +62,7 @@ class CallController extends Controller
         }
 
         return view('calls/show/type-'.$call_type, [
-            'call' => $call
+            'call' => $call,
         ]);
     }
 
