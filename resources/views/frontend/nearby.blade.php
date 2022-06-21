@@ -6,7 +6,7 @@
 
     <div class="mb-4 text-right">
         <label for="accuracy">Accuracy</label> 
-        <select id="accuracy" name="accuracy" class="p-2 border border-black">
+        <select id="accuracy" name="accuracy" class="p-2 mb-2 border border-black">
             <option value="1">~ 10m</option>
             <option value="2" selected>~ 100m</option>
             <option value="3">~ 1km</option>
