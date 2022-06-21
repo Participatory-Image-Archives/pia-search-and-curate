@@ -39,7 +39,8 @@ class CallController extends Controller
     public function store(Request $request)
     {
         $call = Call::create([
-            'collection_id' => $request->collection_id
+            'collection_id' => $request->collection_id,
+            'type' => 1
         ]);
 
         return redirect()->route('calls.edit', [$call]);
@@ -53,8 +54,10 @@ class CallController extends Controller
      */
     public function show($id)
     {
-        return view('calls/show', [
-            'call' => Call::find($id)
+        $call = Call::find($id);
+
+        return view('calls/show/type-'.$call->type, [
+            'call' => $call
         ]);
     }
 
@@ -89,6 +92,7 @@ class CallController extends Controller
         $call->start_date = $request->start_date;
         $call->end_date = $request->end_date;
         $call->keywords()->sync($request->keywords);
+        $call->type = $request->type;
 
         $call->save();
 

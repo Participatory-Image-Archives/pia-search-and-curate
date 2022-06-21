@@ -29,8 +29,15 @@ class CallEntryController extends Controller
      */
     public function create(Request $request)
     {
+        $image_id = '';
+
+        if($request->image_id) {
+            $image_id = $request->image_id;
+        }
+
         return view('callentries/create', [
             'call_id' => $request->call_id,
+            'image_id' => $image_id,
             'keywords' => Keyword::all()->sortBy('label')
         ]);
     }
@@ -51,6 +58,10 @@ class CallEntryController extends Controller
         ]);
 
         $call_entry->keywords()->sync($request->keywords);
+
+        if ($request->image_id) {
+           $call_entry->images()->sync($request->image_id); 
+        }
 
         $call_entry->save();
 

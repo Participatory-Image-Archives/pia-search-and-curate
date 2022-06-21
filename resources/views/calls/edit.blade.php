@@ -20,6 +20,17 @@
                     </div>
 
                     <div class="my-6">
+                        <h3 class="mb-1 text-xs">Call Type</h3>
+                        <div class="mb-2">
+                            <select name="type" class="w-full slim">
+                                <option value="1" {{ $call->type == 1 ? 'selected' : '' }}>Simple Call</option>
+                                <option value="2" {{ $call->type == 2 ? 'selected' : '' }}>Relational Call</option>
+                            </select>
+                        </div>
+                        <p class="text-sm"></p>
+                    </div>
+
+                    <div class="my-6">
                         <h3 class="mb-1 text-xs">Description</h3>
                         <div class="mb-2">
                             <textarea name="description" placeholder="Description of call" class="w-full mt-1 border border-gray-300 p-1 px-2">{{ $call->description ?? '' }}</textarea>

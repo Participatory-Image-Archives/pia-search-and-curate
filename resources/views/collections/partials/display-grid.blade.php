@@ -1,5 +1,5 @@
 <div id="searchable-list">
-    <ul class="list grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 grid-flow-row print-grid print-w-full">
+    <ul class="list grid grid-cols-1 {{ $gridcols ?? 'lg:grid-cols-2 xl:grid-cols-3' }} gap-4 grid-flow-row print-grid print-w-full">
         @foreach ($images as $image)
         <li>
             @if($collection ?? false)

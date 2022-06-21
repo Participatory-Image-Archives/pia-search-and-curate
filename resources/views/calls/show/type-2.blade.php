@@ -3,28 +3,17 @@
 @section('content')
 <div class="bg-gray-100 min-h-screen">
     <div class="flex" id="searchable-list" >
-        <div class="md:fixed bg-black md:h-screen md:w-1/2 p-4 md:overflow-y-auto">
-            <div>
-                <section class="my-10 print-hidden">
-                    <div class="flex gap-6 items-center">
-            
-                        <input type="text" name="query" placeholder="Search collection"
-                            class="search hidden md:inline-block py-2 px-6 w-2/3 border border-gray-700 rounded-full focus:outline-none text-lg z-10">
-                        
-                </section>
-            
-                <main>
-                    <div id="images" class="pb-20">
-                        @include('collections.partials.display-grid', ['images' => $call->collection->images])
-                    </div>
-                </main>
+        <div class="md:fixed bg-black md:h-screen md:w-1/4 p-4 md:overflow-y-auto">
+            <h2 class="text-4xl text-white mb-4">{{ $call->collection->label }}</h2>
+            <div id="images" class="pb-20">
+                @include('collections.partials.display-grid', ['images' => $call->collection->images, 'gridcols' => ''])
             </div>
         </div>
 
-        <div class="md:fixed md:left-1/2 md:h-screen w-full md:w-1/2 md:pr-16 bg-white overflow-y-auto">
-            <div class="p-4 md:p-14">
+        <div class="md:fixed md:left-1/4 md:h-screen w-full md:w-3/4 md:pr-16 bg-white overflow-y-auto">
+            <div class="p-4 md:px-14">
                 <div class="relative flex items-center justify-between mb-12 ">
-                    <h2 class="text-4xl text-center">
+                    <h2 class="text-4xl text-center mb-2">
                         {{ $call->label }}
                     </h2>
                 </div>
@@ -70,8 +59,33 @@
                     </tbody>
                 </table>
 
-                <div class="my-4">
-                    @foreach ($call->call_entries as $call_entry)
+                <div class="mt-4 mb-28">
+                    @foreach ($call->collection->images as $image)
+                        <div class="py-4 border-b border-gray-400 flex flex-row items-center gap-8 overflow-x-auto">
+                            <img class="inline-block mr-2" width="280"
+                                src="https://sipi.participatory-archives.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/360,/0/default.jpg"
+                                alt="{{$image->title}}" title="{{$image->title}}">
+                            <a href="{{ route('callentries.create') }}?call_id={{ $call->id }}&image_id={{ $image->id }}" class="rounded-full border border-black text-center text-4xl block" style="line-height: 80px; min-width: 80px;">+</a>
+                            <div class="flex flex-row flex-shrink-0 items-end gap-2">
+                                @foreach($image->callEntries->where('call_id', $call->id) as $call_entry)
+                                    @foreach ($call_entry->documents as $document)
+                                        <x-smart-download src="{{ storage_path('app/public/'. $document->base_path . '/' . $document->file_name) }}" target="_blank">
+                                            @if(preg_match('(\.jpg|\.png|\.jpeg)', strtolower($document->file_name)) === 1)
+                                            <x-smart-image src="{{ storage_path('app/public/'. $document->base_path . '/' . $document->file_name) }}" alt="{{ $document->file_name  }}" width="200px" data-template="orientate"/>
+                                            @else
+                                                <span class="inline-block py-1 px-3 text-xs rounded-full border border-black hover:bg-black hover:text-white">{{ $document->file_name  }}</span>    
+                                            @endif
+                                        </x-smart-download>
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="mb-28">
+                    <h2 class="text-3xl mb-4">Timeline</h2>
+                    @foreach ($call->callEntries as $call_entry)
                         <div class="{{ $loop->even ? 'ml-auto' : '' }} w-5/6 md:w-3/4 border border-grey-500 rounded-xl p-4 mb-8 shadow-xl relative">
                             <h3 class="text-xl">{{ $call_entry->label }}</h3>
                             <span class="block text-xs italic mb-2">By {{ $call_entry->creator }}, {{ date('d. M. Y', strtotime($call_entry->created_at)) }}</span>
@@ -107,9 +121,8 @@
                 </div>
 
 
-                <div class="flex flex-col md:flex-row justify-between md:fixed bottom-0 md:left-1/2 md:w-1/2 md:p-4 pb-20 md:pr-20 md:pb-4 border-t leading-10 border-gray-700 bg-white">
+                <div class="flex flex-col md:flex-row justify-between md:fixed bottom-0 md:left-1/4 md:w-3/4 md:p-4 pb-20 md:pr-20 md:pb-4 border-t leading-10 border-gray-700 bg-white">
                     <a class="hover:underline" href="{{ route('calls.edit', [$call]) }}">Edit call</a>
-                    <a class="hover:underline" href="{{ route('callentries.create') }}?call_id={{ $call->id }}">Add entry</a>
                     <a class="hover:underline" href="{{ route('collections.show', [$call->collection_id]) }}">View collection</a>
                     <form action="{{ route('calls.destroy', [$call]) }}" method="post" class="inline-block">
                         @csrf

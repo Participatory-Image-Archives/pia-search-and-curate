@@ -13,6 +13,7 @@
                     @csrf
 
                     <input type="hidden" name="call_id" value="{{ $call_id }}"/>
+                    <input type="hidden" name="image_id" value="{{ $image_id ?? '' }}"/>
 
                     <div class="">
                         <label for="label" class="mb-1 text-xs">Title</label>
