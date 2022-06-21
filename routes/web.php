@@ -88,6 +88,35 @@ Route::get('/by-dates', function (Request $request) {
     return view('frontend/partials/search-by-dates');
 })->name('search.byDates');
 
+Route::get('/nearby', function(Request $request) {
+    if ($request->latitude) {
+
+        $accuracy = 0.001;
+
+        if($request->accuracy == 1) {
+            $accuracy = 0.0001;
+        }
+
+        if($request->accuracy == 3) {
+            $accuracy = 0.01;
+        }
+
+        $images = Image::join('places', 'places.id', '=', 'images.place_id')
+            ->where('latitude', '<=', floatval($request->latitude) + $accuracy)
+            ->where('longitude', '>=', floatval($request->longitude) - $accuracy)
+            ->where('latitude', '>=', floatval($request->latitude) - $accuracy)
+            ->where('longitude', '<=', floatval($request->longitude) + $accuracy)
+            ->limit(100)
+            ->get();
+
+        return view('frontend/nearby', [
+            'images' => $images
+        ]);
+    }
+
+    return view('frontend/nearby');
+});
+
 /* statistics */
 Route::get('/stats', function(Request $request) {
     $images_total = Image::count();

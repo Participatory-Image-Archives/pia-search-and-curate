@@ -1,5 +1,5 @@
-<div class="map">
-    <div id="map" class="w-full min-h-screen"></div>
+<div class="map h-full">
+    <div id="map" class="w-full {{ $height ?? 'min-h-screen' }}"></div>
 </div>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
@@ -46,11 +46,11 @@
             accessToken: 'pk.eyJ1IjoidGhnaWV4IiwiYSI6ImNrcjF5Z2ZxZDI2bWYydnFhMWw0eDV2YjIifQ.CZJtOXLy-IZeI6a5ia8Lzw'
         }).addTo(map);
 
-        @foreach ($collection->images as $image)
+        @foreach ($images as $image)
             @if ($image->place)
-                let image_{{ $image->id }} = new L.Marker([{{$image->place->latitude}}, {{$image->place->longitude}}]);
+                let image_{{ $image->id }}_{{ $loop->index }} = new L.Marker([{{$image->place->latitude}}, {{$image->place->longitude}}]);
 
-                image_{{ $image->id }}
+                image_{{ $image->id }}_{{ $loop->index }}
                     .bindTooltip('{{ $image->title }}')
                     .addEventListener('click', function(e) {
                         window.location = '{{ route('images.show', [$image]) }}';
@@ -66,9 +66,23 @@
                         this.openPopup();
                     });
 
-                markers.addLayer(image_{{ $image->id }});
+                markers.addLayer(image_{{ $image->id }}_{{ $loop->index }});
             @endif
         @endforeach
+
+        if (window.location.href.indexOf('latitude') > -1) {
+            const params = new URLSearchParams(window.location.search);
+
+            let position = L.circleMarker([
+                params.get('latitude'),
+                params.get('longitude')
+            ]);
+
+            markers.addLayer(position);
+            console.log('yes')
+        }
+
+        map.fitBounds(markers.getBounds());
 
     });
 

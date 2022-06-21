@@ -21,7 +21,7 @@
                         @if($display == 'list')
                             @include('collections.partials.display-list')
                         @elseif($display == 'map')
-                            @include('collections.partials.display-map')
+                            @include('collections.partials.display-map', ['images' => $collection->images])
                         @elseif($display == 'timeline')
                             @include('collections.partials.display-timeline')
                         @else
