@@ -55,8 +55,13 @@ class CallController extends Controller
     public function show($id)
     {
         $call = Call::find($id);
+        $call_type = '1';
 
-        return view('calls/show/type-'.$call->type, [
+        if($call->type) {
+            $call_type = $call->type;
+        }
+
+        return view('calls/show/type-'.$call_type, [
             'call' => $call
         ]);
     }
