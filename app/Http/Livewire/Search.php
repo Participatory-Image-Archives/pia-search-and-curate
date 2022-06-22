@@ -10,6 +10,7 @@ use App\Models\Agent;
 use App\Models\Collection;
 use App\Models\Comment;
 use App\Models\Date;
+use App\Models\DetectionClass;
 use App\Models\Image;
 use App\Models\Keyword;
 
@@ -25,6 +26,7 @@ class Search extends Component
 
     // get params for relationships
     public $keyword = '';
+    public $detection = '';
     public $agent = '';
     public $place = '';
 
@@ -45,6 +47,7 @@ class Search extends Component
         'coordinates' => ['except' => ''],
         
         'keyword' => ['except' => ''],
+        'detection' => ['except' => ''],
         'agent' => ['except' => ''],
         'place' => ['except' => ''],
         
@@ -77,6 +80,22 @@ class Search extends Component
 
             $images = Keyword::find($this->keyword)->images();
         }
+
+        if($this->detection != '') {
+            $signatures = [];
+
+            $detections = DetectionClass::find($this->detection)->detections()->get();
+            foreach($detections as $key => $detection){
+                $signatures[] = $detection->sgv_signature;
+            }
+
+            $images = Image::whereIn('signature', $signatures);
+
+            $images->select('images.id', 'images.base_path', 'images.signature', 'images.title');
+            $images->orderBy('images.id');
+            $images->distinct('images.id');
+        }
+
 
         if($this->agent != '') {
             /*$agent_id = $this->agent; 

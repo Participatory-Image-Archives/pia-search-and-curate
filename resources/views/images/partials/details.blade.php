@@ -115,6 +115,23 @@
             –
             @endforelse
         </div>
+        <h3 class="mb-1 text-xs">Machine-Detections</h3>
+        <div class="mb-2">
+            @php
+                $detection_labels = [];
+            @endphp
+            @forelse ($image->detections as $detection)
+                @if (!in_array($detection->class->label, $detection_labels))
+                    @php
+                        $detection_labels[] = $detection->class->label;
+                    @endphp
+                    <x-links.default href="/?detection={{ $detection->class->id }}" :label="$detection->class->label" class="mb-2"/>
+                @endif
+            @empty
+            –
+            @endforelse
+        </div>
+       
         <h3 class="mb-1 text-xs">Collections</h3>
         <div class="mb-2">
             @forelse ($image->collections as $collection)
