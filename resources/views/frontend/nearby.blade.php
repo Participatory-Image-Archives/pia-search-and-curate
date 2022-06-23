@@ -49,6 +49,29 @@ function error(err) {
 
 function get_location() {
     navigator.geolocation.getCurrentPosition(success, error, options);
+    if ( navigator.permissions && navigator.permissions.query) {
+      //try permissions APIs first
+      navigator.permissions.query({ name: 'geolocation' }).then(function(result) {
+          // Will return ['granted', 'prompt', 'denied']
+          const permission = result.state;
+          if ( permission === 'granted' || permission === 'prompt' ) {
+              _onGetCurrentLocation();
+          }
+      });
+    } else if (navigator.geolocation) {
+      //then Navigation APIs
+      _onGetCurrentLocation();
+    }
+}
+
+function _onGetCurrentLocation () {
+    const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
 
 }
 
