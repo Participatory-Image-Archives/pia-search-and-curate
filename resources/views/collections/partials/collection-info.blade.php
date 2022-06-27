@@ -53,10 +53,17 @@
     <hr class="my-10">
 
     <div class="mb-10">
-        <span class="text-xs">Download </span>
-        <x-links.bare label="JSON" href="{{ env('API_URL') }}collections/{{ $collection->id }}" target="_blank"
-            class="mr-2 text-xs underline" />
-        <x-links.bare label="CSV" :href="route('collections.export', ['id' => $collection->id])" />
+        <span class="text-xs">View </span>
+        <ul class="list">
+            <li>
+                &mdash; 
+                <span class="text-xs">IIIF Presentation API: </span>
+                <x-links.bare label="manifest.json" href="https://iiif.participatory-archives.ch/collections/{{$collection->id}}.json" target="_blank"/>
+            </li>
+            <li>&mdash; <x-links.bare label="JSON" href="{{ env('API_URL') }}collections/{{ $collection->id }}" target="_blank"
+                class="mr-2 text-xs underline" /></li>
+            <li>&mdash; <x-links.bare label="CSV" :href="route('collections.export', ['id' => $collection->id])" /></li>
+        </ul>
     </div>
 
     <div class="flex flex-col md:flex-row mb-10">
