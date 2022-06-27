@@ -81,10 +81,10 @@ class Search extends Component
             $images = Keyword::find($this->keyword)->images();
         }
 
-        /*if($this->detection != '') {
+        if($this->detection != '') {
             $signatures = [];
 
-            $detections = DetectionClass::find($this->detection)->detections()->get();
+            $detections = DetectionClass::find($this->detection)->detections()->where('score', '>', '0.8')->get();
             foreach($detections as $key => $detection){
                 $signatures[] = $detection->sgv_signature;
             }
@@ -94,7 +94,7 @@ class Search extends Component
             $images->select('images.id', 'images.base_path', 'images.signature', 'images.title');
             $images->orderBy('images.id');
             $images->distinct('images.id');
-        }*/
+        }
 
 
         if($this->agent != '') {
