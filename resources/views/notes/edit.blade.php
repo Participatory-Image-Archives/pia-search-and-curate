@@ -194,7 +194,7 @@
                     });
 
                     html_wrapper.querySelectorAll('a').forEach(el => {
-                        if (el.href.indexOf('iiif') !== -1) {
+                        if (el.href.indexOf('sipi') !== -1) {
                             if (!show_circles) {
                                 let image = document.createElement('img');
                                 image.src = `${el.href}`;
