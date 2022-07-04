@@ -125,7 +125,7 @@
                     @php
                         $detection_labels[] = $detection->class->label;
                     @endphp
-                    @if($detection->score > 0.8)
+                    @if($detection->score > 0.75)
                         <x-links.default href="/?detection={{ $detection->class->id }}" :label="$detection->class->label" class="mb-2"/>
                     @endif
                 @endif
@@ -313,5 +313,6 @@
             <x-buttons.delete/>
         </form>
         @endif
+        <a href="https://memes.participatory-archives.ch?image=https://sipi.participatory-archives.ch/{{$image->base_path != '' ? $image->base_path.'/' : ''}}{{$image->signature}}.jp2/full/800,/0/default.jpg">🖼️</a>
     </div>
 </div>
