@@ -5,13 +5,8 @@
 <div class="p-4">
 
     <div class="mb-4 text-right">
-        <label for="accuracy">Accuracy</label> 
-        <select id="accuracy" name="accuracy" class="p-2 mb-2 border border-black">
-            <option value="1">-</option>
-            <option value="1">~ 10m</option>
-            <option value="2" selected>~ 100m</option>
-            <option value="3">~ 1km</option>
-        </select> 
+        <label for="accuracy">Distance in meter: <span id="distance_value"></span></label> 
+        <input type="range" min="100" max="10000" value="100" step="100" id="distance" name="distance">
         <button type="button" class="p-2 border border-black" onclick="get_location()">Reload with current position</button>
     </div>
 
@@ -40,7 +35,7 @@ const options = {
 function success(pos) {
     const crd = pos.coords;
 
-    window.location = '?latitude='+crd.latitude+'&longitude='+crd.longitude+'&accuracy='+document.querySelector('#accuracy').value;
+    window.location = '?latitude='+crd.latitude+'&longitude='+crd.longitude+'&distance='+document.querySelector('#distance').value;
 }
 
 function error(err) {
@@ -78,6 +73,21 @@ function _onGetCurrentLocation () {
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.href.indexOf('latitude') == -1) {
         get_location();
+    }
+
+    var slider = document.getElementById("distance");
+    var output = document.getElementById("distance_value");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+
+    if(params.get('distance')) {
+        slider.value = parseInt(params.get('distance'));
+        output.innerHTML = slider.value;
     }
 });
 

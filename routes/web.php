@@ -20,6 +20,8 @@ use App\Models\Image;
 use App\Models\Keyword;
 use App\Models\Place;
 
+use AnthonyMartin\GeoLocation\GeoPoint;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,26 +93,26 @@ Route::get('/by-dates', function (Request $request) {
 Route::get('/nearby', function(Request $request) {
     if ($request->latitude) {
 
-        $accuracy = 0.001;
+        $geopoint = new GeoPoint($request->latitude, $request->longitude);
+        $bounding_box = $geopoint->boundingBox($request->distance / 1000, 'km');
 
-        if($request->accuracy == 1) {
-            $accuracy = 0.0001;
-        }
-
-        if($request->accuracy == 3) {
-            $accuracy = 0.01;
-        }
-
-        $images = Image::join('places', 'places.id', '=', 'images.place_id')
-            ->where('latitude', '<=', floatval($request->latitude) + $accuracy)
-            ->where('longitude', '>=', floatval($request->longitude) - $accuracy)
-            ->where('latitude', '>=', floatval($request->latitude) - $accuracy)
-            ->where('longitude', '<=', floatval($request->longitude) + $accuracy)
-            ->limit(100)
+        $places = Place
+            ::where('longitude', '>=', $bounding_box->getMinLongitude())
+            ->where('latitude', '>=', $bounding_box->getMinLatitude())
+            ->where('longitude', '<=', $bounding_box->getMaxLongitude())
+            ->where('latitude', '<=', $bounding_box->getMaxLatitude())
             ->get();
 
+        $image_ids = [];
+
+        foreach($places as $key => $place) {
+            foreach($place->images as $key => $image) {
+                array_push($image_ids, $image->id);
+            }
+        }
+
         return view('frontend/nearby', [
-            'images' => $images
+            'images' => Image::whereIn('id', $image_ids)->get()
         ]);
     }
 

@@ -46,6 +46,8 @@
             accessToken: 'pk.eyJ1IjoidGhnaWV4IiwiYSI6ImNrcjF5Z2ZxZDI2bWYydnFhMWw0eDV2YjIifQ.CZJtOXLy-IZeI6a5ia8Lzw'
         }).addTo(map);
 
+        L.control.scale().addTo(map);
+
         @foreach ($images as $image)
             @if ($image->place)
                 let image_{{ $image->id }}_{{ $loop->index }} = new L.Marker([{{$image->place->latitude}}, {{$image->place->longitude}}]);
@@ -79,7 +81,6 @@
             ]);
 
             markers.addLayer(position);
-            console.log('yes')
         }
 
         map.fitBounds(markers.getBounds());

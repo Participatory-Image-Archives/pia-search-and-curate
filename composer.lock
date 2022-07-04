@@ -4,8 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42402c13453b294ecca2a508d05a1682",
+    "content-hash": "9ada783e5c44e6e38d1c3a68cf346259",
     "packages": [
+        {
+            "name": "anthonymartin/geo-location",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anthonymartin/GeoLocation-PHP.git",
+                "reference": "e92d153c8ab97116ab1342826b74c64c3302b81d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anthonymartin/GeoLocation-PHP/zipball/e92d153c8ab97116ab1342826b74c64c3302b81d",
+                "reference": "e92d153c8ab97116ab1342826b74c64c3302b81d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7"
+            },
+            "type": "class",
+            "autoload": {
+                "psr-0": {
+                    "AnthonyMartin": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anthony Martin",
+                    "email": "anthony@replaycreative.com",
+                    "homepage": "http://replaycreative.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Powerful GeoCoding library: Retrieve bounding box coordinates, distances between geopoints, point in polygon, get longitude and latitude from addresses and more with GeoLocation for PHP",
+            "homepage": "https://github.com/anthonymartin/GeoLocation-PHP",
+            "keywords": [
+                "bounding box coordinates",
+                "bounding coordinates",
+                "distances",
+                "geocode",
+                "geocoding",
+                "geolocation",
+                "latitude",
+                "longitude",
+                "point in polygon"
+            ],
+            "support": {
+                "issues": "https://github.com/anthonymartin/GeoLocation-PHP/issues",
+                "source": "https://github.com/anthonymartin/GeoLocation-PHP/tree/v2.0.1"
+            },
+            "time": "2019-09-18T19:00:37+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.1.1",
@@ -8251,5 +8308,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.0.0"
 }
