@@ -54,11 +54,8 @@
 
                 image_{{ $image->id }}_{{ $loop->index }}
                     .bindTooltip('{{ $image->title }}')
-                    .addEventListener('click', function(e) {
-                        window.location = '{{ route('images.show', [$image]) }}';
-                    })
                     .bindPopup(
-                        `<img src="https://sipi.participatory-archives.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/320,/0/default.jpg"/>`,
+                        `<a href="{{ route('images.show', [$image]) }}"><img src="https://sipi.participatory-archives.ch/{{$image->base_path}}/{{$image->signature}}.jp2/full/320,/0/default.jpg"/></a>`,
                         {
                             minWidth: 320,
                             closeButton: false
