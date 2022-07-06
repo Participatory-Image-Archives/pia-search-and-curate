@@ -58,7 +58,8 @@ class ImageController extends Controller
     public function show(Request $request, $id)
     {
         $data = [
-            'image' => Image::find($id)
+            'image' => Image::find($id),
+            'detection_score' => $request->score ?? 0.75
         ];
 
         if($request->cid && $request->iid){

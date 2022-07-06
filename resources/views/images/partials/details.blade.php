@@ -125,7 +125,7 @@
                     @php
                         $detection_labels[] = $detection->class->label;
                     @endphp
-                    @if($detection->score > 0.75)
+                    @if($detection->score >= $detection_score)
                         <x-links.default href="/?detection={{ $detection->class->id }}" :label="$detection->class->label" class="mb-2"/>
                     @endif
                 @endif
